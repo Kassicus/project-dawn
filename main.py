@@ -15,9 +15,13 @@ class Game():
 
         self.clock = pygame.time.Clock()
 
+        self.events = pygame.event.get()
+
     def start(self):
         while self.running:
-            for event in pygame.event.get():
+            self.events = pygame.event.get()
+
+            for event in self.events:
                 if event.type == pygame.QUIT:
                     self.running = False
 

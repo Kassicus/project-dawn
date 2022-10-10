@@ -28,6 +28,7 @@ class Player():
         # Generic player variables
         self.color = (255, 255, 255)
         self.facing = "right"
+        self.health = 40
 
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self, surface):

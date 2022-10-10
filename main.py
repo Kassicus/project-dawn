@@ -3,6 +3,7 @@ import pygame
 
 # Custom class imports
 import player
+import ui
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -26,6 +27,8 @@ class Game():
         # Game object instances
         self.player = player.Player()
 
+        self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
+
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
         while self.running:
@@ -35,6 +38,20 @@ class Game():
             for event in self.events:
                 if event.type == pygame.QUIT:
                     self.running = False
+
+                """
+                TESTING
+                """
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_i:
+                        if self.player.health <= 90:
+                            self.player.health += 10
+                    if event.key == pygame.K_u:
+                        if self.player.health >= 10:
+                            self.player.health -= 10
+                """
+                TESTING
+                """
 
             self.draw()
 
@@ -46,10 +63,12 @@ class Game():
         # Draw all screen elements after this point
 
         self.player.draw(self.screen)
+        self.healthbar.draw(self.screen)
 
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
         self.player.update(self.events)
+        self.healthbar.update(self.player.health)
 
         # Update all game elements before this point
         pygame.display.update()

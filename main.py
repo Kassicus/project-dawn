@@ -1,4 +1,8 @@
+# Standard library imports
 import pygame
+
+# Custom class imports
+import player
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -19,6 +23,9 @@ class Game():
         self.clock = pygame.time.Clock()
         self.events = pygame.event.get() # Capturing this request into a variable to be used in other locations
 
+        # Game object instances
+        self.player = player.Player()
+
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
         while self.running:
@@ -36,9 +43,15 @@ class Game():
     # Everything that needs to be drawn (graphical-updates) goes here
     def draw(self):
         self.screen.fill((0, 0, 0))
+        # Draw all screen elements after this point
+
+        self.player.draw(self.screen)
 
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
+        self.player.update(self.events)
+
+        # Update all game elements before this point
         pygame.display.update()
         self.clock.tick(30)
 

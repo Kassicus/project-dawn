@@ -8,7 +8,9 @@ class Item():
         self.itemName = itemName
         self.itemDescription = itemDescription
         self.requiresManySoulTypes = False
-        self.soulPrice = 0
+        self.mobSoulPrice = 0
+        self.miniBossSoulPrice = 0
+        self.regionBossSoulPrice = 0
         
 class OneHandedWeapon(Item):
     def __init__(self, damage, atkSpeed):
@@ -23,14 +25,14 @@ class TwoHandedWeapon(Item):
         self.atkSpeed = 0
 
 class DestructionMagic(Item):
-    def __init__(self):
-        self.damage = 1.5
-        self.coolDownTimer = 0
-        self.magicCharges = 1
+    def __init__(self, damage, coolDownTimer, magicCharges):
+        self.damage = damage
+        self.coolDownTimer = coolDownTimer
+        self.magicCharges = magicCharges
 
 class RestorationMagic(Item):
-    def __init__(self):
-        self.healAmount = 5
-        self.coolDownTimer = 0
-        self.magicCharges = 1
+    def __init__(self, healAmount, coolDownTimer, magicCharges):
+        self.healAmount = healAmount
+        self.coolDownTimer = coolDownTimer
+        self.magicCharges = magicCharges
         pass

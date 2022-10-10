@@ -30,6 +30,11 @@ class Player():
         self.facing = "right"
         self.health = 40
 
+        # Player Currency
+        self.mobSoulCount = 0
+        self.miniBossSoulCount = 0
+        self.regionBossSoulCount = 0
+
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self, surface):
         if self.facing == "right":

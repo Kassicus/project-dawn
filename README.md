@@ -1,2 +1,7 @@
-# project-dawn
-Dawn of the Abyss
+# Dawn of the Abyss
+
+## Inspiration? (Influence)
+
+## Goal?
+
+## Background/Story/Lore?

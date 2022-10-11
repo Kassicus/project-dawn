@@ -45,6 +45,20 @@ fireMagic1.itemDescription = "A burning flare erupts from you dealing massive da
 fireMagic1.regionBossSoulPrice = 2 
 fireMagic1.miniBossSoulPrice = 2 
 fireMagic1.requiresManySoulTypes = True
+
+shockMagic1 = item.DestructionMagic(250, 7, 1)
+shockMagic1.itemName = "Lightning Storm"
+shockMagic1.itemDescription = "Call down a lightning storm at a location, damaging and stunning enemies over time"
+shockMagic1.regionBossSoulPrice = 1
+shockMagic1.miniBossSoulPrice = 1
+shockMagic1.requiresManySoulTypes = True
+
+shockMagic2 = item.DestructionMagic(5, 1, 2)                      #Starter Spell 0 cost
+shockMagic2.itemName = "Sparks"
+shockMagic2.itemDescription = "Shoots out a shower of sparks that deal damage and temporarily stun enemies"
+shockMagic2.mobSoulPrice = 0
+shockMagic2.requiresManySoulTypes = False
+
 ####################
 
 ## Restoration Magics ##

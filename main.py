@@ -1,10 +1,13 @@
 # Standard library imports
+from random import triangular
 import pygame
-
+import pygame.examples.fonty
+import pygame.examples.freetype_misc
 # Custom class imports
 import player
 import ui
 import projectile
+import menu
 import particle
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
@@ -34,6 +37,8 @@ class Game():
         # Testing the particle system
         self.fireEmitter = particle.FireParticleSystem(300, 400)
 
+        self.pMenu = menu.PlayerInventoryMenu(50, 45, self.screen_width, self.screen_height, (120,113,93,120), (0,0,0))
+
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
         while self.running:
@@ -54,6 +59,11 @@ class Game():
                     if event.key == pygame.K_u:
                         if self.player.health >= 10:
                             self.player.health -= 10
+                    if event.key == pygame.K_m:
+                        if self.pMenu.isDrawn == False:
+                            self.pMenu.isDrawn = True
+                        else:
+                            self.pMenu.isDrawn = False
                 """
                 TESTING
                 """
@@ -77,6 +87,9 @@ class Game():
 
         self.fireEmitter.draw(self.screen)
 
+        if self.pMenu.isDrawn == True:
+            self.pMenu.draw(self.screen)
+
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
         self.player.update(self.events)
@@ -92,6 +105,9 @@ class Game():
         pygame.display.update()
         self.clock.tick(30)
 
+#testy = pygame.examples.fonty.main()
+#testytype = pygame.examples.freetype_misc
+#testytype.run()
 game = Game() # Create an instance of the game class
 
 game.start() # Start our instance of the game class

@@ -8,6 +8,7 @@ Player spawns at the entrance to a dungeon (maybe they are sent there?) and they
 Only souls will be picked up in the level, everything else will be bought with souls in the shops outside of the dungeon
 
 # Things to Implement
+The mothafudging map!
 
 ## Items
 

@@ -37,7 +37,7 @@ class Game():
         # Testing the particle system
         self.fireEmitter = particle.FireParticleSystem(300, 400)
 
-        self.pMenu = menu.PlayerInventoryMenu(50, 45, self.screen_width, self.screen_height, (120,113,93,120), (0,0,0))
+        self.pMenu = menu.PlayerInventoryMenu(200, 100, self.screen_width, self.screen_height, (120,113,93,120), (0,150,0))
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):

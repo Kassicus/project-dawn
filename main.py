@@ -4,6 +4,7 @@ import pygame
 # Custom class imports
 import player
 import ui
+import projectile
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -40,7 +41,7 @@ class Game():
                     self.running = False
 
                 """
-                TESTING
+                TESTING (Uses the [i] and [u] keys to artificially change player health)
                 """
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_i:
@@ -65,10 +66,19 @@ class Game():
         self.player.draw(self.screen)
         self.healthbar.draw(self.screen)
 
+        # This is a bit of a messy way to do this, sprites are shit, but its the easiest way to remove things from memory when you kill them
+        # This will be refactored soon-ish
+        for p in projectile._projectiles:
+            p.draw(self.screen)
+
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
         self.player.update(self.events)
         self.healthbar.update(self.player.health)
+
+        # See above disclaimer for this...
+        for p in projectile._projectiles:
+            p.update()
 
         # Update all game elements before this point
         pygame.display.update()

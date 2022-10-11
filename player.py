@@ -1,6 +1,9 @@
 # Standard library imports
 import pygame
 
+# Custom class imports
+import projectile
+
 # Primary player class (unless we ever end up with multiplayer, this will only ever be instanciated once)
 class Player():
     def __init__(self):
@@ -54,10 +57,10 @@ class Player():
 
         self.pos = (self.x, self.y)
 
-        self.movementController(events)
+        self.eventHandler(events)
 
     # Turn keyboard input into velocity to move the player
-    def movementController(self, events):
+    def eventHandler(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN: # Check for the keydown event to add velocity
                 # Check for left/right movement
@@ -75,6 +78,14 @@ class Player():
                 elif event.key == pygame.K_s:
                     self.y_velocity = self.speed
                     self.facing = "forward"
+
+                if event.key == pygame.K_SPACE:
+                    p = projectile.Projectile(self.x, self.y, self.facing, 12, 5, (0, 255, 0))
+                    projectile._projectiles.add(p)
+
+                if event.key == pygame.K_g:
+                    p = projectile.Projectile(self.x, self.y, self.facing, 4, 20, (0, 0, 255))
+                    projectile._projectiles.add(p)
 
             if event.type == pygame.KEYUP: # Check for the keyup event to remove velocity
                 # Kill horizontal velocity

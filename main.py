@@ -5,6 +5,7 @@ import pygame
 import player
 import ui
 import projectile
+import particle
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -29,6 +30,9 @@ class Game():
         self.player = player.Player()
 
         self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
+
+        # Testing the particle system
+        self.fireEmitter = particle.FireParticleSystem(300, 400)
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
@@ -71,10 +75,14 @@ class Game():
         for p in projectile._projectiles:
             p.draw(self.screen)
 
+        self.fireEmitter.draw(self.screen)
+
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
         self.player.update(self.events)
         self.healthbar.update(self.player.health)
+
+        self.fireEmitter.update()
 
         # See above disclaimer for this...
         for p in projectile._projectiles:

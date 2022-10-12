@@ -174,7 +174,7 @@ class SmokePuffParticleSystem(ParticleSystem):
             p.facade_type = "circle" # Set the facade type to a circle
             p.facade_radius = 3 # Initial "puff" radius
 
-            puff_color = random.randint(100, 255) # Create a random value (within a range that can be used for the r, g, b colors)
+            puff_color = random.randint(200, 255) # Create a random value (within a range that can be used for the r, g, b colors)
 
             p.facade_color = (puff_color, puff_color, puff_color) # Use that same value to get uniform gray (this is different for every particle)
 

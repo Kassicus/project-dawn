@@ -1,14 +1,15 @@
 # Standard library imports
-from random import triangular
 import pygame
 import pygame.examples.fonty
 import pygame.examples.freetype_misc
+
 # Custom class imports
 import player
 import ui
 import projectile
 import menu
 import particle
+import debug
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -28,6 +29,7 @@ class Game():
         self.running = True
         self.clock = pygame.time.Clock()
         self.events = pygame.event.get() # Capturing this request into a variable to be used in other locations
+        self.debuginterface = debug.DebugInterface()
 
         # Game object instances
         self.player = player.Player()
@@ -76,13 +78,18 @@ class Game():
                             self.pMenu.isDrawn = True
                         else:
                             self.pMenu.isDrawn = False
-                    if event.key == pygame.K_z:
+                    if event.key == pygame.K_j:
                         self.puffEmitter.x = self.player.x
                         self.puffEmitter.y = self.player.y
                         self.puffEmitter.puff_direction = self.player.facing
                         self.puffEmitter.createParticles(self.puffEmitter.max_particles)
-                    if event.key == pygame.K_x:
+                    if event.key == pygame.K_k:
                         self.impactEmitter.createParticles(self.impactEmitter.max_particles)
+                    if event.key == pygame.K_TAB:
+                        if self.debuginterface.active:
+                            self.debuginterface.active = False
+                        else:
+                            self.debuginterface.active = True
                 """
                 TESTING
                 """
@@ -94,6 +101,8 @@ class Game():
     # Everything that needs to be drawn (graphical-updates) goes here
     def draw(self):
         self.screen.fill((0, 0, 0))
+        if self.debuginterface.active:
+            self.debuginterface.draw(self.screen)
         # Draw all screen elements after this point
 
         self.player.draw(self.screen)
@@ -125,6 +134,7 @@ class Game():
             p.update()
 
         # Update all game elements before this point
+        self.debuginterface.update(self.clock)
         pygame.display.update()
         self.clock.tick(30)
 

@@ -19,14 +19,8 @@ class Player():
         self.speed = 5
 
         # Bounding box variables
-        self.width = 25
-        self.height = 40
-
-        # Player sprites
-        self.right_sprite = pygame.image.load("assets/player/right.png")
-        self.left_sprite = pygame.image.load("assets/player/left.png")
-        self.away_sprite = pygame.image.load("assets/player/away.png")
-        self.forward_sprite = pygame.image.load("assets/player/forward.png")
+        self.width = 50
+        self.height = 50
 
         # Generic player variables
         self.color = (255, 255, 255)
@@ -40,14 +34,7 @@ class Player():
 
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self, surface):
-        if self.facing == "right":
-            surface.blit(self.right_sprite, self.pos)
-        elif self.facing == "left":
-            surface.blit(self.left_sprite, self.pos)
-        elif self.facing == "away":
-            surface.blit(self.away_sprite, self.pos)
-        elif self.facing == "forward":
-            surface.blit(self.forward_sprite, self.pos)
+        pygame.draw.rect(surface, (25, 100, 255), (self.x, self.y, self.width, self.height), 0)
 
     # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):

@@ -10,6 +10,7 @@ import projectile
 import menu
 import particle
 import debug
+import world
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -36,15 +37,9 @@ class Game():
 
         self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
 
-        # Testing the particle system
-        self.fireEmitter = particle.FireParticleSystem(300, 400)
-        self.fireEmitter.max_particles = 100
-        
-        self.puffEmitter = particle.SmokePuffParticleSystem(700, 400, "right", 20)
-
-        self.impactEmitter = particle.ImpactParticleSystem(500, 200, "left", 200, 30)
-
         self.pMenu = menu.PlayerInventoryMenu(200, 100, self.screen_width, self.screen_height, (120,113,93,120), (0,150,0))
+
+        self.testRoom = world.Room()
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
@@ -78,13 +73,6 @@ class Game():
                             self.pMenu.isDrawn = True
                         else:
                             self.pMenu.isDrawn = False
-                    if event.key == pygame.K_j:
-                        self.puffEmitter.x = self.player.x
-                        self.puffEmitter.y = self.player.y
-                        self.puffEmitter.puff_direction = self.player.facing
-                        self.puffEmitter.createParticles(self.puffEmitter.max_particles)
-                    if event.key == pygame.K_k:
-                        self.impactEmitter.createParticles(self.impactEmitter.max_particles)
                     if event.key == pygame.K_TAB:
                         if self.debuginterface.active:
                             self.debuginterface.active = False
@@ -101,6 +89,9 @@ class Game():
     # Everything that needs to be drawn (graphical-updates) goes here
     def draw(self):
         self.screen.fill((0, 0, 0))
+
+        self.testRoom.draw(self.screen)
+
         if self.debuginterface.active:
             self.debuginterface.draw(self.screen)
         # Draw all screen elements after this point
@@ -113,10 +104,6 @@ class Game():
         for p in projectile._projectiles:
             p.draw(self.screen)
 
-        self.fireEmitter.draw(self.screen)
-        self.puffEmitter.draw(self.screen)
-        self.impactEmitter.draw(self.screen)
-
         if self.pMenu.isDrawn == True:
             self.pMenu.draw(self.screen)
 
@@ -125,15 +112,12 @@ class Game():
         self.player.update(self.events)
         self.healthbar.update(self.player.health)
 
-        self.fireEmitter.update()
-        self.puffEmitter.update()
-        self.impactEmitter.update()
-
         # See above disclaimer for this...
         for p in projectile._projectiles:
             p.update()
 
         # Update all game elements before this point
+        self.testRoom.update()
         self.debuginterface.update(self.clock)
         pygame.display.update()
         self.clock.tick(30)

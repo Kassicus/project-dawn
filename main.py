@@ -36,6 +36,11 @@ class Game():
 
         # Testing the particle system
         self.fireEmitter = particle.FireParticleSystem(300, 400)
+        self.fireEmitter.max_particles = 100
+        
+        self.puffEmitter = particle.SmokePuffParticleSystem(700, 400, "right", 20)
+
+        self.impactEmitter = particle.ImpactParticleSystem(500, 200, "left", 200, 30)
 
         self.pMenu = menu.PlayerInventoryMenu(200, 100, self.screen_width, self.screen_height, (120,113,93,120), (0,150,0))
 
@@ -50,7 +55,14 @@ class Game():
                     self.running = False
 
                 """
-                TESTING (Uses the [i] and [u] keys to artificially change player health)
+                TESTING
+                [u]: decrease player health
+                [i]: increase player health
+
+                [m]: show menu
+
+                [j]: emit smoke blast from player (only supports left and right currently)
+                [k]: emit particle impact (static position currently)
                 """
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_i:
@@ -64,6 +76,13 @@ class Game():
                             self.pMenu.isDrawn = True
                         else:
                             self.pMenu.isDrawn = False
+                    if event.key == pygame.K_z:
+                        self.puffEmitter.x = self.player.x
+                        self.puffEmitter.y = self.player.y
+                        self.puffEmitter.puff_direction = self.player.facing
+                        self.puffEmitter.createParticles(self.puffEmitter.max_particles)
+                    if event.key == pygame.K_x:
+                        self.impactEmitter.createParticles(self.impactEmitter.max_particles)
                 """
                 TESTING
                 """
@@ -86,6 +105,8 @@ class Game():
             p.draw(self.screen)
 
         self.fireEmitter.draw(self.screen)
+        self.puffEmitter.draw(self.screen)
+        self.impactEmitter.draw(self.screen)
 
         if self.pMenu.isDrawn == True:
             self.pMenu.draw(self.screen)
@@ -96,6 +117,8 @@ class Game():
         self.healthbar.update(self.player.health)
 
         self.fireEmitter.update()
+        self.puffEmitter.update()
+        self.impactEmitter.update()
 
         # See above disclaimer for this...
         for p in projectile._projectiles:

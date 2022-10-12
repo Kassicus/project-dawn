@@ -117,8 +117,8 @@ class Game():
             p.update()
 
         # Update all game elements before this point
-        self.testRoom.update()
-        self.debuginterface.update(self.clock)
+        self.testRoom.update(self.player, self.screen)
+        self.debuginterface.update(self.clock, self.player, self.testRoom)
         pygame.display.update()
         self.clock.tick(30)
 

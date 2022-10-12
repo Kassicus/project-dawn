@@ -5,13 +5,12 @@ import pygame
 import projectile
 
 # Primary player class (unless we ever end up with multiplayer, this will only ever be instanciated once)
-class Player():
+class Player(pygame.sprite.Sprite):
     def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         # Position variables
         self.x = 500
         self.y = 400
-
-        self.pos = (self.x, self.y)
 
         # Velocity variables
         self.x_velocity = 0
@@ -19,13 +18,20 @@ class Player():
         self.speed = 5
 
         # Bounding box variables
-        self.width = 50
-        self.height = 50
+        self.width = 30
+        self.height = 30
 
         # Generic player variables
         self.color = (255, 255, 255)
         self.facing = "right"
         self.health = 40
+
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(self.color)
+
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x - int(self.width / 2)
+        self.rect.y = self.y - int(self.height / 2)
 
         # Player Currency
         self.mobSoulCount = 0
@@ -34,7 +40,7 @@ class Player():
 
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self, surface):
-        pygame.draw.rect(surface, (25, 100, 255), (self.x, self.y, self.width, self.height), 0)
+        surface.blit(self.image, self.rect)
 
     # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):
@@ -42,7 +48,7 @@ class Player():
         self.x += self.x_velocity
         self.y += self.y_velocity
 
-        self.pos = (self.x, self.y)
+        self.rect.update(self.x - int(self.width / 2), self.y - int(self.height / 2), self.width, self.height)
 
         self.eventHandler(events)
 
@@ -53,18 +59,14 @@ class Player():
                 # Check for left/right movement
                 if event.key == pygame.K_a:
                     self.x_velocity = -self.speed
-                    self.facing = "left"
                 elif event.key == pygame.K_d:
                     self.x_velocity = self.speed
-                    self.facing = "right"
 
                 # Check for up/down movement
                 if event.key == pygame.K_w:
                     self.y_velocity = -self.speed
-                    self.facing = "away"
                 elif event.key == pygame.K_s:
                     self.y_velocity = self.speed
-                    self.facing = "forward"
 
                 if event.key == pygame.K_SPACE:
                     p = projectile.Projectile(self.x, self.y, self.facing, 12, 5, (0, 255, 0))

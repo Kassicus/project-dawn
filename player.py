@@ -4,6 +4,10 @@ import pygame
 # Custom class imports
 import projectile
 
+#imports item library for inventory
+import itemLib
+import inventory
+
 # Primary player class (unless we ever end up with multiplayer, this will only ever be instanciated once)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -37,6 +41,9 @@ class Player(pygame.sprite.Sprite):
         self.mobSoulCount = 0
         self.miniBossSoulCount = 0
         self.regionBossSoulCount = 0
+
+        #Player Inventory
+        self.inventory = [itemLib.knife1, itemLib.pistol1, itemLib.shockMagic2]
 
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self, surface):

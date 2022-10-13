@@ -122,9 +122,6 @@ class Game():
         pygame.display.update()
         self.clock.tick(30)
 
-#testy = pygame.examples.fonty.main()
-#testytype = pygame.examples.freetype_misc
-#testytype.run()
 game = Game() # Create an instance of the game class
 
 game.start() # Start our instance of the game class

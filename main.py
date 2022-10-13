@@ -53,8 +53,8 @@ class Game():
 
                 """
                 TESTING
-                [u]: decrease player health
-                [i]: increase player health
+                [y]: decrease player health
+                [u]: increase player health
 
                 [m]: show menu
 
@@ -62,10 +62,10 @@ class Game():
                 [k]: emit particle impact (static position currently)
                 """
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_i:
+                    if event.key == pygame.K_u:
                         if self.player.health <= 90:
                             self.player.health += 10
-                    if event.key == pygame.K_u:
+                    if event.key == pygame.K_y:
                         if self.player.health >= 10:
                             self.player.health -= 10
                     if event.key == pygame.K_m:
@@ -78,6 +78,11 @@ class Game():
                             self.debuginterface.active = False
                         else:
                             self.debuginterface.active = True
+                    if event.key == pygame.K_i:
+                        print("Your inventory consists of:\n ")
+                        for x in self.player.inventory:
+                            print(x.itemName +":", x.itemDescription)
+                        print("")
                 """
                 TESTING
                 """

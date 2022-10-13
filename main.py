@@ -11,6 +11,8 @@ import menu
 import particle
 import debug
 import world
+import inventory
+import itemLib
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -60,6 +62,8 @@ class Game():
 
                 [j]: emit smoke blast from player (only supports left and right currently)
                 [k]: emit particle impact (static position currently)
+                [i]: Display your inventory in the terminal (Graphical display are a WIP)
+                [,]: Adds a short sword to your inventory
                 """
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_u:
@@ -83,6 +87,8 @@ class Game():
                         for x in self.player.inventory:
                             print(x.itemName +":", x.itemDescription)
                         print("")
+                    if event.key == pygame.K_COMMA:
+                        inventory.addItem(self.player.inventory, itemLib.sword1)
                 """
                 TESTING
                 """

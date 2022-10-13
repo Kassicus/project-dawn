@@ -6,6 +6,7 @@ import projectile
 
 #imports item library for inventory
 import itemLib
+import inventory
 
 # Primary player class (unless we ever end up with multiplayer, this will only ever be instanciated once)
 class Player(pygame.sprite.Sprite):

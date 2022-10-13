@@ -18,6 +18,12 @@ knife1.itemName = "Butter Knife"
 knife1.itemDescription = "Your only line of defense when things get too close. Hope it isn't plastic."
 #######################
 
+### Melee Weapons ###
+sword1 = item.Weapon(5,2,False,False)
+sword1.itemName = "Short Sword"
+sword1.itemDescription = "A knight's Trusty Weapon"
+########################
+
 #### Hand Guns ####
 
 ###################

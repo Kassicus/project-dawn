@@ -39,7 +39,7 @@ class Game():
 
         self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
 
-        self.pMenu = menu.PlayerInventoryMenu(200, 100, self.screen_width, self.screen_height, (120,113,93,120), (0,150,0))
+        self.pMenu = menu.PlayerInventoryMenu(50, 45, self.screen_width, self.screen_height, (120,113,93,120), (0,150,0))
 
         self.testRoom = world.Room()
 

@@ -102,13 +102,7 @@ class Game():
         self.screen.fill((0, 0, 0))
 
         self.testRoom.draw(self.screen)
-
-        if self.debuginterface.active:
-            self.debuginterface.draw(self.screen)
-        # Draw all screen elements after this point
-
-        # This is a bit of a messy way to do this, sprites are shit, but its the easiest way to remove things from memory when you kill them
-        # This will be refactored soon-ish
+        
         projectile._projectiles.draw(self.screen)
 
         self.player.draw(self.screen)
@@ -116,6 +110,9 @@ class Game():
 
         if self.pMenu.isDrawn == True:
             self.pMenu.draw(self.screen)
+
+        if self.debuginterface.active:
+            self.debuginterface.draw(self.screen)
 
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
@@ -126,7 +123,7 @@ class Game():
         projectile._projectiles.update(self.screen)
 
         # Update all game elements before this point
-        self.testRoom.update(self.player, self.screen)
+        self.testRoom.update()
         self.debuginterface.update(self.clock, self.player, self.testRoom)
         pygame.display.update()
         self.clock.tick(30)

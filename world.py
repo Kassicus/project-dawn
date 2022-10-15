@@ -1,6 +1,10 @@
 import pygame
 import random
 
+tiles = [
+    pygame.image.load("assets/tiles/ground/brick_test.png")
+]
+
 class Chunk(pygame.sprite.Sprite):
     def __init__(self, x, y, chunk_id, wall=False):
         pygame.sprite.Sprite.__init__(self)
@@ -13,20 +17,12 @@ class Chunk(pygame.sprite.Sprite):
         self.chunk_id = chunk_id
         self.wall = wall
 
-        self.font = pygame.font.SysFont("Arial", 16)
-        self.chunk_text = self.font.render(str(self.chunk_id), 1, (255, 255, 255))
-
-        self.image = pygame.Surface([self.width, self.height])
-        self.image.fill((0, 0, 0))
+        self.image = tiles[0]
 
         self.rect = self.image.get_rect()
 
-    def drawID(self, surface):
-        surface.blit(self.chunk_text, (self.x, self.y))
-
-    def update(self, surface):
+    def update(self):
         self.rect.update(self.x, self.y, self.width, self.height)
-        #self.drawID(surface)
 
 class Room():
     def __init__(self):
@@ -49,8 +45,8 @@ class Room():
     def draw(self, surface):
         self.chunks.draw(surface)
 
-    def update(self, player, surface):
-        self.chunks.update(surface)
+    def update(self):
+        self.chunks.update()
 
     def containsPlayer(self, player):
         collide = pygame.sprite.spritecollide(player, self.chunks, True)

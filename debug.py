@@ -9,7 +9,7 @@ class DebugInterface():
         self.fps_text = None
         self.mouse_text = None
         self.player_text = None
-        self.current_chunk_text = None
+        #self.current_chunk_text = None
         self.projectile_text = None
 
         self.active = False
@@ -47,12 +47,12 @@ class DebugInterface():
         surface.blit(self.fps_text, (800, 10))
         surface.blit(self.mouse_text, (800, 30))
         surface.blit(self.player_text, (800, 50))
-        surface.blit(self.current_chunk_text, (800, 70))
+        #surface.blit(self.current_chunk_text, (800, 70))
         surface.blit(self.projectile_text, (800, 90))
 
     def update(self, clock, player, room):
         self.fps_text = self.get_fps(clock)
         self.mouse_text = self.get_mouse()
         self.player_text = self.get_player(player)
-        self.current_chunk_text = self.get_current_chunk(room, player)
+        #self.current_chunk_text = self.get_current_chunk(room, player)
         self.projectile_text = self.get_projectile_count()

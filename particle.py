@@ -64,7 +64,7 @@ class Particle(pygame.sprite.Sprite):
 #
 # Base class of the system, handles the sprite group and drawing the sprites
 class ParticleSystem():
-    def __init__(self, max_particles=250):
+    def __init__(self, max_particles=100):
         self.particles = pygame.sprite.Group()
         self.max_particles = max_particles
 

@@ -99,5 +99,5 @@ class Player(pygame.sprite.Sprite):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, particle.FireParticleSystem(self.x, self.y), 5)
+                p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, particle.FireParticleSystem(self.x, self.y), 8)
                 projectile._projectiles.add(p)

@@ -37,8 +37,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = self.x - int(self.width / 2)
         self.rect.y = self.y - int(self.height / 2)
 
-        self.mouse_rot = 0
-
         # Player Currency
         self.mobSoulCount = 0
         self.miniBossSoulCount = 0
@@ -50,17 +48,14 @@ class Player(pygame.sprite.Sprite):
 
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self, surface):
-        drawnImage = pygame.transform.rotate(self.image, self.mouse_rot)
-        surface.blit(drawnImage, (self.rect.x, self.rect.y))
+        rotated = self.rotateToMouse()
+        surface.blit(rotated[0], rotated[1])
 
     # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):
         # Update player location based on player velocity
         self.x += self.x_velocity
         self.y += self.y_velocity
-
-        self.mouse_rot = self.rotateToMouse()
-        print(self.mouse_rot)
 
         self.rect.update(self.x - int(self.width / 2), self.y - int(self.height / 2), self.width, self.height)
 
@@ -71,7 +66,10 @@ class Player(pygame.sprite.Sprite):
         angle = math.atan2(self.rect.x - mouse_x, self.rect.y - mouse_y)
         degrees = math.degrees(angle)
 
-        return(degrees)
+        rotatedImage = pygame.transform.rotate(self.image, degrees)
+        new_rect = rotatedImage.get_rect(center = self.image.get_rect(center = (self.x, self.y)).center)
+
+        return(rotatedImage, new_rect)
 
     # Turn keyboard input into velocity to move the player
     def eventHandler(self, events):

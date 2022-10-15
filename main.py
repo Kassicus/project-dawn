@@ -107,13 +107,12 @@ class Game():
             self.debuginterface.draw(self.screen)
         # Draw all screen elements after this point
 
-        self.player.draw(self.screen)
-        self.healthbar.draw(self.screen)
-
         # This is a bit of a messy way to do this, sprites are shit, but its the easiest way to remove things from memory when you kill them
         # This will be refactored soon-ish
-        for p in projectile._projectiles:
-            p.draw(self.screen)
+        projectile._projectiles.draw(self.screen)
+
+        self.player.draw(self.screen)
+        self.healthbar.draw(self.screen)
 
         if self.pMenu.isDrawn == True:
             self.pMenu.draw(self.screen)
@@ -124,8 +123,7 @@ class Game():
         self.healthbar.update(self.player.health)
 
         # See above disclaimer for this...
-        for p in projectile._projectiles:
-            p.update()
+        projectile._projectiles.update(self.screen)
 
         # Update all game elements before this point
         self.testRoom.update(self.player, self.screen)

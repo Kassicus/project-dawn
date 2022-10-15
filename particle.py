@@ -82,16 +82,18 @@ class FireParticleSystem(ParticleSystem):
         self.x = x
         self.y = y
 
-        self.particle_color = ((247, 90, 27))
+        self.particle_color = (247, 90, 27)
+
+        self.createParticles(self.max_particles, 0, 25)
 
     # Create an amount of particles and add them to the group to be updated and drawn
-    def createParticles(self, count):
+    def createParticles(self, count, min_life, max_life):
         for p in range(count):
-            p = Particle(self.x, self.y, 5, 5, self.particle_color, 25, 75) # Create the particle (see particle class)
+            p = Particle(self.x, self.y, 5, 5, self.particle_color, min_life, max_life) # Create the particle (see particle class)
 
             # Assign velocities as a float for more fluid movement
-            p.y_vel = random.uniform(-0.5, -3.5)
-            p.x_vel = random.uniform(-0.5, 0.5)
+            p.y_vel = random.uniform(-1.5, 1.5)
+            p.x_vel = random.uniform(-1.5, 1.5)
 
             # Randomly assign an alpha value to some of the particles for dynamic contrast
             p.image.set_alpha(random.randint(25, 255))
@@ -105,7 +107,7 @@ class FireParticleSystem(ParticleSystem):
 
         # Keeps the particle count correct
         new_count = self.max_particles - len(self.particles)
-        self.createParticles(new_count)
+        self.createParticles(new_count, 25, 75)
 
 #
 #

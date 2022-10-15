@@ -1,61 +1,58 @@
 # Standard library imports
 import pygame
+import math
 
 _projectiles = pygame.sprite.Group() # Python handles sprites in groups, this is for organization purposes
 
-# Generic projectile class (Currently does no damage, as we have no enemies yet)
-class Projectile(pygame.sprite.Sprite): # Extends the default python sprite class
-    def __init__(self, origin_x, origin_y, direction, size, speed, color, psystem=None): 
-        """
-        direction: the self.facing value of the entity creating the projectile
-        """
+class Projectile(pygame.sprite.Sprite):
+    def __init__(self, x, y, tx, ty, particle_system, speed):
+        pygame.sprite.Sprite.__init__(self)
 
-        pygame.sprite.Sprite.__init__(self) # Initializing the sprite parent class
+        self.x = x
+        self.y = y
 
-        # Position variables
-        self.x = origin_x
-        self.y = origin_y
-        self.pos = (self.x, self.y)
+        self.width = 1
+        self.height = 1
 
-        # Velocity control
-        self.x_velocity = 0
-        self.y_velocity = 0
+        self.tx = tx
+        self.ty = ty
+
+        self.particle_system = particle_system
+
         self.speed = speed
 
-        # Determines the initial velocity of the projectile by what player facing orientation was provided
-        if direction == "left":
-            self.x_velocity = -self.speed
-        elif direction == "right":
-            self.x_velocity = self.speed
-        elif direction == "away":
-            self.y_velocity = -self.speed
-        elif direction == "forward":
-            self.y_velocity = self.speed
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill((0, 0, 0))
 
-        # Generic variables
-        self.size = size
-        self.color = color
+        self.rect = (self.x, self.y)
 
-        # To be implemented
-        self.psystem = psystem
+        self.x_vel, self.y_vel = self.get_vectors()
 
-    # Dirty fix to use in place of the generic draw function built into sprites
-    def draw(self, surface):
-        pygame.draw.circle(surface, self.color, self.pos, self.size, 0)
+    def get_vectors(self):
+        distance = [self.tx - self.x, self.ty - self.y]
+        normal = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+        direction = [distance[0] / normal, distance[1] / normal]
+        vectors = [direction[0] * self.speed, direction[1] * self.speed]
 
-    # Handles all non-graphical events and updates
-    def update(self):
-        self.x += self.x_velocity
-        self.y += self.y_velocity
+        return vectors
 
-        self.pos = (self.x, self.y)
+    def update(self, surface):
+        self.particle_system.draw(surface)
+        self.particle_system.update()
 
-        self.check_overrun() # memory control
+        self.x += self.x_vel
+        self.y += self.y_vel
 
-    # Specifically checks if the projectile is outside of the screen (kills if it is)
+        self.rect = (self.x, self.y)
+
+        self.particle_system.x = self.x
+        self.particle_system.y = self.y
+
+        self.check_overrun()
+
     def check_overrun(self):
-        if self.x < -100 or self.x > 1100:
+        if self.x < -500 or self.x > 1500:
             self.kill()
         
-        if self.y < -100 or self.y > 900:
+        if self.y < -500 or self.y > 1300:
             self.kill()

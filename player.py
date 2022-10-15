@@ -4,6 +4,7 @@ import math
 
 # Custom class imports
 import projectile
+import particle
 
 #imports item library for inventory
 import itemLib
@@ -87,14 +88,6 @@ class Player(pygame.sprite.Sprite):
                 elif event.key == pygame.K_s:
                     self.y_velocity = self.speed
 
-                if event.key == pygame.K_SPACE:
-                    p = projectile.Projectile(self.x, self.y, self.facing, 12, 5, (0, 255, 0))
-                    projectile._projectiles.add(p)
-
-                if event.key == pygame.K_g:
-                    p = projectile.Projectile(self.x, self.y, self.facing, 4, 20, (0, 0, 255))
-                    projectile._projectiles.add(p)
-
             if event.type == pygame.KEYUP: # Check for the keyup event to remove velocity
                 # Kill horizontal velocity
                 if event.key == pygame.K_a or event.key == pygame.K_d:
@@ -103,3 +96,8 @@ class Player(pygame.sprite.Sprite):
                 # Kill vertical velocity
                 if event.key == pygame.K_w or event.key == pygame.K_s:
                     self.y_velocity = 0
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, particle.FireParticleSystem(self.x, self.y), 5)
+                projectile._projectiles.add(p)

@@ -62,6 +62,11 @@ class Player(pygame.sprite.Sprite):
 
         self.eventHandler(events)
 
+        if pygame.mouse.get_pressed()[2]:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, 3, 3, particle.MagicParticleSystem(self.x, self.y), 8)
+            projectile._projectiles.add(p)
+
     def rotateToMouse(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         angle = math.atan2(self.rect.x - mouse_x, self.rect.y - mouse_y)
@@ -98,6 +103,7 @@ class Player(pygame.sprite.Sprite):
                     self.y_velocity = 0
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_x, mouse_y = pygame.mouse.get_pos()
-                p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, particle.FireParticleSystem(self.x, self.y), 8)
-                projectile._projectiles.add(p)
+                if event.button == pygame.BUTTON_LEFT:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, 5, 5, particle.FireParticleSystem(self.x, self.y), 8)
+                    projectile._projectiles.add(p)

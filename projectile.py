@@ -5,14 +5,14 @@ import math
 _projectiles = pygame.sprite.Group() # Python handles sprites in groups, this is for organization purposes
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x, y, tx, ty, particle_system, speed):
+    def __init__(self, x, y, tx, ty, width, height, particle_system, speed):
         pygame.sprite.Sprite.__init__(self)
 
         self.x = x
         self.y = y
 
-        self.width = 1
-        self.height = 1
+        self.width = width
+        self.height = height
 
         self.tx = tx
         self.ty = ty
@@ -22,7 +22,7 @@ class Projectile(pygame.sprite.Sprite):
         self.speed = speed
 
         self.image = pygame.Surface([self.width, self.height])
-        self.image.fill((0, 0, 0))
+        self.image.fill((255, 255, 255))
 
         self.rect = (self.x, self.y)
 

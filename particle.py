@@ -109,6 +109,41 @@ class FireParticleSystem(ParticleSystem):
         new_count = self.max_particles - len(self.particles)
         self.createParticles(new_count, 25, 75)
 
+class MagicParticleSystem(ParticleSystem):
+    def __init__(self, x, y):
+        super().__init__()
+        self.x = x
+        self.y = y
+
+        self.particle_color = (255, 0, 255)
+
+        self.max_particles = 50
+
+        self.createParticles(self.max_particles, 0, 25)
+
+    # Create an amount of particles and add them to the group to be updated and drawn
+    def createParticles(self, count, min_life, max_life):
+        for p in range(count):
+            p = Particle(self.x, self.y, 2, 2, self.particle_color, min_life, max_life) # Create the particle (see particle class)
+
+            # Assign velocities as a float for more fluid movement
+            p.y_vel = random.uniform(-0.5, 0.5)
+            p.x_vel = random.uniform(-0.5, 0.5)
+
+            # Randomly assign an alpha value to some of the particles for dynamic contrast
+            p.image.set_alpha(random.randint(25, 255))
+            
+            # Add the particles to the group
+            self.particles.add(p)
+
+    # Only calls for the particles to update, and continues the animation if the particles are allowed to decay
+    def update(self):
+        self.particles.update()
+
+        # Keeps the particle count correct
+        new_count = self.max_particles - len(self.particles)
+        self.createParticles(new_count, 25, 75)
+
 #
 #
 # Extends the base partical system, (x, y) located the origin point of the particles

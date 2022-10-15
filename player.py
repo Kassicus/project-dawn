@@ -1,5 +1,6 @@
 # Standard library imports
 import pygame
+import math
 
 # Custom class imports
 import projectile
@@ -22,20 +23,21 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
 
         # Bounding box variables
-        self.width = 30
-        self.height = 30
+        self.width = 1
+        self.height = 1
 
         # Generic player variables
         self.color = (255, 255, 255)
         self.facing = "right"
         self.health = 40
 
-        self.image = pygame.Surface([self.width, self.height])
-        self.image.fill(self.color)
+        self.image = pygame.image.load("assets/player/temp.png")
 
         self.rect = self.image.get_rect()
         self.rect.x = self.x - int(self.width / 2)
         self.rect.y = self.y - int(self.height / 2)
+
+        self.mouse_rot = 0
 
         # Player Currency
         self.mobSoulCount = 0
@@ -45,9 +47,11 @@ class Player(pygame.sprite.Sprite):
         #Player Inventory
         self.inventory = [itemLib.knife1, itemLib.pistol1, itemLib.shockMagic2]
 
+
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self, surface):
-        surface.blit(self.image, self.rect)
+        drawnImage = pygame.transform.rotate(self.image, self.mouse_rot)
+        surface.blit(drawnImage, (self.rect.x, self.rect.y))
 
     # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):
@@ -55,9 +59,19 @@ class Player(pygame.sprite.Sprite):
         self.x += self.x_velocity
         self.y += self.y_velocity
 
+        self.mouse_rot = self.rotateToMouse()
+        print(self.mouse_rot)
+
         self.rect.update(self.x - int(self.width / 2), self.y - int(self.height / 2), self.width, self.height)
 
         self.eventHandler(events)
+
+    def rotateToMouse(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        angle = math.atan2(self.rect.x - mouse_x, self.rect.y - mouse_y)
+        degrees = math.degrees(angle)
+
+        return(degrees)
 
     # Turn keyboard input into velocity to move the player
     def eventHandler(self, events):

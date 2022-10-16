@@ -21,6 +21,9 @@ class Player(pygame.sprite.Sprite):
         # Velocity variables
         self.x_velocity = 0
         self.y_velocity = 0
+
+        self.friction = 0.1
+
         self.speed = 5
 
         # Bounding box variables

@@ -21,6 +21,17 @@ class PlayerInventoryMenu():
         self.width = width
         self.height = height
 
+        #Dictionary Variables
+        self.menuS1SS = {}         #menuSection1SubSections
+        self.textCenterDict = {}   #Dictionary of Text Centered objects
+        self.menuOptionDict = {}   #Dictionary of menuOptions
+
+        #Dictionary Dynamic Key Name Base Definitions
+        self.menuS1SSKeyName = "menuSection1SubSection" #Base key name for a dynamic dictionary key. Dictionary:'menuSection1SubSections'. USE: Specifically to reference surface objects that are sub sections of menuSection1. EX: self.menuS1SSKeyname+str(1) = menuSection1SubSection1.
+        self.textCenterS1SSC = "menuSection1SubSectionTextCenter" #Base key name for a dynamic dictionary key. Dictionary:'textCenterDict'. USE: Secifically to reference the objects that get a surface's dimensions and centers text within them. More Specifically for Section1's SubSections in this case. EX: self.textCenterS1SSC+str(1) = menuSection1SubSectionTextCenter1.
+        self.mO = "menuOption" #Base key name for a dynamic dictionary key. Dictionary:'menuOptionDict'. USE: Secifically to reference the text of the menu options. EX: self.mO+str(1) = menuOption1.
+        
+
         # Graphics variables 
         self.colorPicker = pygame.color.Color
         self.bg_color = bg_color
@@ -29,11 +40,11 @@ class PlayerInventoryMenu():
 
         # Font Variables
         self.menuTitle = "Character Management"
-        self.menuOption1 = "Character Info"
-        self.menuOption2 = "Inventory"
-        self.menuOption3 = "Astral Stash"
-        self.menuOption4 = "Spell Book"
-        self.menuOption5 = "Settings"
+        self.menuOptionDict[self.mO+str(1)] = "Character Info"
+        self.menuOptionDict[self.mO+str(2)] = "Inventory"
+        self.menuOptionDict[self.mO+str(3)] = "Astral Stash"
+        self.menuOptionDict[self.mO+str(4)] = "Spell Book"
+        self.menuOptionDict[self.mO+str(5)] = "Settings"
         self.menuTitleTextSize = 64
         self.menuTextSize = 28
 
@@ -49,7 +60,7 @@ class PlayerInventoryMenu():
         #Menu Format Variables
         self.menuRows = 5
         self.menuColumns = 3
-
+        
         #Surface Variables
         self.menuScreenBackground = pygame.Surface((self.width - (self.x * 2), self.height - (self.y * 2)), pygame.SRCALPHA)
         self.menuScreenBackground.fill(self.bg_color)
@@ -67,14 +78,12 @@ class PlayerInventoryMenu():
         self.menuSection1RowHeight = self.menuSection1.get_height()/self.menuRows
         self.menuSection1ColumnWidth = self.menuSection1.get_width()/self.menuColumns
         ###MenuSection1 Sub Surface Dimension Variables
-        self.menuSection1SubSections = {}
-        self.menuS1SSKeyName = "menuSectionSubSection" #menuSection1SubSectionKeyName: A dynamic variable essentially. Use in a dictionary key
         for s in range(1,self.menuRows+1):
             key = self.menuS1SSKeyName+str(s)
             value = pygame.Surface((self.menuSection1ColumnWidth*3,self.menuSection1RowHeight),pygame.SRCALPHA)
             #value.fill(self.bg_color)
             #dvalue.fill(self.menuSection2Color)
-            self.menuSection1SubSections[key] = value
+            self.menuS1SS[key] = value
 
         self.menuSection2 = pygame.Surface((self.menuColumnWidth*2,self.menuRowHeight*2),pygame.SRCALPHA)
         self.menuSection2.fill(self.menuSection2Color)
@@ -82,26 +91,14 @@ class PlayerInventoryMenu():
         self.menuSection3.fill(self.menuSection3Color)
 
         #Text Centering Variables
+        for s in range(1,self.menuRows+1):
+            key = self.textCenterS1SSC+str(s)
+            value = self.font.get_rect(self.menuOptionDict[self.mO+str(s)] , size = self.menuTextSize)
+            value.center = self.menuS1SS[self.menuS1SSKeyName+str(s)].get_rect().center
+            self.textCenterDict[key] = value
+
         self.menuTitleTextRect = self.font.get_rect(self.menuTitle, size = self.menuTitleTextSize)
         self.menuTitleTextRect.center = self.menuScreenTitleSection.get_rect().center
-
-        self.menuSection1Row1Center = self.font.get_rect(self.menuOption1, size = self.menuTextSize)
-        self.menuSection1Row1Center.center = self.menuSection1SubSections[self.menuS1SSKeyName+str(1)].get_rect().center
-
-        self.menuSection1Row2Center = self.font.get_rect(self.menuOption2, size = self.menuTextSize)
-        self.menuSection1Row2Center.center = self.menuSection1SubSections[self.menuS1SSKeyName+str(2)].get_rect().center
-
-        self.menuSection1Row3Center = self.font.get_rect(self.menuOption3, size = self.menuTextSize)
-        self.menuSection1Row3Center.center = self.menuSection1SubSections[self.menuS1SSKeyName+str(3)].get_rect().center
-
-        self.menuSection1Row4Center = self.font.get_rect(self.menuOption4, size = self.menuTextSize)
-        self.menuSection1Row4Center.center = self.menuSection1SubSections[self.menuS1SSKeyName+str(4)].get_rect().center
-
-        self.menuSection1Row5Center = self.font.get_rect(self.menuOption5, size = self.menuTextSize)
-        self.menuSection1Row5Center.center = self.menuSection1SubSections[self.menuS1SSKeyName+str(5)].get_rect().center
-
-        self.menuTitleTextRect2 = self.font.get_rect(self.menuTitle, size = self.menuTitleTextSize)
-        self.menuTitleTextRect2.center = self.menuBottomRowSection.get_rect().center
 
     def draw(self, surface):
         # Rendering the separate menu elements 'together'. Background/Containers/Text
@@ -117,69 +114,22 @@ class PlayerInventoryMenu():
         self.font.pad = False
         ##endregion
 
-        ##region -Renders menu title to the 2nd row section of the menu
-        self.font.render_to(
-        self.menuSection1SubSections[self.menuS1SSKeyName+str(1)],
-        self.menuSection1Row1Center,
-        self.menuOption1,
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
-        )
-        self.font.pad = False
+        ##region -Renders the sub sections of section 1
+        for i in range(1,self.menuRows+1):
+            self.font.render_to(
+            self.menuS1SS[self.menuS1SSKeyName+str(i)],
+            self.textCenterDict[self.textCenterS1SSC+str(i)],
+            self.menuOptionDict[self.mO+str(i)],
+            self.textColor1,
+            size=self.menuTextSize,
+            style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
+            )
+            self.font.pad = False
         ##endregion
 
-        ##region -Renders menu title to the 2nd row section of the menu
-        self.font.render_to(
-        self.menuSection1SubSections[self.menuS1SSKeyName+str(2)],
-        self.menuSection1Row2Center,
-        self.menuOption2,
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
-        )
-        self.font.pad = False
-        ##endregion
-
-        ##region -Renders menu title to the 2nd row section of the menu
-        self.font.render_to(
-        self.menuSection1SubSections[self.menuS1SSKeyName+str(3)],
-        self.menuSection1Row3Center,
-        self.menuOption3,
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
-        )
-        self.font.pad = False
-        ##endregion
-
-        ##region -Renders menu title to the 2nd row section of the menu
-        self.font.render_to(
-        self.menuSection1SubSections[self.menuS1SSKeyName+str(4)],
-        self.menuSection1Row4Center,
-        self.menuOption4,
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
-        )
-        self.font.pad = False
-        ##endregion
-
-        ##region -Renders menu title to the 2nd row section of the menu
-        self.font.render_to(
-        self.menuSection1SubSections[self.menuS1SSKeyName+str(5)],
-        self.menuSection1Row5Center,
-        self.menuOption5,
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
-        )
-        self.font.pad = False
-        ##endregion
-        
         surface.blit(self.menuSection1,(self.x,(self.y+self.menuRowHeight)))
         for s in range(1,self.menuRows+1):
-            surface.blit(self.menuSection1SubSections["menuSectionSubSection"+str(s)],(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
+            surface.blit(self.menuS1SS[self.menuS1SSKeyName+str(s)],(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
         surface.blit(self.menuSection2,(self.x+self.menuColumnWidth,(self.y+self.menuRowHeight)))
         surface.blit(self.menuSection3,(self.x,(self.y+self.menuRowHeight*3)))
         surface.blit(self.menuScreenBackground,(self.x,self.y)) #MenuBackground

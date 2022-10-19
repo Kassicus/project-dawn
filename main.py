@@ -114,7 +114,7 @@ class Game():
         self.healthbar.update(self.player.health)
 
         # See above disclaimer for this...
-        projectile._projectiles.update(self.screen)
+        projectile._projectiles.update()
 
         # Update all game elements before this point
         self.testRoom.update()

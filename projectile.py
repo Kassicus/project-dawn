@@ -10,14 +10,13 @@ class Projectile(pygame.sprite.Sprite):
     def __init__(self, x, y, tx, ty, width, height, particle_system, speed):
         pygame.sprite.Sprite.__init__(self)
 
-        self.x = x
-        self.y = y
+        self.pos = pygame.math.Vector2(x, y)
+        self.velocity = pygame.math.Vector2()
 
         self.width = width
         self.height = height
 
-        self.tx = tx
-        self.ty = ty
+        self.target = pygame.math.Vector2(tx, ty)
 
         self.particle_system = particle_system
 
@@ -26,35 +25,36 @@ class Projectile(pygame.sprite.Sprite):
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill((255, 255, 255))
 
-        self.rect = (self.x, self.y)
+        self.display_surface = pygame.display.get_surface()
 
-        self.x_vel, self.y_vel = self.get_vectors()
+        self.rect = self.pos
+
+        self.velocity.x = self.get_vectors()[0]
+        self.velocity.y = self.get_vectors()[1]
 
     def get_vectors(self):
-        distance = [self.tx - self.x, self.ty - self.y]
+        distance = [self.target.x - self.pos.x, self.target.y - self.pos.y]
         normal = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
         direction = [distance[0] / normal, distance[1] / normal]
         vectors = [direction[0] * self.speed, direction[1] * self.speed]
 
         return vectors
 
-    def update(self, surface):
-        self.particle_system.draw(surface)
+    def update(self):
+        self.particle_system.draw(self.display_surface)
         self.particle_system.update()
 
-        self.x += self.x_vel * uni.dt
-        self.y += self.y_vel * uni.dt
+        self.pos += self.velocity * uni.dt
 
-        self.rect = (self.x, self.y)
+        self.rect = self.pos
 
-        self.particle_system.x = self.x
-        self.particle_system.y = self.y
+        self.particle_system.pos = self.pos
 
         self.check_overrun()
 
     def check_overrun(self):
-        if self.x < -500 or self.x > 1500:
+        if self.pos.x < -500 or self.pos.x > 1500:
             self.kill()
         
-        if self.y < -500 or self.y > 1300:
+        if self.pos.y < -500 or self.pos.y > 1300:
             self.kill()

@@ -16,14 +16,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         # Position variables
-        self.x = 500
-        self.y = 400
-
-        # Velocity variables
-        self.x_velocity = 0
-        self.y_velocity = 0
-
-        self.friction = 0.1
+        self.pos = pygame.math.Vector2(500, 400)
+        self.direction = pygame.math.Vector2()
 
         self.speed = 200
 
@@ -41,8 +35,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets/player/temp.png")
 
         self.rect = self.image.get_rect()
-        self.rect.x = self.x - int(self.width / 2)
-        self.rect.y = self.y - int(self.height / 2)
+        self.rect.center = self.pos
 
         # Player Currency
         self.mobSoulCount = 0
@@ -61,18 +54,16 @@ class Player(pygame.sprite.Sprite):
     # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):
         # Update player location based on player velocity
-        self.x += self.x_velocity * uni.dt
-        self.y += self.y_velocity * uni.dt
+        self.pos += self.direction * uni.dt
+        self.rect.center = self.pos
 
-        print(uni.dt)
-
-        self.rect.update(self.x - int(self.width / 2), self.y - int(self.height / 2), self.width, self.height)
+        #self.rect.update(self.x - int(self.width / 2), self.y - int(self.height / 2), self.width, self.height)
 
         self.eventHandler(events)
 
         if pygame.mouse.get_pressed()[2]:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, 3, 3, particle.MagicParticleSystem(self.x, self.y), 400)
+            p = projectile.Projectile(self.pos.x, self.pos.y, mouse_x, mouse_y, 3, 3, particle.MagicParticleSystem(self.pos.x, self.pos.y), 400)
             projectile._projectiles.add(p)
 
     def rotateToMouse(self):
@@ -81,7 +72,7 @@ class Player(pygame.sprite.Sprite):
         degrees = math.degrees(angle)
 
         rotatedImage = pygame.transform.rotate(self.image, degrees)
-        new_rect = rotatedImage.get_rect(center = self.image.get_rect(center = (self.x, self.y)).center)
+        new_rect = rotatedImage.get_rect(center = self.image.get_rect(center = self.pos).center)
 
         return(rotatedImage, new_rect)
 
@@ -90,22 +81,22 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
-            self.x_velocity = -self.speed
+            self.direction.x = -self.speed
         elif keys[pygame.K_d]:
-            self.x_velocity = self.speed
+            self.direction.x = self.speed
         else:
-            self.x_velocity = 0
+            self.direction.x = 0
 
         if keys[pygame.K_w]:
-            self.y_velocity = -self.speed
+            self.direction.y = -self.speed
         elif keys[pygame.K_s]:
-            self.y_velocity = self.speed
+            self.direction.y = self.speed
         else:
-            self.y_velocity = 0
+            self.direction.y = 0
 
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    p = projectile.Projectile(self.x, self.y, mouse_x, mouse_y, 5, 5, particle.FireParticleSystem(self.x, self.y), 300)
+                    p = projectile.Projectile(self.pos.x, self.pos.y, mouse_x, mouse_y, 5, 5, particle.FireParticleSystem(self.pos.x, self.pos.y), 300)
                     projectile._projectiles.add(p)

@@ -31,6 +31,7 @@ class Game():
         # Game management variables
         self.running = True
         self.clock = pygame.time.Clock()
+        self.delta_time = None
         self.events = pygame.event.get() # Capturing this request into a variable to be used in other locations
         self.debuginterface = debug.DebugInterface()
 
@@ -127,9 +128,11 @@ class Game():
         self.debuginterface.update(self.clock, self.player, self.testRoom)
         pygame.display.update()
         self.clock.tick(30)
+        #self.delta_time = self.clock.tick() / 1000
 
-game = Game() # Create an instance of the game class
+if __name__ == '__main__':
 
-game.start() # Start our instance of the game class
-
-pygame.quit() # When the game.running variables is set back to false, the code resumes here and this line kills the game and all other pygame/python tasks on the machine created by the game
+    game = Game() # Create an instance of the game class
+    game.start() # Start our instance of the game class
+    pygame.quit() # When the game.running variables is set back to false, the code resumes here and this line kills the game and all other pygame/python tasks on the machine created by the game
+    

@@ -84,6 +84,8 @@ class FireParticleSystem(ParticleSystem):
 
         self.particle_color = (247, 90, 27)
 
+        self.max_particles = 50
+
         self.createParticles(self.max_particles, 0, 25)
 
     # Create an amount of particles and add them to the group to be updated and drawn
@@ -117,7 +119,7 @@ class MagicParticleSystem(ParticleSystem):
 
         self.particle_color = (255, 0, 255)
 
-        self.max_particles = 50
+        self.max_particles = 20
 
         self.createParticles(self.max_particles, 0, 25)
 

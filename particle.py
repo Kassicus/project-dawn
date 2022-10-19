@@ -1,6 +1,7 @@
 # Standard library imports
 import pygame
 import random
+import uni
 
 #
 #
@@ -49,8 +50,8 @@ class Particle(pygame.sprite.Sprite):
     # Handles all non-graphical updates for the particle
     def update(self):
         # Update the position
-        self.x += self.x_vel
-        self.y += self.y_vel
+        self.x += self.x_vel * uni.dt
+        self.y += self.y_vel * uni.dt
         self.rect = (self.x, self.y)
 
         # If the particle decays, reduce its life by 1 for each frame (~30/s)
@@ -94,8 +95,8 @@ class FireParticleSystem(ParticleSystem):
             p = Particle(self.x, self.y, 5, 5, self.particle_color, min_life, max_life) # Create the particle (see particle class)
 
             # Assign velocities as a float for more fluid movement
-            p.y_vel = random.uniform(-1.5, 1.5)
-            p.x_vel = random.uniform(-1.5, 1.5)
+            p.y_vel = random.uniform(-50, 50)
+            p.x_vel = random.uniform(-50, 50)
 
             # Randomly assign an alpha value to some of the particles for dynamic contrast
             p.image.set_alpha(random.randint(25, 255))
@@ -129,8 +130,8 @@ class MagicParticleSystem(ParticleSystem):
             p = Particle(self.x, self.y, 2, 2, self.particle_color, min_life, max_life) # Create the particle (see particle class)
 
             # Assign velocities as a float for more fluid movement
-            p.y_vel = random.uniform(-0.5, 0.5)
-            p.x_vel = random.uniform(-0.5, 0.5)
+            p.y_vel = random.uniform(-20, 20)
+            p.x_vel = random.uniform(-20, 20)
 
             # Randomly assign an alpha value to some of the particles for dynamic contrast
             p.image.set_alpha(random.randint(25, 255))
@@ -171,11 +172,11 @@ class ImpactParticleSystem(ParticleSystem):
 
             # Determine the direction the particle needs to be cast in and give it a random velocity (random float)
             if self.impact_direction == "left":
-                p.x_vel = random.uniform(-0.5, -3.5)
+                p.x_vel = random.uniform(-10, -25)
             elif self.impact_direction == "right":
-                p.x_vel = random.uniform(0.5, 10)
+                p.x_vel = random.uniform(10, 100)
 
-            p.y_vel = random.uniform(-3.5, 0.0) # Negative values send particles up, this is the initial velocity they are tossed up with
+            p.y_vel = random.uniform(-25, 0.0) # Negative values send particles up, this is the initial velocity they are tossed up with
 
             self.particles.add(p)
 

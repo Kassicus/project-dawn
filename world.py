@@ -31,6 +31,8 @@ class Room():
         self.width = 1000
         self.height = 800
 
+        self.display_surface = pygame.display.get_surface()
+
         self.createChunks()
 
     def createChunks(self):
@@ -42,8 +44,8 @@ class Room():
                 self.chunks.add(c)
                 chunk_id += 1
 
-    def draw(self, surface):
-        self.chunks.draw(surface)
+    def draw(self):
+        self.chunks.draw(self.display_surface)
 
     def update(self):
         self.chunks.update()

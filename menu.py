@@ -4,8 +4,10 @@ import pygame
 import pygame.color
 import pygame.freetype as freetype
 
+import uni
+
 class PlayerInventoryMenu():
-    def __init__(self, x, y, width, height, bg_color, fg_color):
+    def __init__(self, x, y, bg_color, fg_color):
         """
         bg_color: background color for menu
         fg_color: foreground color for menu
@@ -18,8 +20,8 @@ class PlayerInventoryMenu():
         # Position Variables
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
+        self.width = uni.SCREEN_WIDTH
+        self.height = uni.SCREEN_HEIGHT
 
         #Dictionary Variables
         self.menuS1SS = {}         #menuSection1SubSections
@@ -30,7 +32,8 @@ class PlayerInventoryMenu():
         self.menuS1SSKeyName = "menuSection1SubSection" #Base key name for a dynamic dictionary key. Dictionary:'menuSection1SubSections'. USE: Specifically to reference surface objects that are sub sections of menuSection1. EX: self.menuS1SSKeyname+str(1) = menuSection1SubSection1.
         self.textCenterS1SSC = "menuSection1SubSectionTextCenter" #Base key name for a dynamic dictionary key. Dictionary:'textCenterDict'. USE: Secifically to reference the objects that get a surface's dimensions and centers text within them. More Specifically for Section1's SubSections in this case. EX: self.textCenterS1SSC+str(1) = menuSection1SubSectionTextCenter1.
         self.mO = "menuOption" #Base key name for a dynamic dictionary key. Dictionary:'menuOptionDict'. USE: Secifically to reference the text of the menu options. EX: self.mO+str(1) = menuOption1.
-        
+
+        self.display_surface = pygame.display.get_surface()        
 
         # Graphics variables 
         self.colorPicker = pygame.color.Color
@@ -127,12 +130,12 @@ class PlayerInventoryMenu():
             self.font.pad = False
         ##endregion
 
-        surface.blit(self.menuSection1,(self.x,(self.y+self.menuRowHeight)))
+        self.display_surface.blit(self.menuSection1,(self.x,(self.y+self.menuRowHeight)))
         for s in range(1,self.menuRows+1):
-            surface.blit(self.menuS1SS[self.menuS1SSKeyName+str(s)],(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
-        surface.blit(self.menuSection2,(self.x+self.menuColumnWidth,(self.y+self.menuRowHeight)))
-        surface.blit(self.menuSection3,(self.x,(self.y+self.menuRowHeight*3)))
-        surface.blit(self.menuScreenBackground,(self.x,self.y)) #MenuBackground
+            self.display_surface.blit(self.menuS1SS[self.menuS1SSKeyName+str(s)],(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
+        self.display_surface.blit(self.menuSection2,(self.x+self.menuColumnWidth,(self.y+self.menuRowHeight)))
+        self.display_surface.blit(self.menuSection3,(self.x,(self.y+self.menuRowHeight*3)))
+        self.display_surface.blit(self.menuScreenBackground,(self.x,self.y)) #MenuBackground
         #Region Menu wireframe guides
         # for i in range(1,self.menuRows+1):
         #     pygame.draw.line(self.menuSection1,self.fg_color,(0,self.menuSection1RowHeight*i),(self.menuSection1.get_width(),self.menuSection1RowHeight*i))

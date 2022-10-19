@@ -13,20 +13,16 @@ import debug
 import world
 import inventory
 import itemLib
+import uni
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
 # Main game class (despite being a class this will only ever be instanciated once)
 class Game():
     def __init__(self):
-        # Window information variables
-        self.screen_width = 1000
-        self.screen_height = 800
-        self.window_title = "Project Dawn"
-
         # Python screen setup
-        self.screen = pygame.display.set_mode([self.screen_width, self.screen_height])
-        pygame.display.set_caption(self.window_title)
+        self.screen = pygame.display.set_mode([uni.SCREEN_WIDTH, uni.SCREEN_HEIGHT])
+        pygame.display.set_caption(uni.SCREEN_TITLE)
 
         # Game management variables
         self.running = True
@@ -37,11 +33,8 @@ class Game():
 
         # Game object instances
         self.player = player.Player()
-
         self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
-
-        self.pMenu = menu.PlayerInventoryMenu(50, 45, self.screen_width, self.screen_height, (120,113,93,120), (0,150,0))
-
+        self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,120), (0,150,0))
         self.testRoom = world.Room()
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
@@ -102,18 +95,18 @@ class Game():
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        self.testRoom.draw(self.screen)
+        self.testRoom.draw()
         
-        projectile._projectiles.draw(self.screen)
+        projectile._projectiles.draw(self.screen) # Groups should be the only thing that still need a surface passed?
 
-        self.player.draw(self.screen)
-        self.healthbar.draw(self.screen)
+        self.player.draw()
+        self.healthbar.draw()
 
         if self.pMenu.isDrawn == True:
             self.pMenu.draw(self.screen)
 
         if self.debuginterface.active:
-            self.debuginterface.draw(self.screen)
+            self.debuginterface.draw()
 
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
@@ -127,8 +120,7 @@ class Game():
         self.testRoom.update()
         self.debuginterface.update(self.clock, self.player, self.testRoom)
         pygame.display.update()
-        self.clock.tick(30)
-        #self.delta_time = self.clock.tick() / 1000
+        uni.dt = self.clock.tick() / 1000
 
 if __name__ == '__main__':
 

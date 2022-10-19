@@ -12,6 +12,8 @@ class DebugInterface():
         #self.current_chunk_text = None
         self.projectile_text = None
 
+        self.display_surface = pygame.display.get_surface()
+
         self.active = False
 
         self.current_chunk_string = ""
@@ -43,12 +45,12 @@ class DebugInterface():
         projectile_text = self.font.render(projectile_string, 1, (255, 255, 255))
         return projectile_text
 
-    def draw(self, surface):
-        surface.blit(self.fps_text, (800, 10))
-        surface.blit(self.mouse_text, (800, 30))
-        surface.blit(self.player_text, (800, 50))
-        #surface.blit(self.current_chunk_text, (800, 70))
-        surface.blit(self.projectile_text, (800, 90))
+    def draw(self):
+        self.display_surface.blit(self.fps_text, (800, 10))
+        self.display_surface.blit(self.mouse_text, (800, 30))
+        self.display_surface.blit(self.player_text, (800, 50))
+        #self.display_surface.blit(self.current_chunk_text, (800, 70))
+        self.display_surface.blit(self.projectile_text, (800, 90))
 
     def update(self, clock, player, room):
         self.fps_text = self.get_fps(clock)

@@ -21,15 +21,17 @@ class StatusBar():
         self.bg_color = bg_color
         self.fg_color = fg_color
 
+        self.display_surface = pygame.display.get_surface()
+
         # Value
         self.value = value
         self.max_value = max_value
 
         self.current_value = int(self.width / self.max_value) * self.value # Map the current value to a scale between the max and min, change the status bar to reflect (is dynamic)
 
-    def draw(self, surface):
-        pygame.draw.rect(surface, self.bg_color, (self.x, self.y, self.width, self.height), 0) # Background
-        pygame.draw.rect(surface, self.fg_color, (self.x + 2, self.y + 2, self.current_value - 4, self.height - 4)) # Dynamic foreground
+    def draw(self):
+        pygame.draw.rect(self.display_surface, self.bg_color, (self.x, self.y, self.width, self.height), 0) # Background
+        pygame.draw.rect(self.display_surface, self.fg_color, (self.x + 2, self.y + 2, self.current_value - 4, self.height - 4)) # Dynamic foreground
 
     def update(self, value):
         self.value = value # Update the value with a live feed

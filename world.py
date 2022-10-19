@@ -45,7 +45,7 @@ class Room():
 
         self.layout = layout
 
-        self.door = None
+        self.doors = []
 
         self.createChunks()
 
@@ -63,7 +63,11 @@ class Room():
 
     def update(self, player):
         self.chunks.update()
-        self.door.update(player)
+        try:
+            for door in self.doors:
+                door.update(player)
+        except:
+            pass
 
     def containsPlayer(self, player):
         collide = pygame.sprite.spritecollide(player, self.chunks, True)
@@ -89,9 +93,16 @@ class Door():
 
 starting_room = Room(layouts.starting_room)
 second_room = Room(layouts.second_room)
+third_room = Room(layouts.third_room)
 
-starting_room_door = Door(150, 0, 100, 50, second_room, 175, 720)
-starting_room.door = starting_room_door
+door_1 = Door(150, 0, 100, 50, second_room, 175, 720)
+starting_room.doors.append(door_1)
 
-second_room_door = Door(150, 750, 100, 50, starting_room, 175, 75)
-second_room.door = second_room_door
+door_2 = Door(150, 750, 100, 50, starting_room, 175, 75)
+second_room.doors.append(door_2)
+
+door_3 = Door(950, 250, 50, 100, third_room, 75, 275)
+second_room.doors.append(door_3)
+
+door_4 = Door(0, 250, 50, 100, second_room, 875, 275)
+third_room.doors.append(door_4)

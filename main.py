@@ -124,7 +124,6 @@ class Game():
         uni.dt = self.clock.tick() / 1000
 
 if __name__ == '__main__':
-
     game = Game() # Create an instance of the game class
     game.start() # Start our instance of the game class
     pygame.quit() # When the game.running variables is set back to false, the code resumes here and this line kills the game and all other pygame/python tasks on the machine created by the game

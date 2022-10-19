@@ -1,10 +1,10 @@
 import pygame
-import random
 import layouts
 import projectile
+import uni
 
 class Chunk(pygame.sprite.Sprite):
-    def __init__(self, x, y, chunk_id):
+    def __init__(self, x, y, chunk_id, room):
         pygame.sprite.Sprite.__init__(self)
         self.pos = pygame.math.Vector2(x, y)
 
@@ -13,14 +13,15 @@ class Chunk(pygame.sprite.Sprite):
 
         self.chunk_id = chunk_id
         self.wall = False
+
+        self.room = room
         
-        self.layout = layouts.active_layout[self.chunk_id]
+        self.layout = self.room.layout[self.chunk_id]
         
         if self.layout != 0:
             self.wall = True
         
         self.image = layouts.tiles[self.layout]
-
         self.rect = self.image.get_rect()
 
     def update(self):
@@ -36,13 +37,15 @@ class Chunk(pygame.sprite.Sprite):
                     p.kill()
 
 class Room():
-    def __init__(self):
+    def __init__(self, layout):
         self.chunks = pygame.sprite.Group()
 
         self.width = 1000
         self.height = 800
 
-        self.display_surface = pygame.display.get_surface()
+        self.layout = layout
+
+        self.door = None
 
         self.createChunks()
 
@@ -51,15 +54,16 @@ class Room():
 
         for y in range(int(self.height / 50)):
             for x in range(int(self.width / 50)):
-                c = Chunk(int(x * 50), int(y * 50), chunk_id)
+                c = Chunk(int(x * 50), int(y * 50), chunk_id, self)
                 self.chunks.add(c)
                 chunk_id += 1
 
-    def draw(self):
-        self.chunks.draw(self.display_surface)
+    def draw(self, surface):
+        self.chunks.draw(surface)
 
-    def update(self):
+    def update(self, player):
         self.chunks.update()
+        self.door.update(player)
 
     def containsPlayer(self, player):
         collide = pygame.sprite.spritecollide(player, self.chunks, True)
@@ -68,6 +72,26 @@ class Room():
             return chunk.chunk_id
 
 class Door():
-    def __init__(self):
-        pass
+    def __init__(self, x, y, width, height, target_room, sx, sy):
+        self.pos = pygame.math.Vector2(x, y)
+        self.width = width
+        self.height = height
 
+        self.target_room = target_room
+
+        self.spawn_pos = pygame.math.Vector2(sx, sy)
+
+    def update(self, player):
+        if self.pos.x < player.pos.x < self.pos.x + self.width:
+            if self.pos.y < player.pos.y < self.pos.y + self.height:
+                uni.active_room = self.target_room
+                player.pos = self.spawn_pos
+
+starting_room = Room(layouts.starting_room)
+second_room = Room(layouts.second_room)
+
+starting_room_door = Door(150, 0, 100, 50, second_room, 175, 720)
+starting_room.door = starting_room_door
+
+second_room_door = Door(150, 750, 100, 50, starting_room, 175, 75)
+second_room.door = second_room_door

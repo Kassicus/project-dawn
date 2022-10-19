@@ -34,8 +34,9 @@ class Game():
         # Game object instances
         self.player = player.Player()
         self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
-        self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,225), (0,150,0))
-        self.testRoom = world.Room()
+        self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,120), (0,150,0))
+
+        uni.active_room = world.starting_room
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
@@ -95,7 +96,7 @@ class Game():
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        self.testRoom.draw()
+        uni.active_room.draw(self.screen) # This is kindof a group too?
         
         projectile._projectiles.draw(self.screen) # Groups should be the only thing that still need a surface passed?
 
@@ -117,8 +118,8 @@ class Game():
         projectile._projectiles.update()
 
         # Update all game elements before this point
-        self.testRoom.update()
-        self.debuginterface.update(self.clock, self.player, self.testRoom)
+        uni.active_room.update(self.player)
+        self.debuginterface.update(self.clock, self.player)
         pygame.display.update()
         uni.dt = self.clock.tick() / 1000
 

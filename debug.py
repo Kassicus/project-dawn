@@ -9,8 +9,8 @@ class DebugInterface():
         self.fps_text = None
         self.mouse_text = None
         self.player_text = None
-        #self.current_chunk_text = None
         self.projectile_text = None
+        self.particle_text = None
 
         self.display_surface = pygame.display.get_surface()
 
@@ -33,28 +33,31 @@ class DebugInterface():
         player_text = self.font.render(player_string, 1, (255, 255, 255))
         return player_text
 
-    def get_current_chunk(self, room, player):
-        get_chunk_id = room.containsPlayer(player)
-        if get_chunk_id:
-            self.current_chunk_string = "Chunk:   " + str(get_chunk_id)
-        current_chunk_text = self.font.render(self.current_chunk_string, 1, (255, 255, 255))
-        return current_chunk_text
-
     def get_projectile_count(self):
         projectile_string = "Proj:    " + str(int(len(projectile._projectiles)))
         projectile_text = self.font.render(projectile_string, 1, (255, 255, 255))
         return projectile_text
 
+    def get_particle_count(self):
+        particles = 0
+        for p in projectile._projectiles:
+            count = len(p.particle_system.particles)
+            particles += count
+        particle_string = "Part:    " + str(particles)
+        particle_text = self.font.render(particle_string, 1, (255, 255, 255))
+        return particle_text
+
     def draw(self):
+        pygame.draw.rect(self.display_surface, (0, 0, 0), (780, 0, 220, 110), 0)
         self.display_surface.blit(self.fps_text, (800, 10))
         self.display_surface.blit(self.mouse_text, (800, 30))
         self.display_surface.blit(self.player_text, (800, 50))
-        #self.display_surface.blit(self.current_chunk_text, (800, 70))
-        self.display_surface.blit(self.projectile_text, (800, 90))
+        self.display_surface.blit(self.projectile_text, (800, 70))
+        self.display_surface.blit(self.particle_text, (800, 90))
 
-    def update(self, clock, player, room):
+    def update(self, clock, player):
         self.fps_text = self.get_fps(clock)
         self.mouse_text = self.get_mouse()
         self.player_text = self.get_player(player)
-        #self.current_chunk_text = self.get_current_chunk(room, player)
         self.projectile_text = self.get_projectile_count()
+        self.particle_text = self.get_particle_count()

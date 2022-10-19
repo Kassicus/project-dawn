@@ -1,6 +1,6 @@
 import pygame
 
-starter_room = [
+starting_room = [
     13, 13, 4, 0, 0, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 12, 8, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 13,
     13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
@@ -19,22 +19,22 @@ starter_room = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 ]
 
-test_room = [
+second_room = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
-    13, 12, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 13,
+    13, 12, 1, 1, 1, 1, 1, 1, 14, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
     13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
     13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
     13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
     13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
-    13, 10, 6, 0, 0, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 3, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 3, 13,
+    13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 3, 13,
+    13, 10, 6, 0, 0, 5, 2, 2, 2, 2, 2, 2, 2, 15, 2, 2, 2, 2, 9, 13,
     13, 13, 4, 0, 0, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 ]
 
@@ -52,7 +52,17 @@ sprites = {
     "top_right_invert" : pygame.image.load("assets/tiles/walls/top_right_invert.png"),
     "bottom_left_invert" : pygame.image.load("assets/tiles/walls/bottom_left_invert.png"),
     "bottom_right_invert" : pygame.image.load("assets/tiles/walls/bottom_right_invert.png"),
-    "out_of_bounds" : pygame.image.load("assets/tiles/walls/out_of_bounds.png")
+    "out_of_bounds" : pygame.image.load("assets/tiles/walls/out_of_bounds.png"),
+    "bottom_double_invert" : pygame.image.load("assets/tiles/walls/bottom_double_invert.png"),
+    "top_double_invert" : pygame.image.load("assets/tiles/walls/top_double_invert.png"),
+    "left_double_invert" : pygame.image.load("assets/tiles/walls/left_double_invert.png"),
+    "right_double_invert" : pygame.image.load("assets/tiles/walls/right_double_invert.png"),
+    "top_bottom_flat" : pygame.image.load("assets/tiles/walls/top_bottom_flat.png"),
+    "left_right_flat" : pygame.image.load("assets/tiles/walls/left_right_flat.png"),
+    "top_u" : pygame.image.load("assets/tiles/walls/top_u.png"),
+    "bottom_u" : pygame.image.load("assets/tiles/walls/bottom_u.png"),
+    "left_u" : pygame.image.load("assets/tiles/walls/left_u.png"),
+    "right_u" : pygame.image.load("assets/tiles/walls/right_u.png"),
 }
 
 tiles = [
@@ -70,6 +80,14 @@ tiles = [
     sprites["bottom_left_invert"], # 11
     sprites["bottom_right_invert"], # 12
     sprites["out_of_bounds"], # 13
+    sprites["bottom_double_invert"], # 14
+    sprites["top_double_invert"], # 15
+    sprites["left_double_invert"], # 16
+    sprites["right_double_invert"], # 17
+    sprites["top_bottom_flat"], # 18
+    sprites["left_right_flat"], # 19
+    sprites["top_u"], # 20
+    sprites["bottom_u"], # 21
+    sprites["left_u"], # 22
+    sprites["right_u"], # 23
 ]
-
-active_layout = starter_room

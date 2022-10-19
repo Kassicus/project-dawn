@@ -5,3 +5,5 @@ SCREEN_TITLE = "Dawn of the Abyss"
 
 # Variables
 dt = 0
+
+active_room = None

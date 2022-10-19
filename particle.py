@@ -79,7 +79,7 @@ class FireParticleSystem(ParticleSystem):
         super().__init__()
         self.pos = pygame.math.Vector2(x, y)
 
-        self.particle_color = (247, 90, 27)
+        self.particle_color = uni.COLOR_FIRE
 
         self.max_particles = 50
 

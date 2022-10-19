@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.height = 1
 
         # Generic player variables
-        self.color = (255, 255, 255)
+        self.color = uni.WHITE
         self.facing = "right"
         self.health = 40
 

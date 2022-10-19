@@ -23,7 +23,7 @@ class Projectile(pygame.sprite.Sprite):
         self.speed = speed
 
         self.image = pygame.Surface([self.width, self.height])
-        self.image.fill((255, 255, 255))
+        self.image.fill(uni.WHITE)
 
         self.display_surface = pygame.display.get_surface()
 

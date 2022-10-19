@@ -8,7 +8,6 @@ import player
 import ui
 import projectile
 import menu
-import particle
 import debug
 import world
 import inventory
@@ -27,7 +26,6 @@ class Game():
         # Game management variables
         self.running = True
         self.clock = pygame.time.Clock()
-        self.delta_time = None
         self.events = pygame.event.get() # Capturing this request into a variable to be used in other locations
         self.debuginterface = debug.DebugInterface()
 
@@ -36,6 +34,7 @@ class Game():
         self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
         self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,120), (0,150,0))
 
+        # Set the current room to the "starting room" from the world file
         uni.active_room = world.starting_room
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
@@ -94,7 +93,7 @@ class Game():
 
     # Everything that needs to be drawn (graphical-updates) goes here
     def draw(self):
-        self.screen.fill((0, 0, 0))
+        self.screen.fill(uni.BLACK)
 
         uni.active_room.draw(self.screen) # This is kindof a group too?
         

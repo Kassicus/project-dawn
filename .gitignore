@@ -11,4 +11,4 @@ __pycache__/settings.cpython-310.pyc
 __pycache__/ui.cpython-310.pyc
 __pycache__/uni.cpython-3.10.pyc
 __pycache__/world.cpython-310.pyc
-*.pyc
+__pycache__/*.pyc

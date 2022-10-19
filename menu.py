@@ -37,7 +37,9 @@ class PlayerInventoryMenu():
 
         # Graphics variables 
         self.colorPicker = pygame.color.Color
-        self.bg_color = bg_color
+        # self.bg_color = bg_color
+        self.bg_color = self.colorPicker("gray35")
+        self.bg_color.a = 235
         self.fg_color = fg_color
         self.isDrawn = False
 
@@ -55,10 +57,10 @@ class PlayerInventoryMenu():
         self.textColor1 = "red3"
 
         # Surface Color Variables
-        self.menuSection2Color = self.colorPicker("darkseagreen")
-        self.menuSection2Color.a = 150
-        self.menuSection3Color = self.colorPicker("darkslateblue")
-        self.menuSection3Color.a = 150
+        self.menuSection2Color = self.colorPicker("gray22")
+        self.menuSection2Color.a = 225
+        self.menuSection3Color = self.colorPicker("gray23")
+        self.menuSection3Color.a = 225
 
         #Menu Format Variables
         self.menuRows = 5
@@ -76,7 +78,7 @@ class PlayerInventoryMenu():
         self.menuBottomRowSection = pygame.Surface((self.menuScreenBackground.get_width(),self.menuScreenBackground.get_height()*2-self.menuRowHeight))
 
         self.menuSection1 = pygame.Surface((self.menuColumnWidth,self.menuRowHeight*2),pygame.SRCALPHA)
-        self.menuSection1.fill(self.bg_color)
+        #self.menuSection1.fill(self.bg_color)
         ##MenuSection1 Surface Dimension Variables
         self.menuSection1RowHeight = self.menuSection1.get_height()/self.menuRows
         self.menuSection1ColumnWidth = self.menuSection1.get_width()/self.menuColumns
@@ -89,9 +91,9 @@ class PlayerInventoryMenu():
             self.menuS1SS[key] = value
 
         self.menuSection2 = pygame.Surface((self.menuColumnWidth*2,self.menuRowHeight*2),pygame.SRCALPHA)
-        self.menuSection2.fill(self.menuSection2Color)
+        self.menuSection2.fill(self.bg_color)
         self.menuSection3 = pygame.Surface((self.menuColumnWidth*3,self.menuRowHeight*2),pygame.SRCALPHA)
-        self.menuSection3.fill(self.menuSection3Color)
+        self.menuSection3.fill(self.bg_color)
 
         #Text Centering Variables
         for s in range(1,self.menuRows+1):
@@ -103,7 +105,7 @@ class PlayerInventoryMenu():
         self.menuTitleTextRect = self.font.get_rect(self.menuTitle, size = self.menuTitleTextSize)
         self.menuTitleTextRect.center = self.menuScreenTitleSection.get_rect().center
 
-    def draw(self, surface):
+    def draw(self):
         # Rendering the separate menu elements 'together'. Background/Containers/Text
         ##region -Renders menu title to the top row section of the menu
         self.font.render_to(
@@ -130,19 +132,22 @@ class PlayerInventoryMenu():
             self.font.pad = False
         ##endregion
 
+        self.display_surface.blit(self.menuScreenBackground,(self.x,self.y)) #MenuBackground
         self.display_surface.blit(self.menuSection1,(self.x,(self.y+self.menuRowHeight)))
         for s in range(1,self.menuRows+1):
             self.display_surface.blit(self.menuS1SS[self.menuS1SSKeyName+str(s)],(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
         self.display_surface.blit(self.menuSection2,(self.x+self.menuColumnWidth,(self.y+self.menuRowHeight)))
         self.display_surface.blit(self.menuSection3,(self.x,(self.y+self.menuRowHeight*3)))
-        self.display_surface.blit(self.menuScreenBackground,(self.x,self.y)) #MenuBackground
         #Region Menu wireframe guides
         # for i in range(1,self.menuRows+1):
         #     pygame.draw.line(self.menuSection1,self.fg_color,(0,self.menuSection1RowHeight*i),(self.menuSection1.get_width(),self.menuSection1RowHeight*i))
         # for i in range(1,self.menuColumns+1):
         #     pygame.draw.line(self.menuSection1,self.fg_color,(self.menuSection1ColumnWidth*i,self.menuSection1RowHeight),(self.menuSection1ColumnWidth*i,self.menuSection1.get_height()))
         #RegionEnd
-        pygame.draw.rect(surface, self.bg_color, (self.x, self.y, (self.width - (self.x * 2)), self.height - (self.y * 2)), 1) # MenuBorder
+        pygame.draw.rect(self.display_surface, self.menuSection2Color, (self.x, self.y+self.menuRowHeight, self.menuColumnWidth, self.menuRowHeight*2), 1) # MenuSection1Border
+        pygame.draw.rect(self.display_surface, self.menuSection2Color, (self.x+self.menuColumnWidth, self.y+self.menuRowHeight, self.menuColumnWidth*2, self.menuRowHeight*2), 1) # MenuSection1Border
+        pygame.draw.rect(self.display_surface, self.menuSection2Color, (self.x, self.y+self.menuRowHeight*3, self.menuColumnWidth*3, self.menuRowHeight*2), 1) # MenuSection1Border
+        pygame.draw.rect(self.display_surface, self.bg_color, (self.x, self.y, (self.width - (self.x * 2)), self.height - (self.y * 2)), 1) # MenuBorder
 
     #def update(self, value):
     #    self.value = value # Update the value with a live feed

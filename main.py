@@ -34,7 +34,7 @@ class Game():
         # Game object instances
         self.player = player.Player()
         self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
-        self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,120), (0,150,0))
+        self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,225), (0,150,0))
         self.testRoom = world.Room()
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
@@ -103,7 +103,7 @@ class Game():
         self.healthbar.draw()
 
         if self.pMenu.isDrawn == True:
-            self.pMenu.draw(self.screen)
+            self.pMenu.draw()
 
         if self.debuginterface.active:
             self.debuginterface.draw()

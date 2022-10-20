@@ -5,6 +5,7 @@ import pygame.color
 import pygame.freetype as freetype
 
 import uni
+import menuBtn as btn
 
 class PlayerInventoryMenu():
     def __init__(self, x, y, bg_color, fg_color):
@@ -24,12 +25,12 @@ class PlayerInventoryMenu():
         self.height = uni.SCREEN_HEIGHT
 
         #Dictionary Variables
-        self.menuS1SS = {}         #menuSection1SubSections
+        self.menuS1BtnDict = {}         #menuSection1SubSections
         self.textCenterDict = {}   #Dictionary of Text Centered objects
         self.menuOptionDict = {}   #Dictionary of menuOptions
         
         #Dictionary Dynamic Key Name Base Definitions
-        self.menuS1SSKeyName = "menuSection1SubSection" #Base key name for a dynamic dictionary key. Dictionary:'menuSection1SubSections'. USE: Specifically to reference surface objects that are sub sections of menuSection1. EX: self.menuS1SSKeyname+str(1) = menuSection1SubSection1.
+        self.menuS1BtnKey = "menuSection1SubSection" #Base key name for a dynamic dictionary key. Dictionary:'menuSection1SubSections'. USE: Specifically to reference surface objects that are sub sections of menuSection1. EX: self.menuS1SSKeyname+str(1) = menuSection1SubSection1.
         self.textCenterS1SSC = "menuSection1SubSectionTextCenter" #Base key name for a dynamic dictionary key. Dictionary:'textCenterDict'. USE: Secifically to reference the objects that get a surface's dimensions and centers text within them. More Specifically for Section1's SubSections in this case. EX: self.textCenterS1SSC+str(1) = menuSection1SubSectionTextCenter1.
         self.textCenterS2SSC = "menuSection2SubSectionTextCenter" #Base key name for a dynamic dictionary key. Dictionary:'textCenterDict'. USE: Secifically to reference the objects that get a surface's dimensions and centers text within them. More Specifically for Section2's SubSections in this case. EX: self.textCenterS1SSC+str(1) = menuSection1SubSectionTextCenter1.
         self.textCenterS3SSC = "menuSection3SubSectionTextCenter" #Base key name for a dynamic dictionary key. Dictionary:'textCenterDict'. USE: Secifically to reference the objects that get a surface's dimensions and centers text within them. More Specifically for Section3's SubSections in this case. EX: self.textCenterS1SSC+str(1) = menuSection1SubSectionTextCenter1.
@@ -88,11 +89,16 @@ class PlayerInventoryMenu():
         self.menuSection1ColumnWidth = self.menuSection1.get_width()/self.menuColumns
         ###MenuSection1 Sub Surface Dimension Variables
         for s in range(1,self.menuRows+1):
-            key = self.menuS1SSKeyName+str(s)
-            value = pygame.Surface((self.menuSection1ColumnWidth*3,self.menuSection1RowHeight),pygame.SRCALPHA)
+            key = self.menuS1BtnKey+str(s)
+            value = btn.Button(self.x,
+                               self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s,
+                               self.menuSection1ColumnWidth*3,
+                               self.menuSection1RowHeight,
+                               "red3")
+            #value = pygame.Surface((self.menuSection1ColumnWidth*3,self.menuSection1RowHeight),pygame.SRCALPHA)
             #value.fill(self.bg_color)
             #dvalue.fill(self.menuSection2Color)
-            self.menuS1SS[key] = value
+            self.menuS1BtnDict[key] = value
 
         self.menuSection2 = pygame.Surface((self.menuColumnWidth*2,self.menuRowHeight*2),pygame.SRCALPHA)
         self.menuSection2.fill(self.bg_color)
@@ -107,7 +113,7 @@ class PlayerInventoryMenu():
         for s in range(1,self.menuRows+1):
             key = self.textCenterS1SSC+str(s)
             value = self.font.get_rect(self.menuOptionDict[self.mO+str(s)] , size = self.menuTextSize)
-            value.center = self.menuS1SS[self.menuS1SSKeyName+str(s)].get_rect().center
+            value.center = self.menuS1BtnDict[self.menuS1BtnKey+str(s)].surface.get_rect().center
             self.textCenterDict[key] = value
         ##Menu Section 2
         key = self.textCenterS2SSC
@@ -123,10 +129,7 @@ class PlayerInventoryMenu():
 
     def draw(self):
         mouse = pygame.mouse.get_pos()
-        if self.menuS1SS[self.menuS1SSKeyName+str(1)].get_width() <= mouse[0]:  #and self.menuS1SS[self.menuS1SSKeyName+str(1)].get_height() <= mouse[1]
-            color = self.textColor1
-        else: 
-            color = "red4"
+        
         # Rendering the separate menu elements 'together'. Background/Containers/Text
         ##region -Renders menu title to the top row section of the menu
         self.font.render_to(
@@ -142,11 +145,15 @@ class PlayerInventoryMenu():
 
         ##region -Renders the sub sections of section 1
         for i in range(1,self.menuRows+1):
+            if self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x <= mouse[0] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].width and self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y <= mouse[1] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].height:
+                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = "red4"
+            else: 
+                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = self.textColor1
             self.font.render_to(
-            self.menuS1SS[self.menuS1SSKeyName+str(i)],
+            self.menuS1BtnDict[self.menuS1BtnKey+str(i)].surface,
             self.textCenterDict[self.textCenterS1SSC+str(i)],
             self.menuOptionDict[self.mO+str(i)],
-            color,
+            self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor,
             size=self.menuTextSize,
             style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
             )
@@ -180,7 +187,7 @@ class PlayerInventoryMenu():
         self.display_surface.blit(self.menuScreenBackground,(self.x,self.y)) #MenuBackground
         self.display_surface.blit(self.menuSection1,(self.x,(self.y+self.menuRowHeight)))
         for s in range(1,self.menuRows+1):
-            self.display_surface.blit(self.menuS1SS[self.menuS1SSKeyName+str(s)],(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
+            self.display_surface.blit(self.menuS1BtnDict[self.menuS1BtnKey+str(s)].surface,(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
         self.display_surface.blit(self.menuSection2,(self.x+self.menuColumnWidth,(self.y+self.menuRowHeight)))
         self.display_surface.blit(self.menuSection3,(self.x,(self.y+self.menuRowHeight*3)))
         #Region Menu wireframe guides

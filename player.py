@@ -13,28 +13,22 @@ import itemLib
 # Primary player class (unless we ever end up with multiplayer, this will only ever be instanciated once)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
+        """Contains and controlls everything player related"""
+        pygame.sprite.Sprite.__init__(self) 
+
         # Position variables
-        self.pos = pygame.math.Vector2(500, 400)
-        self.direction = pygame.math.Vector2()
-
-        self.speed = 200
-
-        # Bounding box variables
-        self.width = 1
-        self.height = 1
+        self.pos = pygame.math.Vector2(500, 400) # Vectors to store x and y
+        self.direction = pygame.math.Vector2() # Vector to store change in x and y
 
         # Generic player variables
-        self.color = reference.WHITE
-        self.facing = "right"
-        self.health = 40
+        self.health = 40 # Player health (currently arbitrary)
+        self.speed = 200 # This speed needs to be big because of the recent change to delta time
 
-        self.displaySurface = pygame.display.get_surface()
-
-        self.image = pygame.image.load("assets/player/temp.png")
-
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        # Image and drawing variables
+        self.displaySurface = pygame.display.get_surface() # Get the display surface from the location that the class is instanciated
+        self.image = pygame.image.load("assets/player/temp.png").convert_alpha() # Import the image of the player and convert so that invisible pixels work
+        self.rect = self.image.get_rect() # Get the rect (w, h) of the loaded image
+        self.rect.center = self.pos # Set the center of the rect to the player position
 
         # Player Currency
         self.mobSoulCount = 0
@@ -44,58 +38,74 @@ class Player(pygame.sprite.Sprite):
         #Player Inventory
         self.inventory = [itemLib.knife1, itemLib.pistol1, itemLib.shockMagic2]
 
-
-    # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self):
-        rotated = self.rotateToMouse()
-        self.displaySurface.blit(rotated[0], rotated[1])
+        """Draw the player and all relative player objects/items"""
+        rotated = self.rotateToMouse() # Get a copy of the latest rotated player and rect
+        self.displaySurface.blit(rotated[0], rotated[1]) # Blit the latest rotated player surface (rotated[0]) at the latest rect position (rotated[1])
 
-    # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):
-        # Update player location based on player velocity
-        self.pos += self.direction * reference.dt
-        self.rect.center = self.pos
+        """Update the player
+        
+        Keyword argumements:
+        events --  the output of pygame.event.get() (should be from main.py)
+        """
+    
+        self.pos += self.direction * reference.dt # Add the direction vector to the player vector and multiply by delta time to get framerate independant movement
+        self.rect.center = self.pos # update the center of the player
 
-        #self.rect.update(self.x - int(self.width / 2), self.y - int(self.height / 2), self.width, self.height)
+        self.eventHandler(events) # This is where the events really need to go
 
-        self.eventHandler(events)
-
-        if pygame.mouse.get_pressed()[2]:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            p = projectile.Projectile(self.pos.x, self.pos.y, mouse_x, mouse_y, 3, 3, particle.MagicParticleSystem(self.pos.x, self.pos.y), 400)
-            projectile._projectiles.add(p)
+        # Testing the rapid fire weapon
+        if pygame.mouse.get_pressed()[2]: # Check if the right click button is being held
+            mouseX, mouseY = pygame.mouse.get_pos() # Get the current mouse position
+            p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 3, 3, particle.MagicParticleSystem(self.pos.x, self.pos.y), 400) # Fire a mothafuc*in projectile
+            projectile._projectiles.add(p) # Make sure the projectile gets added to the global projectile list
 
     def rotateToMouse(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        angle = math.atan2(self.rect.x - mouse_x, self.rect.y - mouse_y)
-        degrees = math.degrees(angle)
+        """Determine the angle from the player to the mouse, rotate player to that angle
+        
+        Returns:
+        as (rotatedImage, newRect)
+        rotatedImage -- the image file after the rotation has been performed
+        newRect -- the updated rect to keep the image at its centerpoint
+        """
+        
+        mouseX, mouseY = pygame.mouse.get_pos() # Get the mouse position
+        angle = math.atan2(self.rect.x - mouseX, self.rect.y - mouseY) # Determine the angle of the two points using arc-tangent
+        degrees = math.degrees(angle) # Convert the angle to degrees
 
-        rotatedImage = pygame.transform.rotate(self.image, degrees)
-        newRect = rotatedImage.get_rect(center = self.image.get_rect(center = self.pos).center)
+        rotatedImage = pygame.transform.rotate(self.image, degrees) # Rotate the image based on those degrees
+        newRect = rotatedImage.get_rect(center = self.image.get_rect(center = self.pos).center) # Get the new rect of the rotated image and adjust the center
 
-        return(rotatedImage, newRect)
+        return(rotatedImage, newRect) # Return new player image and rect
 
     # Turn keyboard input into velocity to move the player
     def eventHandler(self, events):
-        keys = pygame.key.get_pressed()
+        """Handles anything to do with pygame.event that needs to interact with the player
+        
+        Keyword arguments:
+        events -- passed from self.update(), should be pygame.event.get() from main.py
+        """
+        
+        keys = pygame.key.get_pressed() # Keep a list of all keys currently being pressed
 
-        if keys[pygame.K_a]:
-            self.direction.x = -self.speed
-        elif keys[pygame.K_d]:
-            self.direction.x = self.speed
-        else:
-            self.direction.x = 0
+        if keys[pygame.K_a]: # Check for the A key
+            self.direction.x = -self.speed # Change the x part of the direction vector to -speed (move left)
+        elif keys[pygame.K_d]: # Check for the D key
+            self.direction.x = self.speed # Change the x part of the direction vector to speed (move right)
+        else: # If none of our horizontal keys are being pressed
+            self.direction.x = 0 # We get no horizontal movement
 
-        if keys[pygame.K_w]:
-            self.direction.y = -self.speed
-        elif keys[pygame.K_s]:
-            self.direction.y = self.speed
-        else:
-            self.direction.y = 0
+        if keys[pygame.K_w]: # Check for the W key
+            self.direction.y = -self.speed # Change the y part of the direction vector to -speed (move up)
+        elif keys[pygame.K_s]: # Checkf or the S key
+            self.direction.y = self.speed # Change the y part of the direction vector to speed (move down)
+        else: # If none of our vertical keys are being pressed
+            self.direction.y = 0 # We get no vertical movement
 
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == pygame.BUTTON_LEFT:
-                    mouseX, mouseY = pygame.mouse.get_pos()
-                    p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 5, 5, particle.FireParticleSystem(self.pos.x, self.pos.y), 300)
-                    projectile._projectiles.add(p)
+        for event in events: # Parse events call
+            if event.type == pygame.MOUSEBUTTONDOWN: # Check for the mousebuttondown event (this does not repeat when the button is held)
+                if event.button == pygame.BUTTON_LEFT: # Check for the left click
+                    mouseX, mouseY = pygame.mouse.get_pos() # Get the current mouse position
+                    p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 5, 5, particle.FireParticleSystem(self.pos.x, self.pos.y), 300) # Create the projectile
+                    projectile._projectiles.add(p) # Add the projectile to the global projectile list

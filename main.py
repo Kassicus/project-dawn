@@ -27,15 +27,15 @@ class Game():
         self.running = True
         self.clock = pygame.time.Clock()
         self.events = pygame.event.get() # Capturing this request into a variable to be used in other locations
-        self.debuginterface = debug.DebugInterface()
+        self.debugInterface = debug.DebugInterface()
 
         # Game object instances
         self.player = player.Player()
-        self.healthbar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
+        self.healthBar = ui.StatusBar(10, 10, 200, 30, (87, 11, 6), (255, 0, 0), self.player.health, 100)
         self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,120), (0,150,0))
 
         # Set the current room to the "starting room" from the world file
-        reference.active_room = world.starting_room
+        reference.activeRoom = world.startingRoom
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
@@ -72,10 +72,10 @@ class Game():
                         else:
                             self.pMenu.isDrawn = False
                     if event.key == pygame.K_TAB:
-                        if self.debuginterface.active:
-                            self.debuginterface.active = False
+                        if self.debugInterface.active:
+                            self.debugInterface.active = False
                         else:
-                            self.debuginterface.active = True
+                            self.debugInterface.active = True
                     if event.key == pygame.K_i:
                         print("Your inventory consists of:\n ")
                         for x in self.player.inventory:
@@ -95,30 +95,30 @@ class Game():
     def draw(self):
         self.screen.fill(reference.BLACK)
 
-        reference.active_room.draw(self.screen) # This is kindof a group too?
+        reference.activeRoom.draw(self.screen) # This is kindof a group too?
         
         projectile._projectiles.draw(self.screen) # Groups should be the only thing that still need a surface passed?
 
         self.player.draw()
-        self.healthbar.draw()
+        self.healthBar.draw()
 
         if self.pMenu.isDrawn == True:
             self.pMenu.draw()
 
-        if self.debuginterface.active:
-            self.debuginterface.draw()
+        if self.debugInterface.active:
+            self.debugInterface.draw()
 
     # Everything that needs to be updated (non-graphical) goes here
     def update(self):
         self.player.update(self.events)
-        self.healthbar.update(self.player.health)
+        self.healthBar.update(self.player.health)
 
         # See above disclaimer for this...
         projectile._projectiles.update()
 
         # Update all game elements before this point
-        reference.active_room.update(self.player)
-        self.debuginterface.update(self.clock, self.player)
+        reference.activeRoom.update(self.player)
+        self.debugInterface.update(self.clock, self.player)
         pygame.display.update()
         reference.dt = self.clock.tick() / 1000
 

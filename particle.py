@@ -7,20 +7,20 @@ import reference
 #
 # Particle class, extends sprite. Uses sprite drawing method (image/surface based)
 class Particle(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, color, min_life, max_life, decays=True):
+    def __init__(self, x, y, width, height, color, minLife, maxLife, decays=True):
         pygame.sprite.Sprite.__init__(self) # Init pygame sprite class
 
         # Position Vars
         self.pos = pygame.math.Vector2(x, y)
         self.velocity = pygame.math.Vector2()
 
-        self.active_facade = False
-        self.facade_type = ""
-        self.facade_width = 0
-        self.facade_height = 0
-        self.facade_radius = 0
+        self.activeFacade = False
+        self.facadeType = ""
+        self.facadeWidth = 0
+        self.facadeHeight = 0
+        self.facadeRadius = 0
 
-        self.facade_color = (0, 0, 0)
+        self.facadeColor = (0, 0, 0)
 
         # Dimension Vars
         self.width = width
@@ -28,7 +28,7 @@ class Particle(pygame.sprite.Sprite):
         
         self.color = color
 
-        self.lifetime = random.randint(min_life, max_life) # If you need a non dynamic lifetime, just make these both the same
+        self.lifetime = random.randint(minLife, maxLife) # If you need a non dynamic lifetime, just make these both the same
         self.decays = decays # Set this to false to make the particles never delay (good for one use systems)
 
         self.image = pygame.Surface([self.width, self.height]) # This is how a pygame sprite gets its base image
@@ -37,11 +37,11 @@ class Particle(pygame.sprite.Sprite):
         self.rect = self.pos # Similar to self.pos vars in other classes. pygame.sprite requires this to be called self.rect
 
     def draw(self, surface):
-        if self.active_facade:
-            if self.facade_type == "square":
-                pygame.draw.rect(surface, self.facade_color, (self.pos.x, self.pos.y, self.facade_width, self.facade_height), 0)
-            elif self.facade_type == "circle":
-                pygame.draw.circle(surface, self.facade_color, (self.pos.x, self.pos.y), self.facade_radius, 0)
+        if self.activeFacade:
+            if self.facadeType == "square":
+                pygame.draw.rect(surface, self.facadeColor, (self.pos.x, self.pos.y, self.facadeWidth, self.facadeHeight), 0)
+            elif self.facadeType == "circle":
+                pygame.draw.circle(surface, self.facadeColor, (self.pos.x, self.pos.y), self.facadeRadius, 0)
             else:
                 pass
 
@@ -62,9 +62,9 @@ class Particle(pygame.sprite.Sprite):
 #
 # Base class of the system, handles the sprite group and drawing the sprites
 class ParticleSystem():
-    def __init__(self, max_particles=100):
+    def __init__(self, maxParticles=100):
         self.particles = pygame.sprite.Group()
-        self.max_particles = max_particles
+        self.maxParticles = maxParticles
 
     def draw(self, surface):
         self.particles.draw(surface)
@@ -79,16 +79,16 @@ class FireParticleSystem(ParticleSystem):
         super().__init__()
         self.pos = pygame.math.Vector2(x, y)
 
-        self.particle_color = reference.COLOR_FIRE
+        self.particleColor = reference.COLOR_FIRE
 
-        self.max_particles = 50
+        self.maxParticles = 50
 
-        self.createParticles(self.max_particles, 0, 25)
+        self.createParticles(self.maxParticles, 0, 25)
 
     # Create an amount of particles and add them to the group to be updated and drawn
-    def createParticles(self, count, min_life, max_life):
+    def createParticles(self, count, minLife, maxLife):
         for p in range(count):
-            p = Particle(self.pos.x, self.pos.y, 5, 5, self.particle_color, min_life, max_life) # Create the particle (see particle class)
+            p = Particle(self.pos.x, self.pos.y, 5, 5, self.particleColor, minLife, maxLife) # Create the particle (see particle class)
 
             # Assign velocities as a float for more fluid movement
             p.velocity.x = random.uniform(-50, 50)
@@ -105,24 +105,24 @@ class FireParticleSystem(ParticleSystem):
         self.particles.update()
 
         # Keeps the particle count correct
-        new_count = self.max_particles - len(self.particles)
-        self.createParticles(new_count, 25, 75)
+        newCount = self.maxParticles - len(self.particles)
+        self.createParticles(newCount, 25, 75)
 
 class MagicParticleSystem(ParticleSystem):
     def __init__(self, x, y):
         super().__init__()
         self.pos = pygame.math.Vector2(x, y)
 
-        self.particle_color = (255, 0, 255)
+        self.particleColor = (255, 0, 255)
 
-        self.max_particles = 20
+        self.maxParticles = 20
 
-        self.createParticles(self.max_particles, 0, 25)
+        self.createParticles(self.maxParticles, 0, 25)
 
     # Create an amount of particles and add them to the group to be updated and drawn
-    def createParticles(self, count, min_life, max_life):
+    def createParticles(self, count, minLife, maxLife):
         for p in range(count):
-            p = Particle(self.pos.x, self.pos.y, 2, 2, self.particle_color, min_life, max_life) # Create the particle (see particle class)
+            p = Particle(self.pos.x, self.pos.y, 2, 2, self.particleColor, minLife, maxLife) # Create the particle (see particle class)
 
             # Assign velocities as a float for more fluid movement
             p.velocity.x = random.uniform(-20, 20)
@@ -139,38 +139,38 @@ class MagicParticleSystem(ParticleSystem):
         self.particles.update()
 
         # Keeps the particle count correct
-        new_count = self.max_particles - len(self.particles)
-        self.createParticles(new_count, 25, 75)
+        newCount = self.maxParticles - len(self.particles)
+        self.createParticles(newCount, 25, 75)
 
 #
 #
 # Extends the base particle system, this one uses both partical override and a facade system allowing for circles!
 class SmokePuffParticleSystem(ParticleSystem):
-    def __init__(self, x, y, puff_direction, particle_override):
-        super().__init__(particle_override)
+    def __init__(self, x, y, puffDirection, particleOverride):
+        super().__init__(particleOverride)
         self.pos = pygame.math.Vector2(x, y)
 
-        self.puff_direction = puff_direction
+        self.puffDirection = puffDirection
 
-        self.particle_color = (175, 175, 175)
+        self.particleColor = (175, 175, 175)
 
-        self.createParticles(self.max_particles)
+        self.createParticles(self.maxParticles)
 
     def createParticles(self, count):
         for p in range(count):
-            p = Particle(self.pos.x, self.pos.y, 1, 1, self.particle_color, 40, 50) # Adding a particle color here is not necessary as we set it to alpha, but this is as good as it gets currently without two particle classes
-            p.active_facade = True # Enable the facade in the particle system
-            p.facade_type = "circle" # Set the facade type to a circle
-            p.facade_radius = 3 # Initial "puff" radius
+            p = Particle(self.pos.x, self.pos.y, 1, 1, self.particleColor, 40, 50) # Adding a particle color here is not necessary as we set it to alpha, but this is as good as it gets currently without two particle classes
+            p.activeFacade = True # Enable the facade in the particle system
+            p.facadeType = "circle" # Set the facade type to a circle
+            p.facadeRadius = 3 # Initial "puff" radius
 
-            puff_color = random.randint(200, 255) # Create a random value (within a range that can be used for the r, g, b colors)
+            puffColor = random.randint(200, 255) # Create a random value (within a range that can be used for the r, g, b colors)
 
-            p.facade_color = (puff_color, puff_color, puff_color) # Use that same value to get uniform gray (this is different for every particle)
+            p.facadeColor = (puffColor, puffColor, puffColor) # Use that same value to get uniform gray (this is different for every particle)
 
             # Determine the driection the particle needs to move, same as before
-            if self.puff_direction == "left":
+            if self.puffDirection == "left":
                 p.velocity.x = random.uniform(-1.0, -5.0)
-            elif self.puff_direction == "right":
+            elif self.puffDirection == "right":
                 p.velocity.x = random.uniform(1.0, 5.0)
 
             # Because it is smoke, this can be a positive or negative value so that the smoke puff fluffs out as you would expect
@@ -184,7 +184,7 @@ class SmokePuffParticleSystem(ParticleSystem):
         self.particles.update()
 
         for p in self.particles:
-            p.facade_radius += random.uniform(0.1, 1.0) # Increase the radius by a non standard value (smoke puffs get bigger)
+            p.facadeRadius += random.uniform(0.1, 1.0) # Increase the radius by a non standard value (smoke puffs get bigger)
 
             # Reduce the velocity of the puff to a number nearing 0, without ever inverting the velocity of the puff. Most puffs will die before we get here
             if p.velocity.x >= 0.1:

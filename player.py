@@ -9,7 +9,6 @@ import reference
 
 #imports item library for inventory
 import itemLib
-import inventory
 
 # Primary player class (unless we ever end up with multiplayer, this will only ever be instanciated once)
 class Player(pygame.sprite.Sprite):
@@ -30,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.facing = "right"
         self.health = 40
 
-        self.display_surface = pygame.display.get_surface()
+        self.displaySurface = pygame.display.get_surface()
 
         self.image = pygame.image.load("assets/player/temp.png")
 
@@ -49,7 +48,7 @@ class Player(pygame.sprite.Sprite):
     # Handles the drawing of all items player related (requires a drawable pygame.surface element, we use the game.screen var)
     def draw(self):
         rotated = self.rotateToMouse()
-        self.display_surface.blit(rotated[0], rotated[1])
+        self.displaySurface.blit(rotated[0], rotated[1])
 
     # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):
@@ -72,9 +71,9 @@ class Player(pygame.sprite.Sprite):
         degrees = math.degrees(angle)
 
         rotatedImage = pygame.transform.rotate(self.image, degrees)
-        new_rect = rotatedImage.get_rect(center = self.image.get_rect(center = self.pos).center)
+        newRect = rotatedImage.get_rect(center = self.image.get_rect(center = self.pos).center)
 
-        return(rotatedImage, new_rect)
+        return(rotatedImage, newRect)
 
     # Turn keyboard input into velocity to move the player
     def eventHandler(self, events):
@@ -97,6 +96,6 @@ class Player(pygame.sprite.Sprite):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == pygame.BUTTON_LEFT:
-                    mouse_x, mouse_y = pygame.mouse.get_pos()
-                    p = projectile.Projectile(self.pos.x, self.pos.y, mouse_x, mouse_y, 5, 5, particle.FireParticleSystem(self.pos.x, self.pos.y), 300)
+                    mouseX, mouseY = pygame.mouse.get_pos()
+                    p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 5, 5, particle.FireParticleSystem(self.pos.x, self.pos.y), 300)
                     projectile._projectiles.add(p)

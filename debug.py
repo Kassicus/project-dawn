@@ -6,58 +6,56 @@ class DebugInterface():
     def __init__(self):
         self.font = pygame.font.SysFont("Courier", 16)
 
-        self.fps_text = None
-        self.mouse_text = None
-        self.player_text = None
-        self.projectile_text = None
-        self.particle_text = None
+        self.fpsText = None
+        self.mouseText = None
+        self.playerText = None
+        self.projectileText = None
+        self.particleText = None
 
-        self.display_surface = pygame.display.get_surface()
+        self.displaySurface = pygame.display.get_surface()
 
         self.active = False
 
-        self.current_chunk_string = ""
+    def getFps(self, clock):
+        fpsString = "FPS:     " + str(int(clock.get_fps()))
+        fpsText = self.font.render(fpsString, 1, (255, 255, 255))
+        return fpsText
 
-    def get_fps(self, clock):
-        fps_string = "FPS:     " + str(int(clock.get_fps()))
-        fps_text = self.font.render(fps_string, 1, (255, 255, 255))
-        return fps_text
+    def getMouse(self):
+        mouseString = "Mouse:  " + str(pygame.mouse.get_pos())
+        mouseText = self.font.render(mouseString, 1, (255, 255, 255))
+        return mouseText
 
-    def get_mouse(self):
-        mouse_string = "Mouse:  " + str(pygame.mouse.get_pos())
-        mouse_text = self.font.render(mouse_string, 1, (255, 255, 255))
-        return mouse_text
+    def getPlayer(self, player):
+        playerString = "Player: (" + str(player.rect.x) + ", " + str(player.rect.y) + ")"
+        playerText = self.font.render(playerString, 1, (255, 255, 255))
+        return playerText
 
-    def get_player(self, player):
-        player_string = "Player: (" + str(player.rect.x) + ", " + str(player.rect.y) + ")"
-        player_text = self.font.render(player_string, 1, (255, 255, 255))
-        return player_text
+    def getProjectileCount(self):
+        projectileString = "Proj:    " + str(int(len(projectile._projectiles)))
+        projectileText = self.font.render(projectileString, 1, (255, 255, 255))
+        return projectileText
 
-    def get_projectile_count(self):
-        projectile_string = "Proj:    " + str(int(len(projectile._projectiles)))
-        projectile_text = self.font.render(projectile_string, 1, (255, 255, 255))
-        return projectile_text
-
-    def get_particle_count(self):
+    def getParticleCount(self):
         particles = 0
         for p in projectile._projectiles:
-            count = len(p.particle_system.particles)
+            count = len(p.particleSystem.particles)
             particles += count
-        particle_string = "Part:    " + str(particles)
-        particle_text = self.font.render(particle_string, 1, (255, 255, 255))
-        return particle_text
+        particleString = "Part:    " + str(particles)
+        particleText = self.font.render(particleString, 1, (255, 255, 255))
+        return particleText
 
     def draw(self):
-        pygame.draw.rect(self.display_surface, (0, 0, 0), (780, 0, 220, 110), 0)
-        self.display_surface.blit(self.fps_text, (800, 10))
-        self.display_surface.blit(self.mouse_text, (800, 30))
-        self.display_surface.blit(self.player_text, (800, 50))
-        self.display_surface.blit(self.projectile_text, (800, 70))
-        self.display_surface.blit(self.particle_text, (800, 90))
+        pygame.draw.rect(self.displaySurface, (0, 0, 0), (780, 0, 220, 110), 0)
+        self.displaySurface.blit(self.fpsText, (800, 10))
+        self.displaySurface.blit(self.mouseText, (800, 30))
+        self.displaySurface.blit(self.playerText, (800, 50))
+        self.displaySurface.blit(self.projectileText, (800, 70))
+        self.displaySurface.blit(self.particleText, (800, 90))
 
     def update(self, clock, player):
-        self.fps_text = self.get_fps(clock)
-        self.mouse_text = self.get_mouse()
-        self.player_text = self.get_player(player)
-        self.projectile_text = self.get_projectile_count()
-        self.particle_text = self.get_particle_count()
+        self.fpsText = self.getFps(clock)
+        self.mouseText = self.getMouse()
+        self.playerText = self.getPlayer(player)
+        self.projectileText = self.getProjectileCount()
+        self.particleText = self.getParticleCount()

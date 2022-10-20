@@ -1,6 +1,6 @@
 import pygame
 
-starting_room = [
+startingRoom = [
     13, 13, 4, 0, 0, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 12, 8, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 13,
     13, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
@@ -19,7 +19,7 @@ starting_room = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 ]
 
-second_room = [
+secondRoom = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 12, 1, 1, 1, 1, 1, 1, 14, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 13,
     13, 4, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13,
@@ -38,7 +38,7 @@ second_room = [
     13, 13, 4, 0, 0, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 ]
 
-third_room = [
+thirdRoom = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 12, 1, 1, 1, 1, 11, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 4, 0, 0, 0, 0, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
@@ -59,54 +59,54 @@ third_room = [
 
 sprites = {
     "floor" : pygame.image.load("assets/tiles/ground/brick_test.png"),
-    "bottom_flat" : pygame.image.load("assets/tiles/walls/bottom_flat.png"),
-    "top_flat" : pygame.image.load("assets/tiles/walls/top_flat.png"),
-    "left_flat" : pygame.image.load("assets/tiles/walls/left_flat.png"),
-    "right_flat" : pygame.image.load("assets/tiles/walls/right_flat.png"),
-    "top_left" : pygame.image.load("assets/tiles/walls/top_left.png"),
-    "top_right" : pygame.image.load("assets/tiles/walls/top_right.png"),
-    "bottom_left" : pygame.image.load("assets/tiles/walls/bottom_left.png"),
-    "bottom_right" : pygame.image.load("assets/tiles/walls/bottom_right.png"),
-    "top_left_invert" : pygame.image.load("assets/tiles/walls/top_left_invert.png"),
-    "top_right_invert" : pygame.image.load("assets/tiles/walls/top_right_invert.png"),
-    "bottom_left_invert" : pygame.image.load("assets/tiles/walls/bottom_left_invert.png"),
-    "bottom_right_invert" : pygame.image.load("assets/tiles/walls/bottom_right_invert.png"),
-    "out_of_bounds" : pygame.image.load("assets/tiles/walls/out_of_bounds.png"),
-    "bottom_double_invert" : pygame.image.load("assets/tiles/walls/bottom_double_invert.png"),
-    "top_double_invert" : pygame.image.load("assets/tiles/walls/top_double_invert.png"),
-    "left_double_invert" : pygame.image.load("assets/tiles/walls/left_double_invert.png"),
-    "right_double_invert" : pygame.image.load("assets/tiles/walls/right_double_invert.png"),
-    "top_bottom_flat" : pygame.image.load("assets/tiles/walls/top_bottom_flat.png"),
-    "left_right_flat" : pygame.image.load("assets/tiles/walls/left_right_flat.png"),
-    "top_u" : pygame.image.load("assets/tiles/walls/top_u.png"),
-    "bottom_u" : pygame.image.load("assets/tiles/walls/bottom_u.png"),
-    "left_u" : pygame.image.load("assets/tiles/walls/left_u.png"),
-    "right_u" : pygame.image.load("assets/tiles/walls/right_u.png"),
+    "bottomFlat" : pygame.image.load("assets/tiles/walls/bottom_flat.png"),
+    "topFlat" : pygame.image.load("assets/tiles/walls/top_flat.png"),
+    "leftFlat" : pygame.image.load("assets/tiles/walls/left_flat.png"),
+    "rightFlat" : pygame.image.load("assets/tiles/walls/right_flat.png"),
+    "topLeft" : pygame.image.load("assets/tiles/walls/top_left.png"),
+    "topRight" : pygame.image.load("assets/tiles/walls/top_right.png"),
+    "bottomLeft" : pygame.image.load("assets/tiles/walls/bottom_left.png"),
+    "bottomRight" : pygame.image.load("assets/tiles/walls/bottom_right.png"),
+    "topLeftInvert" : pygame.image.load("assets/tiles/walls/top_left_invert.png"),
+    "topRightInvert" : pygame.image.load("assets/tiles/walls/top_right_invert.png"),
+    "bottomLeftInvert" : pygame.image.load("assets/tiles/walls/bottom_left_invert.png"),
+    "bottomRightInvert" : pygame.image.load("assets/tiles/walls/bottom_right_invert.png"),
+    "outOfBounds" : pygame.image.load("assets/tiles/walls/out_of_bounds.png"),
+    "bottomDoubleInvert" : pygame.image.load("assets/tiles/walls/bottom_double_invert.png"),
+    "topDoubleInvert" : pygame.image.load("assets/tiles/walls/top_double_invert.png"),
+    "leftDoubleInvert" : pygame.image.load("assets/tiles/walls/left_double_invert.png"),
+    "rightDoubleInvert" : pygame.image.load("assets/tiles/walls/right_double_invert.png"),
+    "topBottomFlat" : pygame.image.load("assets/tiles/walls/top_bottom_flat.png"),
+    "leftRightFlat" : pygame.image.load("assets/tiles/walls/left_right_flat.png"),
+    "topU" : pygame.image.load("assets/tiles/walls/top_u.png"),
+    "bottomU" : pygame.image.load("assets/tiles/walls/bottom_u.png"),
+    "leftU" : pygame.image.load("assets/tiles/walls/left_u.png"),
+    "rightU" : pygame.image.load("assets/tiles/walls/right_u.png"),
 }
 
 tiles = [
     sprites["floor"], # 0
-    sprites["bottom_flat"], # 1
-    sprites["top_flat"], # 2
-    sprites["left_flat"], # 3
-    sprites["right_flat"], # 4
-    sprites["top_left"], # 5
-    sprites["top_right"], # 6
-    sprites["bottom_left"], # 7
-    sprites["bottom_right"], # 8
-    sprites["top_left_invert"], # 9
-    sprites["top_right_invert"], # 10
-    sprites["bottom_left_invert"], # 11
-    sprites["bottom_right_invert"], # 12
-    sprites["out_of_bounds"], # 13
-    sprites["bottom_double_invert"], # 14
-    sprites["top_double_invert"], # 15
-    sprites["left_double_invert"], # 16
-    sprites["right_double_invert"], # 17
-    sprites["top_bottom_flat"], # 18
-    sprites["left_right_flat"], # 19
-    sprites["top_u"], # 20
-    sprites["bottom_u"], # 21
-    sprites["left_u"], # 22
-    sprites["right_u"], # 23
+    sprites["bottomFlat"], # 1
+    sprites["topFlat"], # 2
+    sprites["leftFlat"], # 3
+    sprites["rightFlat"], # 4
+    sprites["topLeft"], # 5
+    sprites["topRight"], # 6
+    sprites["bottomLeft"], # 7
+    sprites["bottomRight"], # 8
+    sprites["topLeftInvert"], # 9
+    sprites["topRightInvert"], # 10
+    sprites["bottomLeftInvert"], # 11
+    sprites["bottomRightInvert"], # 12
+    sprites["outOfBounds"], # 13
+    sprites["bottomDoubleInvert"], # 14
+    sprites["topDoubleInvert"], # 15
+    sprites["leftDoubleInvert"], # 16
+    sprites["rightDoubleInvert"], # 17
+    sprites["topBottomFlat"], # 18
+    sprites["leftRightFlat"], # 19
+    sprites["topU"], # 20
+    sprites["bottomU"], # 21
+    sprites["leftU"], # 22
+    sprites["rightU"], # 23
 ]

@@ -4,19 +4,19 @@ import projectile
 import reference
 
 class Chunk(pygame.sprite.Sprite):
-    def __init__(self, x, y, chunk_id, room):
+    def __init__(self, x, y, chunkId, room):
         pygame.sprite.Sprite.__init__(self)
         self.pos = pygame.math.Vector2(x, y)
 
         self.width = 50
         self.height = 50
 
-        self.chunk_id = chunk_id
+        self.chunkId = chunkId
         self.wall = False
 
         self.room = room
         
-        self.layout = self.room.layout[self.chunk_id]
+        self.layout = self.room.layout[self.chunkId]
         
         if self.layout != 0:
             self.wall = True
@@ -50,13 +50,13 @@ class Room():
         self.createChunks()
 
     def createChunks(self):
-        chunk_id = 0
+        chunkId = 0
 
         for y in range(int(self.height / 50)):
             for x in range(int(self.width / 50)):
-                c = Chunk(int(x * 50), int(y * 50), chunk_id, self)
+                c = Chunk(int(x * 50), int(y * 50), chunkId, self)
                 self.chunks.add(c)
-                chunk_id += 1
+                chunkId += 1
 
     def draw(self, surface):
         self.chunks.draw(surface)
@@ -76,33 +76,33 @@ class Room():
             return chunk.chunk_id
 
 class Door():
-    def __init__(self, x, y, width, height, target_room, sx, sy):
+    def __init__(self, x, y, width, height, targetRoom, sx, sy):
         self.pos = pygame.math.Vector2(x, y)
         self.width = width
         self.height = height
 
-        self.target_room = target_room
+        self.targetRoom = targetRoom
 
-        self.spawn_pos = pygame.math.Vector2(sx, sy)
+        self.spawnPos = pygame.math.Vector2(sx, sy)
 
     def update(self, player):
         if self.pos.x < player.pos.x < self.pos.x + self.width:
             if self.pos.y < player.pos.y < self.pos.y + self.height:
-                reference.active_room = self.target_room
-                player.pos = self.spawn_pos
+                reference.activeRoom = self.targetRoom
+                player.pos = self.spawnPos
 
-starting_room = Room(layouts.starting_room)
-second_room = Room(layouts.second_room)
-third_room = Room(layouts.third_room)
+startingRoom = Room(layouts.startingRoom)
+secondRoom = Room(layouts.secondRoom)
+thirdRoom = Room(layouts.thirdRoom)
 
-door_1 = Door(150, 0, 100, 50, second_room, 175, 720)
-starting_room.doors.append(door_1)
+doorOne = Door(150, 0, 100, 50, secondRoom, 175, 720)
+startingRoom.doors.append(doorOne)
 
-door_2 = Door(150, 750, 100, 50, starting_room, 175, 75)
-second_room.doors.append(door_2)
+doorTwo = Door(150, 750, 100, 50, startingRoom, 175, 75)
+secondRoom.doors.append(doorTwo)
 
-door_3 = Door(950, 250, 50, 100, third_room, 75, 275)
-second_room.doors.append(door_3)
+doorThree = Door(950, 250, 50, 100, thirdRoom, 75, 275)
+secondRoom.doors.append(doorThree)
 
-door_4 = Door(0, 250, 50, 100, second_room, 875, 275)
-third_room.doors.append(door_4)
+doorFour = Door(0, 250, 50, 100, secondRoom, 875, 275)
+thirdRoom.doors.append(doorFour)

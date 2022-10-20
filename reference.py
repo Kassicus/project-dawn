@@ -15,4 +15,4 @@ COLOR_FIRE = pygame.Color(247, 90, 27, 255)
 # Variables
 dt = 0
 
-active_room = None
+activeRoom = None

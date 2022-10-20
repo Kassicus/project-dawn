@@ -7,7 +7,7 @@ import reference
 _projectiles = pygame.sprite.Group() # Python handles sprites in groups, this is for organization purposes
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x, y, tx, ty, width, height, particle_system, speed):
+    def __init__(self, x, y, tx, ty, width, height, particleSystem, speed):
         pygame.sprite.Sprite.__init__(self)
 
         self.pos = pygame.math.Vector2(x, y)
@@ -18,14 +18,14 @@ class Projectile(pygame.sprite.Sprite):
 
         self.target = pygame.math.Vector2(tx, ty)
 
-        self.particle_system = particle_system
+        self.particleSystem = particleSystem
 
         self.speed = speed
 
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill(reference.WHITE)
 
-        self.display_surface = pygame.display.get_surface()
+        self.displaySurface = pygame.display.get_surface()
 
         self.rect = self.pos
 
@@ -41,18 +41,18 @@ class Projectile(pygame.sprite.Sprite):
         return vectors
 
     def update(self):
-        self.particle_system.draw(self.display_surface)
-        self.particle_system.update()
+        self.particleSystem.draw(self.displaySurface)
+        self.particleSystem.update()
 
         self.pos += self.velocity * reference.dt
 
         self.rect = self.pos
 
-        self.particle_system.pos = self.pos
+        self.particleSystem.pos = self.pos
 
-        self.check_overrun()
+        self.checkOverrun()
 
-    def check_overrun(self):
+    def checkOverrun(self):
         if self.pos.x < -500 or self.pos.x > 1500:
             self.kill()
         

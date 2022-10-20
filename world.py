@@ -1,7 +1,7 @@
 import pygame
 import layouts
 import projectile
-import uni
+import reference
 
 class Chunk(pygame.sprite.Sprite):
     def __init__(self, x, y, chunk_id, room):
@@ -88,7 +88,7 @@ class Door():
     def update(self, player):
         if self.pos.x < player.pos.x < self.pos.x + self.width:
             if self.pos.y < player.pos.y < self.pos.y + self.height:
-                uni.active_room = self.target_room
+                reference.active_room = self.target_room
                 player.pos = self.spawn_pos
 
 starting_room = Room(layouts.starting_room)

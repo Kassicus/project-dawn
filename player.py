@@ -5,7 +5,7 @@ import math
 # Custom class imports
 import projectile
 import particle
-import uni
+import reference
 
 #imports item library for inventory
 import itemLib
@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.height = 1
 
         # Generic player variables
-        self.color = uni.WHITE
+        self.color = reference.WHITE
         self.facing = "right"
         self.health = 40
 
@@ -54,7 +54,7 @@ class Player(pygame.sprite.Sprite):
     # Hanldes all non-graphical updates and events (requires access to the game.events var)
     def update(self, events):
         # Update player location based on player velocity
-        self.pos += self.direction * uni.dt
+        self.pos += self.direction * reference.dt
         self.rect.center = self.pos
 
         #self.rect.update(self.x - int(self.width / 2), self.y - int(self.height / 2), self.width, self.height)

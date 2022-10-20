@@ -4,7 +4,7 @@ import pygame
 import pygame.color
 import pygame.freetype as freetype
 
-import uni
+import reference
 import menuBtn as btn
 
 class PlayerInventoryMenu():
@@ -21,8 +21,8 @@ class PlayerInventoryMenu():
         # Position Variables
         self.x = x
         self.y = y
-        self.width = uni.SCREEN_WIDTH
-        self.height = uni.SCREEN_HEIGHT
+        self.width = reference.SCREEN_WIDTH
+        self.height = reference.SCREEN_HEIGHT
 
         #Dictionary Variables
         self.menuS1BtnDict = {}         #menuSection1SubSections

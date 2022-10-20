@@ -12,7 +12,7 @@ import debug
 import world
 import inventory
 import itemLib
-import uni
+import reference
 
 pygame.init() # This only needs to be called once, at the top of the primary game file (main.py)
 
@@ -20,8 +20,8 @@ pygame.init() # This only needs to be called once, at the top of the primary gam
 class Game():
     def __init__(self):
         # Python screen setup
-        self.screen = pygame.display.set_mode([uni.SCREEN_WIDTH, uni.SCREEN_HEIGHT])
-        pygame.display.set_caption(uni.SCREEN_TITLE)
+        self.screen = pygame.display.set_mode([reference.SCREEN_WIDTH, reference.SCREEN_HEIGHT])
+        pygame.display.set_caption(reference.SCREEN_TITLE)
 
         # Game management variables
         self.running = True
@@ -35,7 +35,7 @@ class Game():
         self.pMenu = menu.PlayerInventoryMenu(50, 45, (120,113,93,120), (0,150,0))
 
         # Set the current room to the "starting room" from the world file
-        uni.active_room = world.starting_room
+        reference.active_room = world.starting_room
 
     # This function starts the game, but also starts the game loop, it determines the order of logic
     def start(self):
@@ -93,9 +93,9 @@ class Game():
 
     # Everything that needs to be drawn (graphical-updates) goes here
     def draw(self):
-        self.screen.fill(uni.BLACK)
+        self.screen.fill(reference.BLACK)
 
-        uni.active_room.draw(self.screen) # This is kindof a group too?
+        reference.active_room.draw(self.screen) # This is kindof a group too?
         
         projectile._projectiles.draw(self.screen) # Groups should be the only thing that still need a surface passed?
 
@@ -117,10 +117,10 @@ class Game():
         projectile._projectiles.update()
 
         # Update all game elements before this point
-        uni.active_room.update(self.player)
+        reference.active_room.update(self.player)
         self.debuginterface.update(self.clock, self.player)
         pygame.display.update()
-        uni.dt = self.clock.tick() / 1000
+        reference.dt = self.clock.tick() / 1000
 
 if __name__ == '__main__':
     game = Game() # Create an instance of the game class

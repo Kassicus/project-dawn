@@ -2,7 +2,7 @@
 import pygame
 import math
 
-import uni
+import reference
 
 _projectiles = pygame.sprite.Group() # Python handles sprites in groups, this is for organization purposes
 
@@ -23,7 +23,7 @@ class Projectile(pygame.sprite.Sprite):
         self.speed = speed
 
         self.image = pygame.Surface([self.width, self.height])
-        self.image.fill(uni.WHITE)
+        self.image.fill(reference.WHITE)
 
         self.display_surface = pygame.display.get_surface()
 
@@ -44,7 +44,7 @@ class Projectile(pygame.sprite.Sprite):
         self.particle_system.draw(self.display_surface)
         self.particle_system.update()
 
-        self.pos += self.velocity * uni.dt
+        self.pos += self.velocity * reference.dt
 
         self.rect = self.pos
 

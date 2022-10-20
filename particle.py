@@ -1,7 +1,7 @@
 # Standard library imports
 import pygame
 import random
-import uni
+import reference
 
 #
 #
@@ -48,7 +48,7 @@ class Particle(pygame.sprite.Sprite):
     # Handles all non-graphical updates for the particle
     def update(self):
         # Update the position
-        self.pos += self.velocity * uni.dt
+        self.pos += self.velocity * reference.dt
         self.rect = self.pos
 
         # If the particle decays, reduce its life by 1 for each frame (~30/s)
@@ -79,7 +79,7 @@ class FireParticleSystem(ParticleSystem):
         super().__init__()
         self.pos = pygame.math.Vector2(x, y)
 
-        self.particle_color = uni.COLOR_FIRE
+        self.particle_color = reference.COLOR_FIRE
 
         self.max_particles = 50
 

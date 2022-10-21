@@ -38,17 +38,37 @@ class Chunk(pygame.sprite.Sprite):
         self.image = layouts.tiles[self.layout] # Set the image to the layout.tiles, with our layout code
         self.rect = self.image.get_rect() # Get the rect of the image
 
-    def update(self):
+    def update(self, player):
         """Update the tile"""
 
         self.rect.update(self.pos.x, self.pos.y, self.width, self.height) # Keep our rect up to date, just incase we get dynamic world movement in the future (and good practice)
 
         # Check if we are a wall
         if self.wall: # If we are
-            self.collide() # Enable our collision detection
+            self.collideProjectiles() # Enable our collision detection
+            self.collidePlayer(player)
 
-    def collide(self):
-        """Check collisions"""
+    #def collidePlayer(self, player):
+    #    """Check collisions with the player
+    #    
+    #    Keyword arguments:
+    #    player (object) : The player of the game
+    #    """
+    #
+    #    offset = 10
+    #
+    #    # If we are in the vertical slice of the object
+    #    if self.pos.y < player.pos.y < self.pos.y + self.height:
+    #        if self.pos.x < player.pos.x < self.pos.x + self.width:
+    #            if player.direction.x > 0: # Moving right
+    #                player.pos.x -= offset
+    #                player.direction.x = 0
+    #            if player.direction.x < 0: # Moving left
+    #                #player.pos.x = self.pos.x + self.width + offset
+    #                player.direction.x = 0
+
+    def collideProjectiles(self):
+        """Check collisions with projectiles"""
 
         # Check collisions with projectiles
         for p in projectile._projectiles: # Get each projectile
@@ -99,7 +119,7 @@ class Room():
     def update(self, player):
         """Update the chunks"""
 
-        self.chunks.update() # Call the chunks update function
+        self.chunks.update(player) # Call the chunks update function
 
         # This is messy, but its a workaround for rooms without doors
         try: # Try the following

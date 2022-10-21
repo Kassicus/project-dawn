@@ -6,6 +6,7 @@ import math
 import projectile
 import particle
 import reference
+import animation
 
 #imports item library for inventory
 import itemLib
@@ -24,9 +25,19 @@ class Player(pygame.sprite.Sprite):
         self.health = 40 # Player health (currently arbitrary)
         self.speed = 200 # This speed needs to be big because of the recent change to delta time
 
+        # Player animation
+        self.animation = animation.Animation( # Create the animation
+            [
+                pygame.image.load("assets/player/animation/anim_1.png").convert_alpha(), # Add all of the images in the players animation
+                pygame.image.load("assets/player/animation/anim_2.png").convert_alpha(), # The second
+                pygame.image.load("assets/player/animation/anim_3.png").convert_alpha(), # The third
+                pygame.image.load("assets/player/animation/anim_4.png").convert_alpha() # The fourth
+            ],
+            4) # Animation speed
+
         # Image and drawing variables
         self.displaySurface = pygame.display.get_surface() # Get the display surface from the location that the class is instanciated
-        self.image = pygame.image.load("assets/player/temp.png").convert_alpha() # Import the image of the player and convert so that invisible pixels work
+        self.image = self.animation.frames[0] # Get the first animation frame
         self.rect = self.image.get_rect() # Get the rect (w, h) of the loaded image
         self.rect.center = self.pos # Set the center of the rect to the player position
 
@@ -40,6 +51,7 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self):
         """Draw the player and all relative player objects/items"""
+        self.image = self.animation.animate() # Update the image to the latest animation image
         rotated = self.rotateToMouse() # Get a copy of the latest rotated player and rect
         self.displaySurface.blit(rotated[0], rotated[1]) # Blit the latest rotated player surface (rotated[0]) at the latest rect position (rotated[1])
 

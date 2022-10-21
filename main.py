@@ -113,6 +113,7 @@ class Game():
         """Updates everything that is anything"""
 
         self.player.update(self.events) # Update the player, pass events
+        self.pMenu.update(self.events)
         self.healthBar.update(self.player.health) # Update the healthbar, specifically pass the players health
 
         projectile._projectiles.update() # Update all projectiles

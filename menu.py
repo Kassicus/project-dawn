@@ -147,6 +147,7 @@ class PlayerInventoryMenu():
         for i in range(1,self.menuRows+1):
             if self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x <= mouse[0] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].width and self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y <= mouse[1] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].height:
                 self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = "red4"
+
             else: 
                 self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = self.textColor1
             self.font.render_to(
@@ -164,7 +165,7 @@ class PlayerInventoryMenu():
         self.font.render_to(
         self.menuSection2,
         self.textCenterDict[self.textCenterS2SSC],
-        self.menuOptionDict[self.mO],
+        self.menuOptionDict[self.mO]+" "+str(1),
         self.textColor1,
         size=self.menuTextSize,
         style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
@@ -176,7 +177,7 @@ class PlayerInventoryMenu():
         self.font.render_to(
         self.menuSection3,
         self.textCenterDict[self.textCenterS3SSC],
-        self.menuOptionDict[self.mO],
+        self.menuOptionDict[self.mO]+" "+str(1),
         self.textColor1,
         size=self.menuTextSize,
         style=freetype.STYLE_UNDERLINE #| freetype.STYLE_OBLIQUE,
@@ -201,6 +202,26 @@ class PlayerInventoryMenu():
         pygame.draw.rect(self.display_surface, self.menuSection2Color, (self.x, self.y+self.menuRowHeight*3, self.menuColumnWidth*3, self.menuRowHeight*2), 1) # MenuSection3Border
         pygame.draw.rect(self.display_surface, self.bg_color, (self.x, self.y, (self.width - (self.x * 2)), self.height - (self.y * 2)), 1) # MenuBorder
 
-    def update(self, value):
-       self.value = value # Update the value with a live feed
-       self.current_value = int(self.width / self.max_value) * self.value # Refresh status bar width to match live value
+    def update(self, events):
+        """Update the menu
+        
+        Keyword argumements:
+        events (pygame.event) : the output of pygame.event.get() (should be from main.py)
+        """
+        #self.pos += self.direction * reference.dt # Add the direction vector to the player vector and multiply by delta time to get framerate independant movement
+        #self.rect.center = self.pos # update the center of the player
+        self.eventHandler(events) # This is where the events really need to go
+    
+    def eventHandler(self, events):
+        """Handles anything to do with pygame.event that needs to interact with the menu
+        
+        Keyword arguments:
+        events (pygame.event) : passed from self.update(), should be pygame.event.get() from main.py
+        """
+        
+        for event in events: # Parse events call
+            if event.type == pygame.MOUSEBUTTONDOWN: # Check for the mousebuttondown event (this does not repeat when the button is held)
+                if event.button == pygame.BUTTON_LEFT: # Check for the left click
+                    mouseX, mouseY = pygame.mouse.get_pos() # Get the current mouse position
+                    #nexystuff
+

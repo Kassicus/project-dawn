@@ -46,7 +46,7 @@ class Chunk(pygame.sprite.Sprite):
         # Check if we are a wall
         if self.wall: # If we are
             self.collideProjectiles() # Enable our collision detection
-            self.collidePlayer(player)
+            #self.collidePlayer(player)
 
     #def collidePlayer(self, player):
     #    """Check collisions with the player

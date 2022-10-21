@@ -4,12 +4,13 @@ import math
 
 # Custom imports
 import reference
+import sound
 
 # Master groups
 _projectiles = pygame.sprite.Group() # Acts as a global container for all projectiles, can be passed and refernced by other files
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x, y, tx, ty, width, height, particleSystem, speed):
+    def __init__(self, x, y, tx, ty, width, height, particleSystem, speed, soundFile):
         """Dynamic projectile, capable of being created by anything
         
         Keyword arguments:
@@ -47,6 +48,9 @@ class Projectile(pygame.sprite.Sprite):
         # Get velocities
         self.velocity.x = self.getVectors()[0] # Set the x velocity based on the getVectors() function
         self.velocity.y = self.getVectors()[1] # Set the y velocity based ont the getVectors() function
+
+        if soundFile is not None:
+            sound.playSound(soundFile)
 
     def getVectors(self):
         """Takes the spawn position and target position and does fancy math to move the bullet"""

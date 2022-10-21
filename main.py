@@ -123,7 +123,7 @@ class Game():
         pygame.display.update() # Update the display element
         reference.dt = self.clock.tick() / 1000 # Get the current delta time
 
-if __name__ == '__main__': # This is literally the only part of the PEP 8 python code layout we use...
+if __name__ == '__main__': # This is literally the only part of the PEP 8 python standard we use...
     game = Game() # Create an instance of the game class
     game.start() # Start our instance of the game class
     pygame.quit() # When the game.running variables is set back to false, the code resumes here and this line kills the game and all other pygame/python tasks on the machine created by the game

@@ -11,10 +11,10 @@ class Chunk(pygame.sprite.Sprite):
         """50x50 pixel building block for the world
         
         Keyword arguments:
-        x -- the horizontal position of the chunk (top-left)
-        y -- the vertical position of the chunk (top-left
-        chunkId -- the unique id (per room) given to the chunk
-        room -- the parent of this class, the room it resides
+        x (int) : the horizontal position of the chunk (top-left)
+        y (int) : the vertical position of the chunk (top-left)
+        chunkId (int) : the unique id (per room) given to the chunk
+        room (class) : the parent of this class, the room it resides
         """
         
         pygame.sprite.Sprite.__init__(self) # Initialize the super class
@@ -61,7 +61,7 @@ class Room():
         """Serves as the container for all chunks and doors for each 'room'
         
         Keyword arguments:
-        layout -- index grid from layouts.py
+        layout (class) : index grid from layouts.py
         """
         
         # Room dimensions
@@ -91,7 +91,7 @@ class Room():
         """Draws the chunk group
         
         Keyword arguments:
-        surface -- a valid pygame.Surface() needs to be passed here because the rooms are not generated in main.py
+        surface (pygame.surface) : a valid pygame.Surface() needs to be passed here because the rooms are not generated in main.py
         """
         
         self.chunks.draw(surface) # Draw all chunks to screen
@@ -113,13 +113,13 @@ class Door():
         """Object that allows player to move between rooms
         
         Keyword arguments:
-        x -- the horizontal position of the door (top-left)
-        y -- the vertical position of the door (top-left)
-        width -- the width of the doors hitbox
-        height -- the height of the doors hitbox
-        targetRoom -- the room that we be loaded when we move through the door
-        sx -- the horizontal position for the spawn of the player in the targetRoom
-        sy -- the vertical position for the spawn of the player in the targetRoom
+        x (int) : the horizontal position of the door (top-left)
+        y (int) : the vertical position of the door (top-left)
+        width (int) : the width of the doors hitbox
+        height (int) : the height of the doors hitbox
+        targetRoom (object) : the room that we be loaded when we move through the door
+        sx (int) : the horizontal position for the spawn of the player in the targetRoom
+        sy (int) : the vertical position for the spawn of the player in the targetRoom
         """
 
         # Position variables
@@ -137,7 +137,7 @@ class Door():
         """Only really checks for the player in the hitbox
         
         Keyword arguments:
-        player -- the player object (should be player from main.py
+        player (object) : the player object (should be player from main.py
         """
         
         # Hitbox detection

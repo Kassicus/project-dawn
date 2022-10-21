@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
         """Update the player
         
         Keyword argumements:
-        events --  the output of pygame.event.get() (should be from main.py)
+        events (pygame.event) : the output of pygame.event.get() (should be from main.py)
         """
     
         self.pos += self.direction * reference.dt # Add the direction vector to the player vector and multiply by delta time to get framerate independant movement
@@ -73,9 +73,9 @@ class Player(pygame.sprite.Sprite):
         """Determine the angle from the player to the mouse, rotate player to that angle
         
         Returns:
-        as (rotatedImage, newRect)
-        rotatedImage -- the image file after the rotation has been performed
-        newRect -- the updated rect to keep the image at its centerpoint
+        as (rotatedImage, newRect)\n
+        rotatedImage (pygame.surface) : the image file after the rotation has been performed
+        newRect (pygame.rect) : the updated rect to keep the image at its centerpoint
         """
         
         mouseX, mouseY = pygame.mouse.get_pos() # Get the mouse position
@@ -92,7 +92,7 @@ class Player(pygame.sprite.Sprite):
         """Handles anything to do with pygame.event that needs to interact with the player
         
         Keyword arguments:
-        events -- passed from self.update(), should be pygame.event.get() from main.py
+        events (pygame.event) : passed from self.update(), should be pygame.event.get() from main.py
         """
         
         keys = pygame.key.get_pressed() # Keep a list of all keys currently being pressed

@@ -80,7 +80,7 @@ class Game():
                             self.debugInterface.active = True # Open it
 
                     if event.key == pygame.K_i: # Check for the I key
-                        self.player.printInventory() # Call the players print inventory function
+                        self.player.printInventory() # Printing the players inventory
 
                     if event.key == pygame.K_COMMA: # Check for the COMMA key
                         inventory.addItem(self.player.inventory, itemLib.sword1) # Give the player something new!

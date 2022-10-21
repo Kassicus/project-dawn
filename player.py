@@ -38,7 +38,7 @@ class Player(pygame.sprite.Sprite):
 
         # Image and drawing variables
         self.displaySurface = pygame.display.get_surface() # Get the display surface from the location that the class is instanciated
-        self.image = self.animation.frames[0] # Get the first animation frame
+        self.image = pygame.image.load("assets/player/test_1.png").convert_alpha() # Get the first animation frame
         self.rect = self.image.get_rect() # Get the rect (w, h) of the loaded image
         self.rect.center = self.pos # Set the center of the rect to the player position
 
@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self):
         """Draw the player and all relative player objects/items"""
-        self.image = self.animation.animate() # Update the image to the latest animation image
+        #self.image = self.animation.animate() # Update the image to the latest animation image
         rotated = self.rotateToMouse() # Get a copy of the latest rotated player and rect
         self.displaySurface.blit(rotated[0], rotated[1]) # Blit the latest rotated player surface (rotated[0]) at the latest rect position (rotated[1])
 

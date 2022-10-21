@@ -1,5 +1,6 @@
 import pygame
 
+# Grid layout for the starting room
 startingRoom = [
     13, 13, 4, 0, 0, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 12, 8, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 13,
@@ -19,6 +20,7 @@ startingRoom = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 ]
 
+# Grid layout for the second room
 secondRoom = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 12, 1, 1, 1, 1, 1, 1, 14, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 13,
@@ -38,6 +40,7 @@ secondRoom = [
     13, 13, 4, 0, 0, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 ]
 
+# Grid layout for the third room
 thirdRoom = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     13, 12, 1, 1, 1, 1, 11, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
@@ -57,6 +60,7 @@ thirdRoom = [
     13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13
 ]
 
+# Dictionary of all sprites
 sprites = {
     "floor" : pygame.image.load("assets/tiles/ground/brick_test.png"),
     "bottomFlat" : pygame.image.load("assets/tiles/walls/bottom_flat.png"),
@@ -84,6 +88,7 @@ sprites = {
     "rightU" : pygame.image.load("assets/tiles/walls/right_u.png"),
 }
 
+# List of all tiles, reference the index to get the corresponding image
 tiles = [
     sprites["floor"], # 0
     sprites["bottomFlat"], # 1

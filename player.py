@@ -14,10 +14,10 @@ import itemLib
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         """Contains and controlls everything player related"""
-        pygame.sprite.Sprite.__init__(self) 
+        pygame.sprite.Sprite.__init__(self) # Initialize the super class
 
         # Position variables
-        self.pos = pygame.math.Vector2(500, 400) # Vectors to store x and y
+        self.pos = pygame.math.Vector2(500, 400) # Vector to store x and y
         self.direction = pygame.math.Vector2() # Vector to store change in x and y
 
         # Generic player variables
@@ -60,6 +60,14 @@ class Player(pygame.sprite.Sprite):
             mouseX, mouseY = pygame.mouse.get_pos() # Get the current mouse position
             p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 3, 3, particle.MagicParticleSystem(self.pos.x, self.pos.y), 400) # Fire a mothafuc*in projectile
             projectile._projectiles.add(p) # Make sure the projectile gets added to the global projectile list
+
+    def printInventory(self):
+        """Print everything in the player inventory to the terminal"""
+
+        print("Your inventory consists of:\n ") # Print the header
+        for x in self.inventory: # Go through each item
+            print(x.itemName + ":", x.itemDescription) # Print the item name : description
+        print("") # Empty line at the bottom to keep things clean
 
     def rotateToMouse(self):
         """Determine the angle from the player to the mouse, rotate player to that angle

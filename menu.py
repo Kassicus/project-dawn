@@ -15,8 +15,8 @@ class PlayerInventoryMenu():
         
         """
         # Font Path Variables
-        fontdir = os.path.dirname(os.path.abspath(__file__))
-        self.font = freetype.Font(os.path.join(fontdir, "data", "Orbitron-Regular.ttf"))  # type: ignore
+        #fontdir = os.path.dirname(os.path.abspath(__file__))
+        self.font = freetype.Font("data/Orbitron-Regular.ttf")  # type: ignore
 
         # Position Variables
         self.x = x

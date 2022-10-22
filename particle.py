@@ -1,4 +1,5 @@
 # Standard library imports
+from weakref import ref
 import pygame
 import random
 
@@ -116,7 +117,7 @@ class FireParticleSystem(ParticleSystem):
 
         self.pos = pygame.math.Vector2(x, y) # Vector to contain the x and y position
 
-        self.particleColor = reference.COLOR_FIRE # Set the particle color
+        self.particleColor = reference.color.FIRE_PARTICLE # Set the particle color
 
         self.maxParticles = 50 # Set the maxParticle limit
 
@@ -271,3 +272,51 @@ class SmokePuffParticleSystem(ParticleSystem):
                 p.velocity.x -= 0.1 # Reduce it (cancell it left)
             if p.velocity.x <= -0.1: # If our velocity is negative (moving left)
                 p.velocity.x += 0.1 # Increase it (cancell with right)
+
+class PlayerParticleSystem(ParticleSystem):
+    def __init__(self, x, y):
+        super().__init__()
+
+        self.pos = pygame.math.Vector2(x, y)
+
+        self.particleColor = reference.color.getRandomChoice([reference.color.PLAYER_PARTICLE_1, reference.color.PLAYER_PARTICLE_2, reference.color.PLAYER_PARTICLE_3])
+
+        self.maxParticles = 300
+
+        self.createParticles(self.maxParticles, 10, 25)
+
+    # Create an amount of particles and add them to the group to be updated and drawn
+    def createParticles(self, count, minLife, maxLife):
+        """Create particles for the system
+        
+        Keyword arguments:
+        count (int) : The amount of particles to create
+        minLife (int) : The minimum amount of updates the particles live
+        maxLife (int) : The maximum amount of updates the particles live
+        """
+
+        for p in range(count): # Create particles equal to the count
+            particleDim = random.randint(3, 5)
+            spawnOffset = 15
+            spawnPos = pygame.math.Vector2(random.randint(int(self.pos.x) - spawnOffset, int(self.pos.x) + spawnOffset), random.randint(int(self.pos.y) - spawnOffset, int(self.pos.y) + spawnOffset))
+            self.particleColor = reference.color.getRandomChoice([reference.color.PLAYER_PARTICLE_1, reference.color.PLAYER_PARTICLE_2, reference.color.PLAYER_PARTICLE_3])
+            p = Particle(spawnPos.x, spawnPos.y, particleDim, particleDim, self.particleColor, minLife, maxLife) # Create the particle
+
+            # Assign velocities as a float for more fluid movement
+            p.velocity.x = random.uniform(-40, 40) # Smaller numbers here mean less spread over lifetime (tighter line)
+            p.velocity.y = random.uniform(-40, 40) # See above
+
+            # Randomly assign an alpha value to some of the particles for dynamic contrast
+            p.image.set_alpha(random.randint(25, 255)) # Random opacity is fun
+            
+            self.particles.add(p) # Add the particles to the group
+
+    # Only calls for the particles to update, and continues the animation if the particles are allowed to decay
+    def update(self):
+        """Update the particles"""
+
+        self.particles.update() # Call the master update
+
+        # Keeps the particle count correct
+        newCount = self.maxParticles - len(self.particles) # Get the amount of dead particles
+        self.createParticles(newCount, 10, 25) # Necromancy!

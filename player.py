@@ -26,6 +26,8 @@ class Player(pygame.sprite.Sprite):
         self.health = 40 # Player health (currently arbitrary)
         self.speed = 200 # This speed needs to be big because of the recent change to delta time
 
+        self.particleSystem = particle.PlayerParticleSystem(self.pos.x, self.pos.y)
+
         # Player animation
         self.animation = animation.Animation( # Create the animation
             [
@@ -53,8 +55,9 @@ class Player(pygame.sprite.Sprite):
     def draw(self):
         """Draw the player and all relative player objects/items"""
         #self.image = self.animation.animate() # Update the image to the latest animation image
-        rotated = self.rotateToMouse() # Get a copy of the latest rotated player and rect
-        self.displaySurface.blit(rotated[0], rotated[1]) # Blit the latest rotated player surface (rotated[0]) at the latest rect position (rotated[1])
+        #rotated = self.rotateToMouse() # Get a copy of the latest rotated player and rect
+        #self.displaySurface.blit(rotated[0], rotated[1]) # Blit the latest rotated player surface (rotated[0]) at the latest rect position (rotated[1])
+        self.particleSystem.draw(self.displaySurface)
 
     def update(self, events):
         """Update the player
@@ -65,6 +68,10 @@ class Player(pygame.sprite.Sprite):
     
         self.pos += self.direction * reference.dt # Add the direction vector to the player vector and multiply by delta time to get framerate independant movement
         self.rect.center = self.pos # update the center of the player
+
+        self.particleSystem.pos = self.pos
+
+        self.particleSystem.update()
 
         self.eventHandler(events) # This is where the events really need to go
 

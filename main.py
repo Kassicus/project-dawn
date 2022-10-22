@@ -92,7 +92,7 @@ class Game():
     def draw(self):
         """Draws everything that is anything to the screen"""
 
-        self.screen.fill(reference.BLACK) # Set the screen to black, paint over everything from the old frame
+        self.screen.fill(reference.color.BLACK) # Set the screen to black, paint over everything from the old frame
 
         reference.activeRoom.draw(self.screen) # Draw the active room, pass the screen because the rooms are not created in this file
         

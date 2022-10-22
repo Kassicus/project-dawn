@@ -41,7 +41,7 @@ class Projectile(pygame.sprite.Sprite):
 
         # Image and drawing variables
         self.image = pygame.Surface([self.width, self.height])
-        self.image.fill(reference.WHITE)
+        self.image.fill(reference.color.WHITE)
         self.displaySurface = pygame.display.get_surface()
         self.rect = self.pos
 

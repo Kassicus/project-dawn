@@ -320,3 +320,63 @@ class PlayerParticleSystem(ParticleSystem):
         # Keeps the particle count correct
         newCount = self.maxParticles - len(self.particles) # Get the amount of dead particles
         self.createParticles(newCount, 10, 25) # Necromancy!
+
+class ContainedParticle(pygame.sprite.Sprite):
+    def __init__(self, x, y, width, height, color, minLife, maxLife):
+        """Contained particle for contained particle system
+        
+        Keyword arguments:
+        x (int) : The horizontal position of the particle
+        y (int) : The veritcal position of the particle
+        width (int) : The width of the particle
+        height (int) : The height of the particle
+        color (pygame.Color) : The color of the particle system
+        minLife (int) : The minimum amount of particle updates that the particle lives for
+        maxLife (int) : The maximum amount of particle updates that the particle lives for
+        """
+
+        self.pos = pygame.math.Vector2(x, y)
+        self.velocity = pygame.math.Vector2()
+
+        self.width = width
+        self.height = height
+
+        self.lifetime = random.randint(minLife, maxLife)
+
+        self.color = color
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.set_color(self.color)
+        self.rect = self.pos
+
+    def update(self):
+        self.pos += self.velocity * reference.dt
+        self.rect = self.pos
+
+class ContainedParticleSystem():
+    def __init__(self, maxParticles = 100):
+        """Base container for contained particles, extended by each specific system
+        
+        Keyword arguments:
+        maxParticles (int) : The maximum number of particles that the system is allowed to contain (default=100)
+        """
+        
+        self.particles = pygame.sprite.Group() # Create a group to contain particles
+        self.maxParticles = maxParticles # Set max particles
+
+    def draw(self, surface):
+        """Draw all the particles in the system
+        
+        Keyword arguments:
+        surface (pygame.Surface) : The surface to draw the particles on, passed from projectile
+        """
+        
+        self.particles.draw(surface) # Call the draw function of the particle class
+        for p in self.particles: # For each particle
+            p.draw(surface) # Update manually
+
+class ExplosionContainedParticleSystem(ContainedParticleSystem):
+    def __init__(self, x, y):
+        super().__init__()
+
+        self.pos = pygame.math.Vector2(x, y)
+        

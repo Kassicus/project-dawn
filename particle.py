@@ -352,24 +352,30 @@ class ContainedParticle(pygame.sprite.Sprite):
         self.pos += self.velocity * reference.dt
         self.rect = self.pos
 
-class ContainedParticleSystem():
+        self.lifetime -= 1
+
+        if self.lifetime <= 0:
+            self.kill()
+
+class ContainedParticleSystem(pygame.sprite.Sprite):
     def __init__(self, maxParticles = 100):
+        pygame.sprite.Sprite.__init__(self)
         """Base container for contained particles, extended by each specific system
         
         Keyword arguments:
         maxParticles (int) : The maximum number of particles that the system is allowed to contain (default=100)
         """
         
+        self.displaySurface = None
+
         self.particles = pygame.sprite.Group() # Create a group to contain particles
         self.maxParticles = maxParticles # Set max particles
 
     def draw(self, surface):
-        """Draw all the particles in the system
+        """Draw all the particles in the system"""
         
-        Keyword arguments:
-        surface (pygame.Surface) : The surface to draw the particles on, passed from projectile
-        """
-        
+        print("Drawing!")
+
         self.particles.draw(surface) # Call the draw function of the particle class
         for p in self.particles: # For each particle
             p.draw(surface) # Update manually
@@ -379,4 +385,43 @@ class ExplosionContainedParticleSystem(ContainedParticleSystem):
         super().__init__()
 
         self.pos = pygame.math.Vector2(x, y)
+
+        self.particleColor = reference.color.WHITE
+
+        self.maxParticles = 150
+
+        self.createParticles(self.maxParticles, 30, 45)
+
+        self.image = pygame.Surface([1, 1])
+        self.image.fill((self.particleColor))
+        self.rect = self.image.get_rect()
+
+        print("I exist!")
+
+    # Create an amount of particles and add them to the group to be updated and drawn
+    def createParticles(self, count, minLife, maxLife):
+        """Create particles for the system
         
+        Keyword arguments:
+        count (int) : The amount of particles to create
+        minLife (int) : The minimum amount of updates the particles live
+        maxLife (int) : The maximum amount of updates the particles live
+        """
+
+        for p in range(count): # Create particles equal to the count
+            p = Particle(self.pos.x, self.pos.y, 3, 3, self.particleColor, minLife, maxLife) # Create the particle
+
+            # Assign velocities as a float for more fluid movement
+            p.velocity.x = random.uniform(-40, 40) # Smaller numbers here mean less spread over lifetime (tighter line)
+            p.velocity.y = random.uniform(-40, 40) # See above
+
+            # Randomly assign an alpha value to some of the particles for dynamic contrast
+            p.image.set_alpha(random.randint(25, 255)) # Random opacity is fun
+            
+            self.particles.add(p) # Add the particles to the group
+        
+    def update(self):
+        self.particles.update()
+
+        if len(self.particles) <= 0:
+            self.kill()

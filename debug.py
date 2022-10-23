@@ -76,8 +76,9 @@ class DebugInterface():
         
         particles = 0 # Particles starts over at 0 for each render
         for p in projectile._projectiles: # Parse the projectiles
-            count = len(p.particleSystem.particles) # Get the current particle count for each projectile
-            particles += count # Add that to the overall particle count
+            if hasattr(p, "particleSystem"):
+                count = len(p.particleSystem.particles) # Get the current particle count for each projectile
+                particles += count # Add that to the overall particle count
         particleString = "Part:    " + str(particles) # Get the count of particles in a string
         particleText = self.font.render(particleString, 1, (255, 255, 255)) # Convert the string to an object
         return particleText # Return said object

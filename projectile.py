@@ -5,12 +5,13 @@ import math
 # Custom imports
 import reference
 import sound
+import particle
 
 # Master groups
 _projectiles = pygame.sprite.Group() # Acts as a global container for all projectiles, can be passed and refernced by other files
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x, y, tx, ty, width, height, particleSystem, speed, soundFile):
+    def __init__(self, x, y, tx, ty, width, height, particleSystem, explodes, speed, soundFile):
         """Dynamic projectile, capable of being created by anything
         
         Keyword arguments:
@@ -21,6 +22,7 @@ class Projectile(pygame.sprite.Sprite):
         width (int) : The width of the projectile
         height (int) : The height of the projectile
         particleSystem (object) : Optional particle system to make fun bullet trail bullshit
+        explodes (boolean) : If the projectile explodes or not
         speed (int) : The speed of the bullet
         """
         
@@ -36,6 +38,7 @@ class Projectile(pygame.sprite.Sprite):
         self.height = height # Height of the projectile
 
         self.particleSystem = particleSystem # Particle system
+        self.explodes = explodes
 
         self.speed = speed # Projectile speed
 
@@ -85,3 +88,15 @@ class Projectile(pygame.sprite.Sprite):
         
         if self.pos.y < -500 or self.pos.y > 1300: # If we are outside of the screen vertically
             self.kill() # Kill the projectile
+
+    def terminate(self):
+        if self.explodes:
+            part = particle.ExplosionContainedParticleSystem(self.pos.x, self.pos.y)
+            for projectile in _projectiles:
+                print(projectile)
+            _projectiles.add(part)
+            for projectile in _projectiles:
+                print(projectile)
+            self.kill()
+        else:
+            self.kill()

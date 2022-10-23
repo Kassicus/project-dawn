@@ -78,7 +78,7 @@ class Player(pygame.sprite.Sprite):
         # Testing the rapid fire weapon
         if pygame.mouse.get_pressed()[2]: # Check if the right click button is being held
             mouseX, mouseY = pygame.mouse.get_pos() # Get the current mouse position
-            p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 3, 3, particle.MagicParticleSystem(self.pos.x, self.pos.y), 400, "magic") # Fire a mothafuc*in projectile
+            p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 3, 3, particle.MagicParticleSystem(self.pos.x, self.pos.y), False, 400, "magic") # Fire a mothafuc*in projectile
             projectile._projectiles.add(p) # Make sure the projectile gets added to the global projectile list
 
     def printInventory(self):
@@ -135,5 +135,5 @@ class Player(pygame.sprite.Sprite):
             if event.type == pygame.MOUSEBUTTONDOWN: # Check for the mousebuttondown event (this does not repeat when the button is held)
                 if event.button == pygame.BUTTON_LEFT: # Check for the left click
                     mouseX, mouseY = pygame.mouse.get_pos() # Get the current mouse position
-                    p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 5, 5, particle.FireParticleSystem(self.pos.x, self.pos.y), 300, random.choice(["fireball", "fireball 2"])) # Create the projectile
+                    p = projectile.Projectile(self.pos.x, self.pos.y, mouseX, mouseY, 5, 5, particle.FireParticleSystem(self.pos.x, self.pos.y), True, 300, random.choice(["fireball", "fireball 2"])) # Create the projectile
                     projectile._projectiles.add(p) # Add the projectile to the global projectile list

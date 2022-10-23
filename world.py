@@ -72,9 +72,10 @@ class Chunk(pygame.sprite.Sprite):
 
         # Check collisions with projectiles
         for p in projectile._projectiles: # Get each projectile
-            if self.pos.x < p.pos.x < self.pos.x + self.width: # If its inside of us horizontally
-                if self.pos.y < p.pos.y < self.pos.y + self.height: # If its inside of us vertically
-                    p.kill() # Murder the fucker
+            if hasattr(p, "particleSystem"):
+                if self.pos.x < p.pos.x < self.pos.x + self.width: # If its inside of us horizontally
+                    if self.pos.y < p.pos.y < self.pos.y + self.height: # If its inside of us vertically
+                        p.terminate()
 
 class Room():
     def __init__(self, layout):

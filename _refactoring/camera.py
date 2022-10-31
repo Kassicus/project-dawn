@@ -1,26 +1,54 @@
+# Standard imports
 import pygame
 
-class PlayerCenterCamera(pygame.sprite.Group):
-    def __init__(self, displaySurface, groundSurface):
-        pygame.sprite.Group.__init__(self)
-        self.displaySurface = displaySurface
-        self.halfWidth = self.displaySurface.get_size()[0] // 2
-        self.halfHeight = self.displaySurface.get_size()[1] // 2
+# Custom player centric y-sort camera
+class PlayerCenterCamera(pygame.sprite.Group): # Extends the pygame sprite group
+    def __init__(self, displaySurface: pygame.Surface, groundSurface: pygame.Surface) -> None:
+        """Create an instance of a pygame sprite group with some special features
+        
+        Arguments:
+        displaySurface: pygame.Surface - The main display of the game
+        groundSurface: pygame.Surface - The background element of the camera (should be from the level)
+        """
+        
+        pygame.sprite.Group.__init__(self) # INit the superclass\
 
-        self.groundSurface = groundSurface
-        self.groundRect = self.groundSurface.get_rect(topleft = (0, 0))
-        self.offset = pygame.math.Vector2()
+        # Setup the display
+        self.displaySurface = displaySurface # This is what we draw to
+        self.halfWidth = self.displaySurface.get_size()[0] // 2 # Get half of the width of the current display (supports resizing)
+        self.halfHeight = self.displaySurface.get_size()[1] // 2 # Get half of the height of the current display (supports resizing)
 
-    def centerTargetCamera(self, target):
-        self.offset.x = target.rect.centerx - self.halfWidth
-        self.offset.y = target.rect.centery - self.halfHeight
+        # Background setup
+        self.groundSurface = groundSurface # This is our background for the level
+        self.groundRect = self.groundSurface.get_rect(topleft = (0, 0)) # Create a rect for the background so we can move it
+        
+        # Translation variables
+        self.offset = pygame.math.Vector2() # This will handle our offset
 
-    def cameraDraw(self, player):
-        self.centerTargetCamera(player)
+    def centerTargetCamera(self, target: pygame.Sprite) -> None:
+        """Get the movement of the player, and move the offsets accordingly
+        
+        Arguments:
+        target: pygame.Sprite - The main game player
+        """
+        
+        # Set offsets
+        self.offset.x = target.rect.centerx - self.halfWidth # Get the offset between the players horizontal pos and the middle of the screen
+        self.offset.y = target.rect.centery - self.halfHeight # Get the offset between the player vertical pos and the middle of the screen
 
-        groundOffset = self.groundRect.topleft - self.offset
-        self.displaySurface.blit(self.groundSurface, groundOffset)
+    def cameraDraw(self, player: pygame.Sprite) -> None:
+        """Draw all elements, in a Y sorted fashion, faking depth
+        
+        Arguments:
+        player: pygame.Sprite - The main game player
+        """
+        
+        self.centerTargetCamera(player) # Update the offsets by recentering the camera
 
-        for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
-            offsetPos = sprite.rect.topleft - self.offset
-            self.displaySurface.blit(sprite.image, offsetPos)
+        # Ground stuff
+        groundOffset = self.groundRect.topleft - self.offset # Create the offset to draw the ground
+        self.displaySurface.blit(self.groundSurface, groundOffset) # Drawn the ground at that offset
+
+        for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery): # Get each sprite in our group, and sort them by the vertical position on screen
+            offsetPos = sprite.rect.topleft - self.offset # Get the offset position for each sprite
+            self.displaySurface.blit(sprite.image, offsetPos) # Draw each sprite at the offset position

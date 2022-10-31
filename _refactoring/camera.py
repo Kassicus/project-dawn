@@ -25,7 +25,7 @@ class PlayerCenterCamera(pygame.sprite.Group): # Extends the pygame sprite group
         # Translation variables
         self.offset = pygame.math.Vector2() # This will handle our offset
 
-    def centerTargetCamera(self, target: pygame.Sprite) -> None:
+    def centerTargetCamera(self, target: pygame.sprite.Sprite) -> None:
         """Get the movement of the player, and move the offsets accordingly
         
         Arguments:
@@ -36,7 +36,7 @@ class PlayerCenterCamera(pygame.sprite.Group): # Extends the pygame sprite group
         self.offset.x = target.rect.centerx - self.halfWidth # Get the offset between the players horizontal pos and the middle of the screen
         self.offset.y = target.rect.centery - self.halfHeight # Get the offset between the player vertical pos and the middle of the screen
 
-    def cameraDraw(self, player: pygame.Sprite) -> None:
+    def cameraDraw(self, player: pygame.sprite.Sprite) -> None:
         """Draw all elements, in a Y sorted fashion, faking depth
         
         Arguments:

@@ -33,7 +33,7 @@ class Game():
     def update(self):
         self.level.update()
         pygame.display.update()
-        lib.deltaTime = self.clock.tick() / 1000
+        lib.deltaTime = self.clock.tick(120) / 1000
 
 if __name__ == '__main__':
     game = Game()

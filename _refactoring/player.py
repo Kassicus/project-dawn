@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([40, 40])
         self.image.fill(lib.color.WHITE)
+        self.image.set_colorkey(lib.color.WHITE)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
@@ -23,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         self.move()
 
         if self.particleSystem is not None:
-            self.particleSystem.update()
+            self.particleSystem.update(self.pos.x, self.pos.y)
 
     def move(self):
         keys = pygame.key.get_pressed()

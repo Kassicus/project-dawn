@@ -1,14 +1,5 @@
 import pygame
 
-class LinkedPlayerCamera(pygame.sprite.Group):
-    def __init__(self, displaySurface):
-        pygame.sprite.Group.__init__(self)
-        self.displaySurface = displaySurface
-
-    def cameraDraw(self):
-        for sprite in self.sprites():
-            self.displaySurface.blit(sprite.image, sprite.rect)
-
 class PlayerCenterCamera(pygame.sprite.Group):
     def __init__(self, displaySurface, groundSurface):
         pygame.sprite.Group.__init__(self)

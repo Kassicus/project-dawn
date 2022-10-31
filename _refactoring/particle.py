@@ -19,8 +19,6 @@ class Particle(pygame.sprite.Sprite):
         self.pos += self.velo * lib.deltaTime
         self.rect.center = self.pos
 
-        print(self.pos, self.velo)
-
         self.lifeTime -= 1
         if self.lifeTime <= 0:
             self.kill()
@@ -50,10 +48,11 @@ class PlayerParticleSystem(ParticleSystem):
     def __init__(self, drawContainer):
         super().__init__(drawContainer)
         self.particleColor = lib.color.getRandomChoice([lib.color.PLAYER1, lib.color.PLAYER2, lib.color.PLAYER3])
-        self.createParticles(500, 400, self.maxParticles, 3, 5, 15, 10, 25, -40, 40, -40, 40, 25, 255)
+        self.createParticles(500, 400, self.maxParticles, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255)
 
-    def update(self):
+    def update(self, x, y):
+        new_pos = pygame.math.Vector2(int(x), int(y))
         self.particleContainer.update()
 
         newCount = self.maxParticles - len(self.particleContainer)
-        self.createParticles(500, 400, newCount, 3, 5, 15, 10, 25, -40, 40, -40, 40, 25, 255)
+        self.createParticles(new_pos.x, new_pos.y, newCount, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255)

@@ -11,7 +11,6 @@ class Level():
         self.displaySurface = pygame.display.get_surface()
         self.levelBackground = pygame.image.load("_refactoring/assets/background/test_1.png").convert_alpha()
         self.worldCamera = camera.PlayerCenterCamera(self.displaySurface, self.levelBackground)
-        self.staticCamera = camera.LinkedPlayerCamera(self.displaySurface)
         self.player = player.Player()
 
         self.collidables = pygame.sprite.Group()
@@ -25,15 +24,13 @@ class Level():
         self.createWalls(self.walls)
         self.worldCamera.add(self.player)
 
-        self.player.particleSystem = particle.PlayerParticleSystem(self.staticCamera)
+        self.player.particleSystem = particle.PlayerParticleSystem(self.worldCamera)
 
     def draw(self):
         self.worldCamera.cameraDraw(self.player)
-        self.staticCamera.cameraDraw()
 
     def update(self):
         self.worldCamera.update()
-        self.staticCamera.cameraDraw()
 
         self.checkCollisions()
 

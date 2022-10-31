@@ -1,44 +1,59 @@
+# Standard imoprts
 import pygame
 
+# Custom imports
 import lib
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.pos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2))
-        self.velo = pygame.math.Vector2()
-        self.speed = 200
+    def __init__(self) -> None:
+        """Create the player"""
 
-        self.particleSystem = None
+        pygame.sprite.Sprite.__init__(self) # Initialize the sprite super class
 
-        self.image = pygame.Surface([40, 40])
-        self.image.fill(lib.color.WHITE)
-        self.image.set_colorkey(lib.color.WHITE)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        # Pos and movement vars
+        self.pos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2)) # Set the players position to the center of the screen
+        self.velo = pygame.math.Vector2() # Create the players velocity vector
+        self.speed = 200 # Set the speed variable for the player
 
-    def update(self):
-        self.pos += self.velo * lib.deltaTime
-        self.rect.center = self.pos
+        # Fancy things
+        self.particleSystem = None # By default we dont get a particle system? TODO make the players particle system work here
 
-        self.move()
+        # Image vars
+        self.image = pygame.Surface([40, 40]) # Create the player as a 40x40 square
+        self.image.fill(lib.color.WHITE) # Make the player white
+        self.image.set_colorkey(lib.color.WHITE) # Make white the colorkey (makes the player ivisible)
+        self.rect = self.image.get_rect() # Get the rect of the players image
+        self.rect.center = self.pos # Center the rect on the players position
 
-        if self.particleSystem is not None:
-            self.particleSystem.update(self.pos.x, self.pos.y)
+    def update(self) -> None:
+        """Update the player"""
 
-    def move(self):
-        keys = pygame.key.get_pressed()
+        self.pos += self.velo * lib.deltaTime # Position + velocity * delta time = frame independant movement
+        self.rect.center = self.pos # Update the center of the rect to the position
 
-        if keys[pygame.K_a]:
-            self.velo.x = -self.speed
-        elif keys[pygame.K_d]:
-            self.velo.x = self.speed
-        else:
-            self.velo.x = 0
+        self.move() # Call the players movmement method
 
-        if keys[pygame.K_w]:
-            self.velo.y = -self.speed
-        elif keys[pygame.K_s]:
-            self.velo.y = self.speed
-        else:
-            self.velo.y = 0
+        # Update the particle system
+        if self.particleSystem is not None: # If we have a particle system
+            self.particleSystem.update(self.pos.x, self.pos.y) # Update it with our latest position
+
+    def move(self) -> None:
+        """Handles player movement based on [WASD] keys"""
+
+        keys = pygame.key.get_pressed() # Get all keys current being pressed
+
+        # Check for horizontal axis
+        if keys[pygame.K_a]: # If we find the [A] key
+            self.velo.x = -self.speed # Set our horizontal velocity to our negative speed (left)
+        elif keys[pygame.K_d]: # If we find the [D] key
+            self.velo.x = self.speed # Give our horizontal velocity a postive value instead (right)
+        else: # If neither of the horizontal keys are pressed
+            self.velo.x = 0 # Kill our velocity
+
+        # Check for vertical axis
+        if keys[pygame.K_w]: # If we get the [W] key
+            self.velo.y = -self.speed # Set our vertical velocity to negative (up)
+        elif keys[pygame.K_s]: # If we get the [S] key
+            self.velo.y = self.speed # Set our vertical velocity to positive (down)
+        else: # Otherwise
+            self.velo.y = 0 # Kill the vertical velocity

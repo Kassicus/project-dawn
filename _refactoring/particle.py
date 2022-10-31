@@ -47,8 +47,9 @@ class ParticleSystem():
 class PlayerParticleSystem(ParticleSystem):
     def __init__(self, drawContainer):
         super().__init__(drawContainer)
+        self.spawnPos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2))
         self.particleColor = lib.color.getRandomChoice([lib.color.PLAYER1, lib.color.PLAYER2, lib.color.PLAYER3])
-        self.createParticles(500, 400, self.maxParticles, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255)
+        self.createParticles(self.spawnPos.x, self.spawnPos.y, self.maxParticles, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255)
 
     def update(self, x, y):
         newPos = pygame.math.Vector2(int(x), int(y))

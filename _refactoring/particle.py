@@ -51,8 +51,8 @@ class PlayerParticleSystem(ParticleSystem):
         self.createParticles(500, 400, self.maxParticles, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255)
 
     def update(self, x, y):
-        new_pos = pygame.math.Vector2(int(x), int(y))
+        newPos = pygame.math.Vector2(int(x), int(y))
         self.particleContainer.update()
 
         newCount = self.maxParticles - len(self.particleContainer)
-        self.createParticles(new_pos.x, new_pos.y, newCount, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255)
+        self.createParticles(newPos.x, newPos.y, newCount, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255)

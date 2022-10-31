@@ -4,6 +4,7 @@ import pygame
 # Custom Imports
 import lib
 import level
+import debug
 
 pygame.init() # Initialize the pygame module (called once)
 
@@ -22,6 +23,7 @@ class Game(): # Main game class
 
         # Gameplay vars
         self.level = level.Level("_refactoring/assets/background/test_1.png") # The level, this holds most of our logic
+        self.debugInterface = debug.DebugInterface()
 
     def run(self) -> None:
         """Calls all of the functions that run the game"""
@@ -40,6 +42,10 @@ class Game(): # Main game class
             if event.type == pygame.QUIT: # If we hear the quit event
                 self.running = False # Stop the game from running
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_TAB:
+                    self.debugInterface.toggleActive(self.level.wallContainer)
+
     def draw(self) -> None:
         """Handles drawing all graphical elements"""
 
@@ -49,6 +55,10 @@ class Game(): # Main game class
         # Draw everything here, things are drawn to screen in order, items at the bottom are drawn over items at the top
         self.level.draw() # Invoke the active levels draw method
 
+        # Draw below this
+        if self.debugInterface.active:
+            self.debugInterface.draw()
+
     def update(self) -> None:
         """Updates everything, applies all physics/events changes"""
 
@@ -56,6 +66,7 @@ class Game(): # Main game class
         self.level.update() # Update the game level
 
         # Do these last
+        self.debugInterface.update(self.clock, self.level.player)
         pygame.display.update() # Update the display (push the new elements from the draw method)
         lib.deltaTime = self.clock.tick(120) / 1000 # Update the delta time and tick the clock (locked to 120fps)
 

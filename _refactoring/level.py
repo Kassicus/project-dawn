@@ -23,6 +23,7 @@ class Level():
         self.worldCamera = camera.PlayerCenterCamera(self.displaySurface, self.levelBackground) # Create a camera that tracks the player
         self.player = player.Player() # Create the player
         self.collidables = pygame.sprite.Group() # Create a group to hold all collidable objects
+        self.wallContainer = pygame.sprite.Group() # Held here to access all walls
 
         # Create all of the walls (these should match the walls drawn on the background)
         self.walls = [ # Walls are 'point arrays' [x: int, y: int, width: int, height: int]
@@ -60,6 +61,7 @@ class Level():
             w = wall.Wall(wallArray[pointArray][0], wallArray[pointArray][1], wallArray[pointArray][2], wallArray[pointArray][3]) # Create a wall based on the points in each arrray
             self.worldCamera.add(w) # Add the wall to the camera to be drawn TODO make invisible
             self.collidables.add(w) # Add the wall to the collidables to make the player hit it
+            self.wallContainer.add(w)
 
     def checkCollisions(self) -> None:
         """Check the collisions between the player and everthing in the collidables group"""

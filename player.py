@@ -4,6 +4,7 @@ import pygame
 # Custom imports
 import lib
 import projectile
+import particle
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, level: object) -> None:
@@ -46,7 +47,7 @@ class Player(pygame.sprite.Sprite):
         worldMousePos = pygame.math.Vector2(rawMousePos[0] + lib.globalOffset.x, rawMousePos[1] + lib.globalOffset.y)
 
         if pygame.mouse.get_pressed()[0]:
-            p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 300)
+            p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 200, particle.MagicProjectileParticleSystem, self.level.worldCamera)
             self.level.friendlyProjectiles.add(p)
             self.level.worldCamera.add(p)
 

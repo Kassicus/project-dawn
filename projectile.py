@@ -4,13 +4,15 @@ import math
 import lib
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float) -> None:
+    def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float, particleSystem: object, drawContainer: pygame.sprite.Group) -> None:
         pygame.sprite.Sprite.__init__(self)
 
         self.pos = pygame.math.Vector2(x, y)
         self.velo = pygame.math.Vector2()
         self.targetPos = pygame.math.Vector2(targetX, targetY)
         self.speed = speed
+
+        self.particleSystem = particleSystem(self.pos.x, self.pos.y, drawContainer)
 
         self.image = pygame.Surface([size, size])
         self.image.fill(lib.color.WHITE)
@@ -33,6 +35,9 @@ class Projectile(pygame.sprite.Sprite):
     def update(self) -> None:
         self.pos += self.velo * lib.deltaTime
         self.rect.center = self.pos
+
+        if self.particleSystem is not None:
+            self.particleSystem.update(self.pos.x, self.pos.y)
 
         if self.overrun():
             self.kill()

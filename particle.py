@@ -79,7 +79,7 @@ class ParticleSystem():
         
         for p in range(count): # Run for as many particles as we need
             particleDim = random.randint(minParticleDim, maxParticleDim) # Get the dimension for this particle
-            spawnPos = pygame.math.Vector2(random.randint(x - particleOffset, x + particleOffset), random.randint(y - particleOffset, y + particleOffset)) # Get the random spawn position for this particle, taking offset into account
+            spawnPos = pygame.math.Vector2(random.randint(int(x) - particleOffset, int(x) + particleOffset), random.randint(int(y) - particleOffset, int(y) + particleOffset)) # Get the random spawn position for this particle, taking offset into account
             p = Particle(spawnPos.x, spawnPos.y, particleDim, particleDim, self.particleColor, minLife, maxLife) # Create the particle
 
             p.velo.x = random.uniform(minVeloX, maxVeloX) # Assign a random velocity on the horizontal axis
@@ -114,6 +114,21 @@ class PlayerParticleSystem(ParticleSystem): # The players particle system
         
         newPos = pygame.math.Vector2(int(x), int(y)) # Create a vector of the new positions
         self.particleContainer.update() # Update the particles we currently have
-
+        self.particleColor = lib.color.getRandomChoice([lib.color.PLAYER1, lib.color.PLAYER2, lib.color.PLAYER3])
         newCount = self.maxParticles - len(self.particleContainer) # Figure out how many particles have died
         self.createParticles(newPos.x, newPos.y, newCount, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255) # Make that many more
+
+class MagicProjectileParticleSystem(ParticleSystem):
+    def __init__(self, x: int, y: int, drawContainer: pygame.sprite.Group) -> None:
+        super().__init__(drawContainer)
+
+        self.spawnPos = pygame.math.Vector2(x, y)
+        self.particleColor = lib.color.getRandomColor(255)
+        self.maxParticles = 20
+        self.createParticles(self.spawnPos.x, self.spawnPos.y, self.maxParticles, 2, 2, 0, 25, 75, -20, 20, -20, 20, 0, 255)
+
+    def update(self, x: int, y: int) -> None:
+        newPos = pygame.math.Vector2(int(x), int(y))
+        self.particleContainer.update()
+        newCount = self.maxParticles - len(self.particleContainer)
+        self.createParticles(newPos.x, newPos.y, newCount, 2, 2, 0, 25, 75, -20, 20, -20, 20, 0, 255)

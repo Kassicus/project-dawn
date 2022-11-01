@@ -8,6 +8,7 @@ class Projectile(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.pos = pygame.math.Vector2(x, y)
+        self.velo = pygame.math.Vector2()
         self.targetPos = pygame.math.Vector2(targetX, targetY)
         self.speed = speed
 
@@ -16,10 +17,13 @@ class Projectile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
+        self.velo.x = self.getVectors()[0]
+        self.velo.y = self.getVectors()[1]
+
     def getVectors(self) -> None:
         """Takes the spawn position and target position and does fancy math to move the bullet"""
 
-        distance = [self.target.x - self.pos.x, self.target.y - self.pos.y] # Difference in the x values and difference in the y values
+        distance = [self.targetPos.x - self.pos.x, self.targetPos.y - self.pos.y] # Difference in the x values and difference in the y values
         normal = math.sqrt(distance[0] ** 2 + distance[1] ** 2) # This is just pythagorean theorum. A^2 + B^2 = C^2, but for us its C = sqrt(A^2 + B^2)
         direction = [distance[0] / normal, distance[1] / normal] # Divide the difference by the normal to get a rise over run step
         vectors = [direction[0] * self.speed, direction[1] * self.speed] # Multiply that step by speed to get the actual change in rise over run for the projectile
@@ -27,7 +31,7 @@ class Projectile(pygame.sprite.Sprite):
         return vectors # Return those projectiles
 
     def update(self) -> None:
-        self.pos += self.velocity * lib.deltaTime
+        self.pos += self.velo * lib.deltaTime
         self.rect.center = self.pos
 
         if self.overrun():

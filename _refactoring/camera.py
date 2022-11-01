@@ -1,6 +1,9 @@
 # Standard imports
 import pygame
 
+# Custom imports
+import lib
+
 # Custom player centric y-sort camera
 class PlayerCenterCamera(pygame.sprite.Group): # Extends the pygame sprite group
     def __init__(self, displaySurface: pygame.Surface, groundSurface: pygame.Surface) -> None:
@@ -21,9 +24,6 @@ class PlayerCenterCamera(pygame.sprite.Group): # Extends the pygame sprite group
         # Background setup
         self.groundSurface = groundSurface # This is our background for the level
         self.groundRect = self.groundSurface.get_rect(topleft = (0, 0)) # Create a rect for the background so we can move it
-        
-        # Translation variables
-        self.offset = pygame.math.Vector2() # This will handle our offset
 
     def centerTargetCamera(self, target: pygame.sprite.Sprite) -> None:
         """Get the movement of the player, and move the offsets accordingly
@@ -33,8 +33,8 @@ class PlayerCenterCamera(pygame.sprite.Group): # Extends the pygame sprite group
         """
         
         # Set offsets
-        self.offset.x = target.rect.centerx - self.halfWidth # Get the offset between the players horizontal pos and the middle of the screen
-        self.offset.y = target.rect.centery - self.halfHeight # Get the offset between the player vertical pos and the middle of the screen
+        lib.globalOffset.x = target.rect.centerx - self.halfWidth # Get the offset between the players horizontal pos and the middle of the screen
+        lib.globalOffset.y = target.rect.centery - self.halfHeight # Get the offset between the player vertical pos and the middle of the screen
 
     def cameraDraw(self, player: pygame.sprite.Sprite) -> None:
         """Draw all elements, in a Y sorted fashion, faking depth
@@ -46,9 +46,9 @@ class PlayerCenterCamera(pygame.sprite.Group): # Extends the pygame sprite group
         self.centerTargetCamera(player) # Update the offsets by recentering the camera
 
         # Ground stuff
-        groundOffset = self.groundRect.topleft - self.offset # Create the offset to draw the ground
+        groundOffset = self.groundRect.topleft - lib.globalOffset # Create the offset to draw the ground
         self.displaySurface.blit(self.groundSurface, groundOffset) # Drawn the ground at that offset
 
         for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery): # Get each sprite in our group, and sort them by the vertical position on screen
-            offsetPos = sprite.rect.topleft - self.offset # Get the offset position for each sprite
+            offsetPos = sprite.rect.topleft - lib.globalOffset # Get the offset position for each sprite
             self.displaySurface.blit(sprite.image, offsetPos) # Draw each sprite at the offset position

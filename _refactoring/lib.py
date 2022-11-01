@@ -15,6 +15,7 @@ class ColorLibrary():
         self.BLACK = pygame.Color(0, 0, 0, 255)
         self.WHITE = pygame.Color(255, 255, 255, 255)
         self.BLUE = pygame.Color(0, 0, 255, 255)
+        self.RED = pygame.Color(255, 0, 0)
 
         # Custom colors
         self.PLAYER1 = pygame.Color(99, 155, 255, 255)
@@ -50,3 +51,4 @@ class ColorLibrary():
 color = ColorLibrary() # Creat the color library
 
 deltaTime = 0 # Delta time is a magical fucking thing
+globalOffset = pygame.math.Vector2() # A global offset to be able to use the correct camera features

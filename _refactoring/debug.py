@@ -46,13 +46,21 @@ class DebugInterface():
 
         self.changeWallVisibility(walls)
 
+    def drawLineToMouse(self, player: pygame.sprite.Sprite) -> None:
+        rawMousePos = pygame.mouse.get_pos()
+        worldMousePos = pygame.math.Vector2(rawMousePos[0], rawMousePos[1])
+
+        pygame.draw.line(self.displaySurface, lib.color.RED, (player.pos.x - lib.globalOffset.x, player.pos.y - lib.globalOffset.y), (worldMousePos.x, worldMousePos.y), 1)
+
     def draw(self) -> None:
         self.displaySurface.blit(self.fpsText, (800, 10))
         self.displaySurface.blit(self.mouseText, (800, 30))
         self.displaySurface.blit(self.playerText, (800, 50))
-            
 
     def update(self, clock: pygame.time.Clock, player: pygame.sprite.Sprite):
         self.fpsText = self.getFps(clock)
         self.mouseText = self.getMousePos()
         self.playerText = self.getPlayerPos(player)
+
+        if self.active:
+            self.drawLineToMouse(player)

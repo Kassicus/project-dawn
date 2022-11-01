@@ -3,12 +3,15 @@ import pygame
 
 # Custom imports
 import lib
+import projectile
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self) -> None:
+    def __init__(self, level: object) -> None:
         """Create the player"""
 
+        # Import setup
         pygame.sprite.Sprite.__init__(self) # Initialize the sprite super class
+        self.level = level # A reference back to the parent of the player
 
         # Pos and movement vars
         self.pos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2)) # Set the players position to the center of the screen
@@ -32,10 +35,20 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = self.pos # Update the center of the rect to the position
 
         self.move() # Call the players movmement method
+        self.interact()
 
         # Update the particle system
         if self.particleSystem is not None: # If we have a particle system
             self.particleSystem.update(self.pos.x, self.pos.y) # Update it with our latest position
+
+    def interact(self) -> None:
+        rawMousePos = pygame.mouse.get_pos()
+        worldMousePos = pygame.math.Vector2(rawMousePos[0] + lib.globalOffset.x, rawMousePos[1] + lib.globalOffset.y)
+
+        if pygame.mouse.get_pressed()[0]:
+            p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 300)
+            self.level.friendlyProjectiles.add(p)
+            self.level.worldCamera.add(p)
 
     def move(self) -> None:
         """Handles player movement based on [WASD] keys"""

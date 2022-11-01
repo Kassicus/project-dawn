@@ -21,9 +21,11 @@ class Level():
         
         # Early level setup
         self.worldCamera = camera.PlayerCenterCamera(self.displaySurface, self.levelBackground) # Create a camera that tracks the player
-        self.player = player.Player() # Create the player
+        self.player = player.Player(self) # Create the player
         self.collidables = pygame.sprite.Group() # Create a group to hold all collidable objects
         self.wallContainer = pygame.sprite.Group() # Held here to access all walls
+        self.friendlyProjectiles = pygame.sprite.Group()
+        self.hostileProjeciles = pygame.sprite.Group()
 
         # Create all of the walls (these should match the walls drawn on the background)
         self.walls = [ # Walls are 'point arrays' [x: int, y: int, width: int, height: int]
@@ -48,6 +50,8 @@ class Level():
 
         self.worldCamera.update() # Update everything contained in the camera
         self.checkCollisions() # Check collisions
+        self.friendlyProjectiles.update()
+        self.hostileProjeciles.update()
 
     def createWalls(self, wallArray: list) -> None:
         """Creates walls for each entry in self.walls

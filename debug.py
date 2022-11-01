@@ -1,108 +1,66 @@
-# Standard library imports
+# Standard imports
 import pygame
-import projectile
+
+# Custom imports
+import lib
 
 class DebugInterface():
-    def __init__(self):
-        """ Gets a ton of useful information and displays it for the user"""
+    def __init__(self) -> None:
+        """Collects and draws out a ton of useful information"""
 
-        # Font and text variables
-        self.font = pygame.font.SysFont("Courier", 16) # Set the font to a system default Courier size 16
-        self.fpsText = None # Temp var for the fps
-        self.mouseText = None # Temp var for the mouse
-        self.playerText = None # Temp var for the player
-        self.projectileText = None # Temp var for the projectiles
-        self.particleText = None # Temp var for the particles
+        self.font = pygame.font.SysFont("Courier", 16)
+        self.fpsText = None
+        self.mouseText = None
+        self.playerText = None
 
-        # Drawing variables
-        self.displaySurface = pygame.display.get_surface() # Get the main display surface
-        self.active = False # By default we should be inactive
+        self.displaySurface = pygame.display.get_surface()
+        self.active = False
 
-    def getFps(self, clock):
-        """Get the FPS and convert it to a user friendly format
-        
-        Keyword arguments:
-        clock (pygame.clock) : the main clock for the game
-        
-        Returns:
-        fpsText (object) : the blit-able rendered text of the FPS
-        """
-        
-        fpsString = "FPS:     " + str(int(clock.get_fps())) # Create a string containing the fps value
-        fpsText = self.font.render(fpsString, 1, (255, 255, 255)) # Convert that string to an object
-        return fpsText # Return said object
+    def getFps(self, clock: pygame.time.Clock) -> pygame.Surface:
+        fpsString = "FPS: " + str(int(clock.get_fps()))
+        fpsText = self.font.render(fpsString, True, lib.color.WHITE)
+        return fpsText
 
-    def getMouse(self):
-        """Get the mouse pos
-        
-        Returns:
-        mouseText (object) : the blit-able rendered text of the mouse posision"""
+    def getMousePos(self) -> pygame.Surface:
+        mouseString = "Mouse: " + str(pygame.mouse.get_pos())
+        mouseText = self.font.render(mouseString, True, lib.color.WHITE)
+        return mouseText
 
-        mouseString = "Mouse:  " + str(pygame.mouse.get_pos()) # Get the mouse position in a string
-        mouseText = self.font.render(mouseString, 1, (255, 255, 255)) # Convert the string to an object
-        return mouseText # Return said object
+    def getPlayerPos(self, player: pygame.sprite.Sprite) -> pygame.Surface:
+        playerString = "Player: (" + str(player.rect.x) + ", " + str(player.rect.y) + ")"
+        playerText = self.font.render(playerString, True, lib.color.WHITE)
+        return playerText
 
-    def getPlayer(self, player):
-        """Get the player position
-        
-        Keyword arguments:
-        player (object) : the player for the game
-        
-        Returns:
-        playerText (object) : the blit-able rendered text of the player position
-        """
-        
-        playerString = "Player: (" + str(player.rect.x) + ", " + str(player.rect.y) + ")" # Get the player position in a string
-        playerText = self.font.render(playerString, 1, (255, 255, 255)) # Convert that string to an object
-        return playerText # Return said object
+    def changeWallVisibility(self, walls: pygame.sprite.Group) -> None:
+        for wall in walls:
+            if wall.image.get_colorkey() == lib.color.BLUE:
+                wall.image.set_colorkey(lib.color.WHITE)
+            else:
+                wall.image.set_colorkey(lib.color.BLUE)
 
-    def getProjectileCount(self):
-        """Get the count of projectiles that are alive
-        
-        Returns:
-        projectileText (object) : the blit-able rendered text of the projectile count
-        """
-        
-        projectileString = "Proj:    " + str(int(len(projectile._projectiles))) # Get the count of projectiles in a string
-        projectileText = self.font.render(projectileString, 1, (255, 255, 255)) # Convert the string to an object
-        return projectileText # Return said object
+    def toggleActive(self, walls: pygame.sprite.Group) -> None:
+        if self.active:
+            self.active = False
+        else:
+            self.active = True
 
-    def getParticleCount(self):
-        """Get the count of all particles on screen
-        
-        Returns:
-        particleText (object) : the blit-able rendered text of the particle count
-        """
-        
-        particles = 0 # Particles starts over at 0 for each render
-        for p in projectile._projectiles: # Parse the projectiles
-            if hasattr(p, "particleSystem"):
-                count = len(p.particleSystem.particles) # Get the current particle count for each projectile
-                particles += count # Add that to the overall particle count
-        particleString = "Part:    " + str(particles) # Get the count of particles in a string
-        particleText = self.font.render(particleString, 1, (255, 255, 255)) # Convert the string to an object
-        return particleText # Return said object
+        self.changeWallVisibility(walls)
 
-    def draw(self):
-        """Draw all of the fonts to the surface"""
+    def drawLineToMouse(self, player: pygame.sprite.Sprite) -> None:
+        rawMousePos = pygame.mouse.get_pos()
+        worldMousePos = pygame.math.Vector2(rawMousePos[0], rawMousePos[1])
 
-        pygame.draw.rect(self.displaySurface, (0, 0, 0), (780, 0, 220, 110), 0) # Draw the background
-        self.displaySurface.blit(self.fpsText, (800, 10)) # Draw the fps text
-        self.displaySurface.blit(self.mouseText, (800, 30)) # Draw the mouse position
-        self.displaySurface.blit(self.playerText, (800, 50)) # Draw the player position
-        self.displaySurface.blit(self.projectileText, (800, 70)) # Draw the count of projectiles
-        self.displaySurface.blit(self.particleText, (800, 90)) # Draw the count of particles
+        pygame.draw.line(self.displaySurface, lib.color.RED, (player.pos.x - lib.globalOffset.x, player.pos.y - lib.globalOffset.y), (worldMousePos.x, worldMousePos.y), 1)
 
-    def update(self, clock, player):
-        """Update all of the fonts
-        
-        Keyword arguments:
-        clock (pygame.clock) : Needed for the fps text
-        player (object) : Needed to get the player position
-        """
-        
-        self.fpsText = self.getFps(clock) # Update the fps text
-        self.mouseText = self.getMouse() # Update the mouse text
-        self.playerText = self.getPlayer(player) # Update the player text
-        self.projectileText = self.getProjectileCount() # Update the projectile text
-        self.particleText = self.getParticleCount() # Update the particle text
+    def draw(self) -> None:
+        self.displaySurface.blit(self.fpsText, (800, 10))
+        self.displaySurface.blit(self.mouseText, (800, 30))
+        self.displaySurface.blit(self.playerText, (800, 50))
+
+    def update(self, clock: pygame.time.Clock, player: pygame.sprite.Sprite):
+        self.fpsText = self.getFps(clock)
+        self.mouseText = self.getMousePos()
+        self.playerText = self.getPlayerPos(player)
+
+        if self.active:
+            self.drawLineToMouse(player)

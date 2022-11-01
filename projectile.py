@@ -5,6 +5,19 @@ import lib
 
 class Projectile(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float, particleSystem: object, drawContainer: pygame.sprite.Group) -> None:
+        """Create a projectile
+        
+        Arguments:
+        x: int - The initial horizontal posision of the projectile
+        y: int - The initial vertical position of the projectile
+        targetX: int - The intended horizontal position of the projectile
+        targetY: int - The intended vertical position of the projectile
+        size: int - The amount of pixels the projectile is wide and tall
+        speed: float - The speed of the projectile
+        particleSystem: object - The particle system of the projectile
+        drawContainer: pygame.sprite.Group - The levels main camera object
+        """
+        
         pygame.sprite.Sprite.__init__(self)
 
         self.pos = pygame.math.Vector2(x, y)
@@ -22,8 +35,12 @@ class Projectile(pygame.sprite.Sprite):
         self.velo.x = self.getVectors()[0]
         self.velo.y = self.getVectors()[1]
 
-    def getVectors(self) -> None:
-        """Takes the spawn position and target position and does fancy math to move the bullet"""
+    def getVectors(self) -> list:
+        """Takes the spawn position and target position and does fancy math to get the bullet vectors
+        
+        Returns:
+        vectors: list - The calculated vectors [0] = x, [1] = y
+        """
 
         distance = [self.targetPos.x - self.pos.x, self.targetPos.y - self.pos.y] # Difference in the x values and difference in the y values
         normal = math.sqrt(distance[0] ** 2 + distance[1] ** 2) # This is just pythagorean theorum. A^2 + B^2 = C^2, but for us its C = sqrt(A^2 + B^2)
@@ -42,7 +59,9 @@ class Projectile(pygame.sprite.Sprite):
         if self.overrun():
             self.kill()
 
+    #TODO rework this, it breaks if the player moves outside of those boundaries
     def overrun(self) -> bool:
+        """Checks if the projectile has exceeded 500px outside of the screen"""
         if self.pos.x < -500 or self.pos.x > 1500 or self.pos.y < -500 or self.pos.y > 1300:
             return True
         else:

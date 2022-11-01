@@ -70,7 +70,7 @@ class Level():
     def checkCollisions(self) -> None:
         """Check the collisions between the player and everthing in the collidables group"""
 
-        collisionTollerance = 10 # The maximum overlap that two collidables objects can have (we might need to tweak this once we get animations working)
+        collisionTollerance = 15 # The maximum overlap that two collidables objects can have (we might need to tweak this once we get animations working)
 
         # Check all of the collisions
         for c in self.collidables: # Parse the collidables group

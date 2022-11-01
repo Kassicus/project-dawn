@@ -125,10 +125,10 @@ class MagicProjectileParticleSystem(ParticleSystem):
         self.spawnPos = pygame.math.Vector2(x, y)
         self.particleColor = lib.color.getRandomColor(255)
         self.maxParticles = 20
-        self.createParticles(self.spawnPos.x, self.spawnPos.y, self.maxParticles, 2, 2, 0, 25, 75, -20, 20, -20, 20, 0, 255)
+        self.createParticles(self.spawnPos.x, self.spawnPos.y, self.maxParticles, 1, 3, 0, 25, 75, -20, 20, -20, 20, 0, 255)
 
     def update(self, x: int, y: int) -> None:
         newPos = pygame.math.Vector2(int(x), int(y))
         self.particleContainer.update()
         newCount = self.maxParticles - len(self.particleContainer)
-        self.createParticles(newPos.x, newPos.y, newCount, 2, 2, 0, 25, 75, -20, 20, -20, 20, 0, 255)
+        self.createParticles(newPos.x, newPos.y, newCount, 1, 3, 0, 25, 75, -20, 20, -20, 20, 0, 255)

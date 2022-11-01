@@ -24,14 +24,14 @@ class Game(): # Main game class
 
         # Game interface objects
         self.level = level.Level("assets/tiles/ground/test_1.png") # The level, this holds most of our logic
-        self.debugInterface = debug.DebugInterface()
+        self.debugInterface = debug.DebugInterface(self.level)
         self.pauseMenu = menu.PlayerInventoryMenu(50, 45, (120, 113, 93, 120), (0, 150, 0))
 
     def run(self) -> None:
         """Calls all of the functions that run the game"""
 
         # Main game loop
-        while self.running: # While the game is happening
+        while self.running: # While the game is happening            
             self.eventHandler() # Process all events
             self.draw() # Draw eveything to the screen
             self.update() # Apply all of the new processes
@@ -77,7 +77,7 @@ class Game(): # Main game class
         self.level.update() # Update the game level
 
         # Do these last
-        self.debugInterface.update(self.clock, self.level.player)
+        self.debugInterface.update(self.clock)
         pygame.display.update() # Update the display (push the new elements from the draw method)
         lib.deltaTime = self.clock.tick(120) / 1000 # Update the delta time and tick the clock (locked to 120fps)
 

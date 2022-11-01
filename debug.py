@@ -5,8 +5,11 @@ import pygame
 import lib
 
 class DebugInterface():
-    def __init__(self) -> None:
+    def __init__(self, level: object) -> None:
         """Collects and draws out a ton of useful information"""
+
+        self.level = level
+        self.player = self.level.player
 
         self.font = pygame.font.SysFont("Courier", 16)
         self.fpsText = None
@@ -26,8 +29,8 @@ class DebugInterface():
         mouseText = self.font.render(mouseString, True, lib.color.WHITE)
         return mouseText
 
-    def getPlayerPos(self, player: pygame.sprite.Sprite) -> pygame.Surface:
-        playerString = "Player: (" + str(player.rect.x) + ", " + str(player.rect.y) + ")"
+    def getPlayerPos(self) -> pygame.Surface:
+        playerString = "Player: (" + str(self.player.rect.x) + ", " + str(self.player.rect.y) + ")"
         playerText = self.font.render(playerString, True, lib.color.WHITE)
         return playerText
 
@@ -46,21 +49,21 @@ class DebugInterface():
 
         self.changeWallVisibility(walls)
 
-    def drawLineToMouse(self, player: pygame.sprite.Sprite) -> None:
+    def drawLineToMouse(self) -> None:
         rawMousePos = pygame.mouse.get_pos()
         worldMousePos = pygame.math.Vector2(rawMousePos[0], rawMousePos[1])
 
-        pygame.draw.line(self.displaySurface, lib.color.RED, (player.pos.x - lib.globalOffset.x, player.pos.y - lib.globalOffset.y), (worldMousePos.x, worldMousePos.y), 1)
+        pygame.draw.line(self.displaySurface, lib.color.RED, (self.player.pos.x - lib.globalOffset.x, self.player.pos.y - lib.globalOffset.y), (worldMousePos.x, worldMousePos.y), 1)
 
     def draw(self) -> None:
         self.displaySurface.blit(self.fpsText, (800, 10))
         self.displaySurface.blit(self.mouseText, (800, 30))
         self.displaySurface.blit(self.playerText, (800, 50))
 
-    def update(self, clock: pygame.time.Clock, player: pygame.sprite.Sprite):
+    def update(self, clock: pygame.time.Clock):
         self.fpsText = self.getFps(clock)
         self.mouseText = self.getMousePos()
-        self.playerText = self.getPlayerPos(player)
+        self.playerText = self.getPlayerPos()
 
         if self.active:
-            self.drawLineToMouse(player)
+            self.drawLineToMouse()

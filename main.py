@@ -54,6 +54,9 @@ class Game(): # Main game class
                     else:
                         self.pauseMenu.isDrawn = True
 
+                if event.key == pygame.K_e:
+                    self.level.createEnemies(5)
+
     def draw(self) -> None:
         """Handles drawing all graphical elements"""
 

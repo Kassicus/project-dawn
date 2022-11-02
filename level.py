@@ -1,11 +1,13 @@
 # Standard imports
 import pygame
+import random
 
 # Custom imports
 import camera
 import player
 import wall
 import particle
+import enemy
 
 class Level():
     def __init__(self, backgroundPath: str) -> None:
@@ -26,6 +28,7 @@ class Level():
         self.wallContainer = pygame.sprite.Group() # Held here to access all walls
         self.friendlyProjectiles = pygame.sprite.Group()
         self.hostileProjeciles = pygame.sprite.Group()
+        self.enemyContainer = pygame.sprite.Group()
 
         # Create all of the walls (these should match the walls drawn on the background)
         self.walls = [ # Walls are 'point arrays' [x: int, y: int, width: int, height: int]
@@ -52,6 +55,10 @@ class Level():
         self.checkCollisions() # Check collisions
         self.friendlyProjectiles.update()
         self.hostileProjeciles.update()
+        self.enemyContainer.update()
+        
+        for e in self.enemyContainer:
+            e.chasePlayer(self.player)
 
     def createWalls(self, wallArray: list) -> None:
         """Creates walls for each entry in self.walls
@@ -89,3 +96,9 @@ class Level():
                 if abs(self.player.rect.bottom - c.rect.top) < collisionTollerance: # Check the negative vertical collision
                     self.player.velo.y = 0 # Kill velocity
                     self.player.pos.y = c.rect.top - self.player.rect.height / 2 # Set the player to the right spot
+
+    def createEnemies(self, count: int) -> None:
+        for c in range(count):
+            c = enemy.ChaserEnemy(random.randint(0, 1000), random.randint(0, 800), 20, 100)
+            self.worldCamera.add(c)
+            self.enemyContainer.add(c)

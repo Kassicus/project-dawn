@@ -23,7 +23,7 @@ class Game(): # Main game class
         self.events = pygame.event.get() # Holds all of our events
 
         # Game interface objects
-        self.level = level.Level("assets/tiles/ground/test_1.png") # The level, this holds most of our logic
+        self.level = level.Level("assets/tiles/starter_dungeon.png") # The level, this holds most of our logic
         self.debugInterface = debug.DebugInterface(self.level)
         self.pauseMenu = menu.PlayerInventoryMenu(50, 45, (120, 113, 93, 120), (0, 150, 0))
 

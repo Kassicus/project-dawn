@@ -35,7 +35,7 @@ class Game(): # Main game class
             self.eventHandler() # Process all events
             self.draw() # Draw eveything to the screen
             self.update() # Apply all of the new processes
-
+            
     def eventHandler(self) -> None:
         """Handles all input/event logic for the game"""
 
@@ -77,7 +77,11 @@ class Game(): # Main game class
         """Updates everything, applies all physics/events changes"""
 
         # Do all game logic here
-        self.level.update() # Update the game level
+        
+        if self.pauseMenu.isDrawn == False:
+            self.level.update() # Update the game level
+        else:
+            self.pauseMenu.update()
 
         # Do these last
         self.debugInterface.update(self.clock) # Update the debug interface

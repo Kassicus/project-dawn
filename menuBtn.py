@@ -19,6 +19,8 @@ class Button():
         self.height = height
         self.surface = pygame.Surface((width,height),pygame.SRCALPHA)
         self.btnTxtColor = btnTxtColor
+        self.isHovered = False
         self.isActive = False
+        self.screenNum = 0
         self.linkedSection2DictKey = ""
         self.linkedSection3DictKey = ""

@@ -2,9 +2,10 @@ import pygame
 import math
 
 import lib
+import sound
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float, particleSystem: object, drawContainer: pygame.sprite.Group, damage: int) -> None:
+    def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float, particleSystem: object, drawContainer: pygame.sprite.Group, damage: int, spawnSound: str) -> None:
         """Create a projectile
         
         Arguments:
@@ -16,26 +17,30 @@ class Projectile(pygame.sprite.Sprite):
         speed: float - The speed of the projectile
         particleSystem: object - The particle system of the projectile
         drawContainer: pygame.sprite.Group - The levels main camera object
+        damage: int - The amount of damage the projectile will do to enemies
+        spawnSound: str - The dictionary key of the desired sound to be played when the projectile is created
         """
         
-        pygame.sprite.Sprite.__init__(self)
+        super().__init__()
 
-        self.pos = pygame.math.Vector2(x, y)
-        self.velo = pygame.math.Vector2()
-        self.targetPos = pygame.math.Vector2(targetX, targetY)
-        self.speed = speed
-        self.damage = damage
-        self.lifetime = 1000
+        self.pos = pygame.math.Vector2(x, y) # Vector for our current position
+        self.velo = pygame.math.Vector2() # Vector for our movement
+        self.targetPos = pygame.math.Vector2(targetX, targetY) # Vector for the target position
+        self.speed = speed # How fast we get to our target position
+        self.damage = damage # The amount of damage we do
+        self.lifetime = 1000 # The default lifetime of the projectile
 
-        self.particleSystem = particleSystem(self.pos.x, self.pos.y, drawContainer)
+        sound.playSound(spawnSound) # Play the spawn sound on init
 
-        self.image = pygame.Surface([size, size])
-        self.image.fill(lib.color.WHITE)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        self.particleSystem = particleSystem(self.pos.x, self.pos.y, drawContainer) # Create our particle system
 
-        self.velo.x = self.getVectors()[0]
-        self.velo.y = self.getVectors()[1]
+        self.image = pygame.Surface([size, size]) # Create a square surface for our image
+        self.image.fill(lib.color.WHITE) # Fill that surface solid white
+        self.rect = self.image.get_rect() # Get the rect of the surface
+        self.rect.center = self.pos # Set the center of the rect to the projectile position
+
+        self.velo.x = self.getVectors()[0] # Map our x movement to our first vector
+        self.velo.y = self.getVectors()[1] # Map our y movement to our second vector
 
     def getVectors(self) -> list:
         """Takes the spawn position and target position and does fancy math to get the bullet vectors
@@ -49,16 +54,17 @@ class Projectile(pygame.sprite.Sprite):
         direction = [distance[0] / normal, distance[1] / normal] # Divide the difference by the normal to get a rise over run step
         vectors = [direction[0] * self.speed, direction[1] * self.speed] # Multiply that step by speed to get the actual change in rise over run for the projectile
 
-        return vectors # Return those projectiles
+        return vectors # Return those vectors
 
     def update(self) -> None:
-        self.pos += self.velo * lib.deltaTime
-        self.rect.center = self.pos
+        """Update the projectile"""
 
-        if self.particleSystem is not None:
-            self.particleSystem.update(self.pos.x, self.pos.y)
+        self.pos += self.velo * lib.deltaTime # Move the projectile
+        self.rect.center = self.pos # Set the center of the rect to the new position
 
-        self.lifetime -= 1
+        if self.particleSystem is not None: # If we have a particle system
+            self.particleSystem.update(self.pos.x, self.pos.y) # Make sure to update it
 
-        if self.lifetime <= 0:
-            self.kill()
+        self.lifetime -= 1 # Count down our lifetime (kinda range?)
+        if self.lifetime <= 0: # If it runs out
+            self.kill() # We die

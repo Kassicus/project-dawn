@@ -27,7 +27,7 @@ class Level():
         self.collidables = pygame.sprite.Group() # Create a group to hold all collidable objects
         self.wallContainer = pygame.sprite.Group() # Held here to access all walls
         self.friendlyProjectiles = pygame.sprite.Group()
-        self.hostileProjeciles = pygame.sprite.Group()
+        self.hostileProjectiles = pygame.sprite.Group()
         self.enemyContainer = pygame.sprite.Group()
 
         # Create all of the walls (these should match the walls drawn on the background)
@@ -40,8 +40,13 @@ class Level():
         [18, 45, 1, 3], [19, 47, 7, 1]
         ]
 
+        self.turretLocations = [
+        [7, 20], [22, 20], [7, 35], [22, 35]
+        ]
+
         # Late level setup
         self.createWalls(self.walls) # Create the walls, the get added to collidables
+        self.createTurrets()
         self.worldCamera.add(self.player) # Add the player to the world camera
 
         # TODO: Refactor this, move into player?
@@ -58,13 +63,17 @@ class Level():
         self.worldCamera.update() # Update everything contained in the camera
         self.checkCollisions() # Check collisions
         self.friendlyProjectiles.update()
-        self.hostileProjeciles.update()
+        self.hostileProjectiles.update()
         self.enemyContainer.update()
         
         for e in self.enemyContainer:
-            e.chasePlayer(self.player)
+            if e.tag == "chaser":
+                e.chasePlayer(self.player)
+            if e.tag == "turret":
+                e.shootAtPlayer(self.player, self)
 
         self.friendlyProjectileCollision()
+        #self.hostileProjectileCollision()
 
     def createWalls(self, wallArray: list) -> None:
         """Creates walls for each entry in self.walls
@@ -91,6 +100,10 @@ class Level():
                 if p.rect.colliderect(c.rect):
                     p.kill()
 
+            for p in self.hostileProjectiles:
+                if p.rect.colliderect(c.rect):
+                    p.kill()
+
             if self.player.rect.colliderect(c.rect): # If the player collides with a collidable
                 # Horizontal
                 if abs(self.player.rect.left - c.rect.right) < collisionTollerance: # Check the positive horizontal collision
@@ -113,6 +126,18 @@ class Level():
                 if e.rect.colliderect(p.rect):
                     e.health -= p.damage
                     p.kill()
+
+    def hostileProjectileCollision(self) -> None:
+        for p in self.hostileProjectiles:
+            if self.player.rect.colliderect(p.rect):
+                self.player.health -= p.damage
+                p.kill()
+
+    def createTurrets(self):
+        for x in range(len(self.turretLocations)):
+            e = enemy.TurretEnemy(int(self.turretLocations[x][0] * 50), int(self.turretLocations[x][1] * 50), 30, self.displaySurface)
+            self.enemyContainer.add(e)
+            self.worldCamera.add(e)
 
     def createEnemies(self, count: int) -> None:
         for c in range(count):

@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         # Pos and movement vars
         self.pos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2)) # Set the players position to the center of the screen
         self.velo = pygame.math.Vector2() # Create the players velocity vector
-        self.speed = 200 # Set the speed variable for the player
+        self.speed = 250 # Set the speed variable for the player
 
         # Fancy things
         self.particleSystem = None # By default we dont get a particle system? TODO make the players particle system work here
@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
         worldMousePos = pygame.math.Vector2(rawMousePos[0] + lib.globalOffset.x, rawMousePos[1] + lib.globalOffset.y)
 
         if pygame.mouse.get_pressed()[0]:
-            p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 200, particle.MagicProjectileParticleSystem, self.level.worldCamera, 5)
+            p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 200, particle.MagicProjectileParticleSystem, self.level.worldCamera, 5, "magic")
             self.level.friendlyProjectiles.add(p)
             self.level.worldCamera.add(p)
 

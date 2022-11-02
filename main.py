@@ -24,8 +24,8 @@ class Game(): # Main game class
 
         # Game interface objects
         self.level = level.Level("assets/tiles/starter_dungeon.png") # The level, this holds most of our logic
-        self.debugInterface = debug.DebugInterface(self.level)
-        self.pauseMenu = menu.PlayerInventoryMenu(50, 45, (120, 113, 93, 120), (0, 150, 0))
+        self.debugInterface = debug.DebugInterface(self.level) # Create a debug interface, it needs the level for reference
+        self.pauseMenu = menu.PlayerInventoryMenu(50, 45, (120, 113, 93, 120), (0, 150, 0)) # Create the pause menu instance
 
     def run(self) -> None:
         """Calls all of the functions that run the game"""
@@ -44,15 +44,15 @@ class Game(): # Main game class
             if event.type == pygame.QUIT: # If we hear the quit event
                 self.running = False # Stop the game from running
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_TAB:
-                    self.debugInterface.toggleActive(self.level.wallContainer)
+            if event.type == pygame.KEYDOWN: # Check for all keydown events
+                if event.key == pygame.K_TAB: # If our key is tab
+                    self.debugInterface.toggleActive(self.level.wallContainer) # We toggle the visibility of the debug interface
                 
-                if event.key == pygame.K_m:
-                    if self.pauseMenu.isDrawn:
-                        self.pauseMenu.isDrawn = False
-                    else:
-                        self.pauseMenu.isDrawn = True
+                if event.key == pygame.K_m: # If the key is m
+                    if self.pauseMenu.isDrawn: # If the pause menu is being drawn
+                        self.pauseMenu.isDrawn = False # Stop it
+                    else: # If its not
+                        self.pauseMenu.isDrawn = True # Draw it
 
                 if event.key == pygame.K_e:
                     self.level.createEnemies(5)
@@ -66,12 +66,12 @@ class Game(): # Main game class
         # Draw everything here, things are drawn to screen in order, items at the bottom are drawn over items at the top
         self.level.draw() # Invoke the active levels draw method
 
-        if self.pauseMenu.isDrawn:
-            self.pauseMenu.draw()
+        if self.pauseMenu.isDrawn: # If we should be drawing the pause menu
+            self.pauseMenu.draw() # Do it
 
         # Draw below this
-        if self.debugInterface.active:
-            self.debugInterface.draw()
+        if self.debugInterface.active: # If we should be drawing the degub menu
+            self.debugInterface.draw() # Do it
 
     def update(self) -> None:
         """Updates everything, applies all physics/events changes"""
@@ -80,7 +80,7 @@ class Game(): # Main game class
         self.level.update() # Update the game level
 
         # Do these last
-        self.debugInterface.update(self.clock)
+        self.debugInterface.update(self.clock) # Update the debug interface
         pygame.display.update() # Update the display (push the new elements from the draw method)
         lib.deltaTime = self.clock.tick(120) / 1000 # Update the delta time and tick the clock (locked to 120fps)
 

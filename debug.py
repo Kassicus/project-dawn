@@ -37,7 +37,7 @@ class DebugInterface():
         return playerText
 
     def getProjectileCount(self) -> pygame.Surface:
-        projectileString = "Projectiles: " + str(len(self.level.friendlyProjectiles))
+        projectileString = "Projectiles: " + str(len(self.level.friendlyProjectiles) + len(self.level.hostileProjectiles))
         projectileText = self.font.render(projectileString, True, lib.color.WHITE)
         return projectileText
 
@@ -69,7 +69,8 @@ class DebugInterface():
 
     def drawEnemyToTarget(self) -> None:
         for e in self.level.enemyContainer:
-            pygame.draw.line(self.displaySurface, lib.color.GREEN, (e.pos.x - lib.globalOffset.x, e.pos.y - lib.globalOffset.y), (e.targetPos.x - lib.globalOffset.x, e.targetPos.y - lib.globalOffset.y), 1)
+            if e.tag == "chaser":
+                pygame.draw.line(self.displaySurface, lib.color.GREEN, (e.pos.x - lib.globalOffset.x, e.pos.y - lib.globalOffset.y), (e.targetPos.x - lib.globalOffset.x, e.targetPos.y - lib.globalOffset.y), 1)
 
     def draw(self) -> None:
         self.displaySurface.blit(self.fpsText, (800, 10))

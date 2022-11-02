@@ -70,7 +70,8 @@ class Level():
             if e.tag == "chaser":
                 e.chasePlayer(self.player)
             if e.tag == "turret":
-                e.shootAtPlayer(self.player, self)
+                #e.shootAtPlayer(self.player, self)
+                pass
 
         self.friendlyProjectileCollision()
         #self.hostileProjectileCollision()

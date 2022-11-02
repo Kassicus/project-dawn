@@ -135,7 +135,7 @@ class PlayerInventoryMenu():
         
 
     def draw(self):
-        mouse = pygame.mouse.get_pos()
+        
         
         # Rendering the separate menu elements 'together'. Background/Containers/Text
         ##region -Renders menu title to the top row section of the menu
@@ -152,15 +152,6 @@ class PlayerInventoryMenu():
 
         ##region -Renders the sub sections of section 1
         for i in range(1,self.menuRows+1):
-            if self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x <= mouse[0] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].width and self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y <= mouse[1] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].height:
-                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isHovered = True
-            else: 
-                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isHovered = False
-            if self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isHovered or self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isActive:
-                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = "red4"
-            else:
-                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = self.textColor1
-
             self.font.render_to(
             self.menuS1BtnDict[self.menuS1BtnKey+str(i)].surface,
             self.textCenterDict[self.textCenterS1SSC+str(i)],
@@ -216,6 +207,25 @@ class PlayerInventoryMenu():
     def update(self):
         """Update the menu
         """
+        mouse = pygame.mouse.get_pos()
+        for i in range(1,len(self.menuS1BtnDict.keys())+1):
+            if self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x <= mouse[0] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].x+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].width and self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y <= mouse[1] <= self.menuS1BtnDict[self.menuS1BtnKey+str(i)].y+self.menuS1BtnDict[self.menuS1BtnKey+str(i)].height:
+                    self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isHovered = True
+            else: 
+                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isHovered = False
+            if self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isHovered or self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isActive:
+                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = "red4"
+            else:
+                self.menuS1BtnDict[self.menuS1BtnKey+str(i)].btnTxtColor = self.textColor1
+            self.menuS1BtnDict[self.menuS1BtnKey+str(i)].surface = pygame.Surface((self.menuS1BtnDict[self.menuS1BtnKey+str(i)].width,self.menuS1BtnDict[self.menuS1BtnKey+str(i)].height),pygame.SRCALPHA)
+        self.menuScreenBackground = pygame.Surface((self.width - (self.x * 2), self.height - (self.y * 2)), pygame.SRCALPHA)
+        self.menuScreenBackground.fill(self.bg_color)
+        self.menuScreenTitleSection = pygame.Surface((self.menuScreenBackground.get_width(),self.menuRowHeight))
+        self.menuSection1 = pygame.Surface((self.menuColumnWidth,self.menuRowHeight*2),pygame.SRCALPHA)
+        self.menuSection2 = pygame.Surface((self.menuColumnWidth*2,self.menuRowHeight*2),pygame.SRCALPHA)
+        self.menuSection2.fill(self.bg_color)
+        self.menuSection3 = pygame.Surface((self.menuColumnWidth*3,self.menuRowHeight*2),pygame.SRCALPHA)
+        self.menuSection3.fill(self.bg_color)        
         self.menuClick() 
     
     def menuClick(self):
@@ -230,15 +240,7 @@ class PlayerInventoryMenu():
 
                     self.activeButtonKey = self.menuS1BtnKey+str(i)
                     self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isActive = True
-                    self.screenNum = self.menuS1BtnDict[self.menuS1BtnKey+str(i)].screenNum
-
-                    self.menuS1BtnDict[self.menuS1BtnKey+str(i)].surface = pygame.Surface((self.menuS1BtnDict[self.menuS1BtnKey+str(i)].width,self.menuS1BtnDict[self.menuS1BtnKey+str(i)].height),pygame.SRCALPHA)
-                    self.menuSection1 = pygame.Surface((self.menuColumnWidth,self.menuRowHeight*2),pygame.SRCALPHA)
-                    self.menuSection2 = pygame.Surface((self.menuColumnWidth*2,self.menuRowHeight*2),pygame.SRCALPHA)
-                    self.menuSection2.fill(self.bg_color)
-                    self.menuSection3 = pygame.Surface((self.menuColumnWidth*3,self.menuRowHeight*2),pygame.SRCALPHA)
-                    self.menuSection3.fill(self.bg_color)
-                
+                    self.screenNum = self.menuS1BtnDict[self.menuS1BtnKey+str(i)].screenNum                
                 elif self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isHovered == False and self.activeButtonKey != self.menuS1BtnKey+str(i):
                     self.menuS1BtnDict[self.menuS1BtnKey+str(i)].isActive = False
                 

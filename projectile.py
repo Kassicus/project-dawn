@@ -4,7 +4,7 @@ import math
 import lib
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float, particleSystem: object, drawContainer: pygame.sprite.Group) -> None:
+    def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float, particleSystem: object, drawContainer: pygame.sprite.Group, damage: int) -> None:
         """Create a projectile
         
         Arguments:
@@ -24,6 +24,7 @@ class Projectile(pygame.sprite.Sprite):
         self.velo = pygame.math.Vector2()
         self.targetPos = pygame.math.Vector2(targetX, targetY)
         self.speed = speed
+        self.damage = damage
 
         self.particleSystem = particleSystem(self.pos.x, self.pos.y, drawContainer)
 

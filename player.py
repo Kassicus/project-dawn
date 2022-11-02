@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
         worldMousePos = pygame.math.Vector2(rawMousePos[0] + lib.globalOffset.x, rawMousePos[1] + lib.globalOffset.y)
 
         if pygame.mouse.get_pressed()[0]:
-            p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 200, particle.MagicProjectileParticleSystem, self.level.worldCamera)
+            p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 200, particle.MagicProjectileParticleSystem, self.level.worldCamera, 5)
             self.level.friendlyProjectiles.add(p)
             self.level.worldCamera.add(p)
 

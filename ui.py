@@ -1,9 +1,11 @@
 # Standard library imports
 import pygame
 
+import lib
+
 # Generic status bar class, updates in real time, requires feed from updated value
 class StatusBar():
-    def __init__(self, x, y, width, height, bgColor, fgColor, value, maxValue):
+    def __init__(self, x, y, width, height, bgColor, fgColor, value, maxValue, displaySurface):
         """Draw a dynamic status bar
 
         Keyword arguments:
@@ -25,7 +27,7 @@ class StatusBar():
         # Graphics variables
         self.bgColor = bgColor # The background color
         self.fgColor = fgColor # The foreground color
-        self.displaySurface = pygame.display.get_surface() # Get the master surface
+        self.displaySurface = displaySurface # Get the master surface
 
         # Value variables
         self.value = value # The inital value we start with, updated with the current value after the first update loop
@@ -35,8 +37,8 @@ class StatusBar():
     def draw(self):
         """Draws the background and foreground of the bar"""
 
-        pygame.draw.rect(self.displaySurface, self.bgColor, (self.pos.x, self.pos.y, self.width, self.height), 0) # Draw the background
-        pygame.draw.rect(self.displaySurface, self.fgColor, (self.pos.x + 2, self.pos.y + 2, self.currentValue - 4, self.height - 4)) # Draw the dynamic foreground
+        pygame.draw.rect(self.displaySurface, self.bgColor, (self.pos.x - lib.globalOffset.x, self.pos.y - lib.globalOffset.y, self.width, self.height), 0) # Draw the background
+        pygame.draw.rect(self.displaySurface, self.fgColor, (self.pos.x + 2 - lib.globalOffset.x, self.pos.y + 2 - lib.globalOffset.y, self.currentValue - 4, self.height - 4)) # Draw the dynamic foreground
 
     def update(self, value):
         """Updates the bar

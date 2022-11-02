@@ -2,14 +2,18 @@ import pygame
 import math
 
 import lib
+import ui
 
 class BaseEnemy(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, size: int) -> None:
+    def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface) -> None:
         super().__init__()
 
         self.pos = pygame.math.Vector2(x, y)
         self.velo = pygame.math.Vector2()
         self.speed = 100
+        self.health = 20
+
+        self.healthBar = ui.StatusBar(int(self.pos.x - 20), int(self.pos.y - 30), 40, 7, lib.color.WHITE, lib.color.RED, self.health, self.health, displaySurface)
         
         self.image = pygame.Surface([size, size])
         self.image.fill(lib.color.RED)
@@ -20,11 +24,20 @@ class BaseEnemy(pygame.sprite.Sprite):
         self.pos += self.velo * lib.deltaTime
         self.rect.center = self.pos
 
+        self.healthBar.draw()
+        self.healthBar.update(self.health)
+        self.healthBar.pos.x = int(self.pos.x - 20)
+        self.healthBar.pos.y = int(self.pos.y - 30)
+
+        if self.health <= 0:
+            self.kill()
+
 class ChaserEnemy(BaseEnemy):
-    def __init__(self, x: int, y: int, size: int, speed: float) -> None:
-        super().__init__(x, y, size)
+    def __init__(self, x: int, y: int, size: int, speed: float, displaySurface: pygame.Surface) -> None:
+        super().__init__(x, y, size, displaySurface)
 
         self.speed = speed
+        self.health = 20
     
     def chasePlayer(self, player: pygame.sprite.Sprite) -> None:
         self.velo.x = self.getVectors(player.pos)[0]

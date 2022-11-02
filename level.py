@@ -60,6 +60,8 @@ class Level():
         for e in self.enemyContainer:
             e.chasePlayer(self.player)
 
+        self.friendlyProjectileCollision()
+
     def createWalls(self, wallArray: list) -> None:
         """Creates walls for each entry in self.walls
         
@@ -97,8 +99,15 @@ class Level():
                     self.player.velo.y = 0 # Kill velocity
                     self.player.pos.y = c.rect.top - self.player.rect.height / 2 # Set the player to the right spot
 
+    def friendlyProjectileCollision(self) -> None:
+        for e in self.enemyContainer:
+            for p in self.friendlyProjectiles:
+                if e.rect.colliderect(p.rect):
+                    e.health -= p.damage
+                    p.kill()
+
     def createEnemies(self, count: int) -> None:
         for c in range(count):
-            c = enemy.ChaserEnemy(random.randint(0, 1000), random.randint(0, 800), 20, 100)
+            c = enemy.ChaserEnemy(random.randint(0, 1000), random.randint(0, 800), 20, 100, self.displaySurface)
             self.worldCamera.add(c)
             self.enemyContainer.add(c)

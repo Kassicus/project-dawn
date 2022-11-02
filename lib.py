@@ -16,6 +16,7 @@ class ColorLibrary():
         self.WHITE = pygame.Color(255, 255, 255, 255)
         self.BLUE = pygame.Color(0, 0, 255, 255)
         self.RED = pygame.Color(255, 0, 0)
+        self.GREEN = pygame.Color(0, 255, 0, 255)
 
         # Custom colors
         self.PLAYER1 = pygame.Color(99, 155, 255, 255)

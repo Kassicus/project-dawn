@@ -25,6 +25,7 @@ class Projectile(pygame.sprite.Sprite):
         self.targetPos = pygame.math.Vector2(targetX, targetY)
         self.speed = speed
         self.damage = damage
+        self.lifetime = 1000
 
         self.particleSystem = particleSystem(self.pos.x, self.pos.y, drawContainer)
 
@@ -57,13 +58,7 @@ class Projectile(pygame.sprite.Sprite):
         if self.particleSystem is not None:
             self.particleSystem.update(self.pos.x, self.pos.y)
 
-        if self.overrun():
-            self.kill()
+        self.lifetime -= 1
 
-    #TODO rework this, it breaks if the player moves outside of those boundaries
-    def overrun(self) -> bool:
-        """Checks if the projectile has exceeded 500px outside of the screen"""
-        if self.pos.x < -500 or self.pos.x > 1500 or self.pos.y < -500 or self.pos.y > 1300:
-            return True
-        else:
-            return False
+        if self.lifetime <= 0:
+            self.kill()

@@ -38,12 +38,16 @@ class ChaserEnemy(BaseEnemy):
 
         self.speed = speed
         self.health = 20
+
+        self.targetPos = pygame.math.Vector2()
     
     def chasePlayer(self, player: pygame.sprite.Sprite) -> None:
         self.velo.x = self.getVectors(player.pos)[0]
         self.velo.y = self.getVectors(player.pos)[1]
 
     def getVectors(self, target: pygame.math.Vector2) -> list:
+        self.targetPos = target
+        
         distance = [target.x - self.pos.x, target.y - self.pos.y]
         normal = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
         direction = [distance[0] / normal, distance[1] / normal]

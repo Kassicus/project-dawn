@@ -83,6 +83,10 @@ class Level():
 
         # Check all of the collisions
         for c in self.collidables: # Parse the collidables group
+            for p in self.friendlyProjectiles:
+                if p.rect.colliderect(c.rect):
+                    p.kill()
+
             if self.player.rect.colliderect(c.rect): # If the player collides with a collidable
                 # Horizontal
                 if abs(self.player.rect.left - c.rect.right) < collisionTollerance: # Check the positive horizontal collision

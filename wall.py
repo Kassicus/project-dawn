@@ -17,8 +17,8 @@ class Wall(pygame.sprite.Sprite): # Extends the sprite class
         
         pygame.sprite.Sprite.__init__(self) # Init superclass
 
-        self.pos = pygame.math.Vector2(x, y) # Create our position
-        self.image = pygame.Surface([width, height]) # Create the surface
+        self.pos = pygame.math.Vector2(x * 50, y * 50) # Create our position
+        self.image = pygame.Surface([width * 50, height * 50]) # Create the surface
         self.image.fill(lib.color.BLUE) # Fill the surface for testing TODO add automatic visibility toggle
         self.image.set_colorkey(lib.color.BLUE)
         self.rect = self.image.get_rect() # Get the rect of the image

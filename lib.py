@@ -22,6 +22,7 @@ class ColorLibrary():
         self.PLAYER1 = pygame.Color(99, 155, 255, 255)
         self.PLAYER2 = pygame.Color(91, 110, 255, 255)
         self.PLAYER3 = pygame.Color(146, 172, 255, 255)
+        self.BACKGROUND = pygame.Color(9, 8, 16, 255)
 
     def getRandomColor(self, alpha: int) -> pygame.Color:
         """Create a random color

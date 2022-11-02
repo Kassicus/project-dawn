@@ -61,7 +61,7 @@ class Game(): # Main game class
         """Handles drawing all graphical elements"""
 
         # Refresh the screen
-        self.screen.fill(lib.color.BLACK) # Fill the screen, effectively erases the screen every frame
+        self.screen.fill(lib.color.BACKGROUND) # Fill the screen, effectively erases the screen every frame
 
         # Draw everything here, things are drawn to screen in order, items at the bottom are drawn over items at the top
         self.level.draw() # Invoke the active levels draw method

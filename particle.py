@@ -44,15 +44,20 @@ class Particle(pygame.sprite.Sprite): # The base particle for everyting to happe
         if self.lifeTime <= 0: # If its out of life
             self.kill() # Kill it
 
-class ParticleSystem():
-    def __init__(self, drawContainer: pygame.sprite.Group) -> None:
+class ParticleSystem(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        super().__init__()
         """The base particle system, not to be used without extending
         
         Arguments:
         drawContainer: pygame.sprite.Group - The group that will be drawing the particles, passed from subclass
         """
-        
-        self.drawContainer = drawContainer # The group that draws our particles
+        self.pos = pygame.math.Vector2(0, 0)
+        self.image = pygame.Surface([0, 0])
+        self.rect = self.image.get_rect()
+        self.rect.center = self.pos
+
+        self.drawContainer = lib.levelref.worldCamera # The group that draws our particles
         self.particleContainer = pygame.sprite.Group() # Our container for particle physics
         self.particleColor = lib.color.BLACK # The default particle color
         self.maxParticles = 100 # The default for maximum particles
@@ -89,16 +94,17 @@ class ParticleSystem():
 
             self.drawContainer.add(p) # Add the particle to the master draw container
             self.particleContainer.add(p) # Add the particle to our physics container
+            lib.levelref.particles.add(p)
 
 class PlayerParticleSystem(ParticleSystem): # The players particle system
-    def __init__(self, drawContainer: pygame.sprite.Group) -> None:
+    def __init__(self) -> None:
         """Create a particle system used to represent the player
         
         Arguments:
         drawContainer: pygame.sprite.Group - The master container that will draw the particle system to the screen
         """
         
-        super().__init__(drawContainer) # Pass the draw container onto the superclass
+        super().__init__() # Pass the draw container onto the superclass
 
         self.spawnPos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2)) # Set the spawn postion for the first particles to the center of the screen
         self.particleColor = lib.color.getRandomChoice([lib.color.PLAYER1, lib.color.PLAYER2, lib.color.PLAYER3]) # Get a random particle color from our selections
@@ -113,38 +119,48 @@ class PlayerParticleSystem(ParticleSystem): # The players particle system
         """
         
         newPos = pygame.math.Vector2(int(x), int(y)) # Create a vector of the new positions
-        self.particleContainer.update() # Update the particles we currently have
         self.particleColor = lib.color.getRandomChoice([lib.color.PLAYER1, lib.color.PLAYER2, lib.color.PLAYER3])
         newCount = self.maxParticles - len(self.particleContainer) # Figure out how many particles have died
         self.createParticles(newPos.x, newPos.y, newCount, 3, 5, 15, 20, 45, -40, 40, -40, 40, 25, 255) # Make that many more
 
 class MagicProjectileParticleSystem(ParticleSystem):
-    def __init__(self, x: int, y: int, drawContainer: pygame.sprite.Group) -> None:
-        super().__init__(drawContainer)
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__()
 
-        self.spawnPos = pygame.math.Vector2(x, y)
+        self.pos = pygame.math.Vector2(x, y)
         self.particleColor = lib.color.getRandomColor(255)
         self.maxParticles = 20
-        self.createParticles(self.spawnPos.x, self.spawnPos.y, self.maxParticles, 1, 3, 0, 25, 75, -20, 20, -20, 20, 0, 255)
+        self.createParticles(self.pos.x, self.pos.y, self.maxParticles, 1, 3, 0, 25, 75, -20, 20, -20, 20, 0, 255)
 
     def update(self, x: int, y: int) -> None:
-        newPos = pygame.math.Vector2(int(x), int(y))
-        self.particleContainer.update()
+        self.pos = pygame.math.Vector2(int(x), int(y))
         newCount = self.maxParticles - len(self.particleContainer)
-        self.createParticles(newPos.x, newPos.y, newCount, 1, 3, 0, 25, 75, -20, 20, -20, 20, 0, 255)
+        self.createParticles(self.pos.x, self.pos.y, newCount, 1, 3, 0, 25, 75, -20, 20, -20, 20, 0, 255)
 
 class FireTrailParticleSystem(ParticleSystem):
-    def __init__(self, x: int, y: int, drawContainer: pygame.sprite.Group) -> None:
-        super().__init__(drawContainer)
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__()
 
-        self.spawnPos = pygame.math.Vector2(x, y)
+        self.pos = pygame.math.Vector2(x, y)
         self.particleColor = lib.color.getRandomChoice([lib.color.FIRETRAIL1, lib.color.FIRETRAIL2, lib.color.FIRETRAIL3])
         self.maxParticles = 75
-        self.createParticles(self.spawnPos.x, self.spawnPos.y, self.maxParticles, 2, 5, 3, 100, 140, -30, 30, -30, 30, 100, 255)
+        self.createParticles(self.pos.x, self.pos.y, self.maxParticles, 2, 5, 3, 100, 140, -30, 30, -30, 30, 100, 255)
 
     def update(self, x: int, y: int) -> None:
-        newPos = pygame.math.Vector2(int(x), int(y))
-        self.particleContainer.update()
+        self.pos = pygame.math.Vector2(int(x), int(y))
         newCount = self.maxParticles - len(self.particleContainer)
         self.particleColor = lib.color.getRandomChoice([lib.color.FIRETRAIL1, lib.color.FIRETRAIL2, lib.color.FIRETRAIL3])
-        self.createParticles(newPos.x, newPos.y, newCount, 2, 5, 3, 100, 140, -30, 30, -30, 30, 100, 255)
+        self.createParticles(self.pos.x, self.pos.y, newCount, 2, 5, 3, 100, 140, -30, 30, -30, 30, 100, 255)
+
+class MagicExplosionParticleSystem(ParticleSystem):
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__()
+
+        self.pos = pygame.math.Vector2(x, y)
+        self.particleColor = lib.color.getRandomColor(255)
+        self.maxParticles = 75
+        self.createParticles(self.pos.x, self.pos.y, self.maxParticles, 2, 2, 0, 75, 100, -40, 40, -40, 40, 255, 255)
+
+    def update(self) -> None:
+        if len(self.particleContainer) <= 0:
+            self.kill()

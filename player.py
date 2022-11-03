@@ -3,8 +3,6 @@ import pygame
 
 # Custom imports
 import lib
-import projectile
-import particle
 import spells
 
 class Player(pygame.sprite.Sprite):
@@ -27,6 +25,8 @@ class Player(pygame.sprite.Sprite):
             "Magic Missle": spells.MagicMissle("friendly"),
             "Fireball": spells.Fireball("friendly")
         }
+
+        self.spellbook["Magic Missle"].explodes = True
 
         self.activeSpell = self.spellbook["Magic Missle"]
 

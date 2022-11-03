@@ -28,6 +28,7 @@ class Level():
         self.player = player.Player() # Create the player
         self.collidables = pygame.sprite.Group() # Create a group to hold all collidable objects
         self.wallContainer = pygame.sprite.Group() # Held here to access all walls
+        self.particles = pygame.sprite.Group()
         self.friendlyProjectiles = pygame.sprite.Group()
         self.hostileProjectiles = pygame.sprite.Group()
         self.enemyContainer = pygame.sprite.Group()
@@ -52,7 +53,7 @@ class Level():
         self.worldCamera.add(self.player) # Add the player to the world camera
 
         # TODO: Refactor this, move into player?
-        self.player.particleSystem = particle.PlayerParticleSystem(self.worldCamera) # Create the players particle system and add it to the world camera
+        self.player.particleSystem = particle.PlayerParticleSystem() # Create the players particle system and add it to the world camera
 
     def draw(self) -> None:
         """Draw the level"""
@@ -67,6 +68,7 @@ class Level():
         self.friendlyProjectiles.update()
         self.hostileProjectiles.update()
         self.enemyContainer.update()
+        self.particles.update()
         
         for e in self.enemyContainer:
             if e.tag == "chaser":
@@ -100,11 +102,11 @@ class Level():
         for c in self.collidables: # Parse the collidables group
             for p in self.friendlyProjectiles:
                 if p.rect.colliderect(c.rect):
-                    p.kill()
+                    p.destroy()
 
             for p in self.hostileProjectiles:
                 if p.rect.colliderect(c.rect):
-                    p.kill()
+                    p.destroy()
 
             if self.player.rect.colliderect(c.rect): # If the player collides with a collidable
                 # Horizontal
@@ -127,13 +129,13 @@ class Level():
             for p in self.friendlyProjectiles:
                 if e.rect.colliderect(p.rect):
                     e.health -= p.damage
-                    p.kill()
+                    p.destroy()
 
     def hostileProjectileCollision(self) -> None:
         for p in self.hostileProjectiles:
             if self.player.rect.colliderect(p.rect):
                 self.player.health -= p.damage
-                p.kill()
+                p.destroy()
 
     def createTurrets(self):
         for x in range(len(self.turretLocations)):

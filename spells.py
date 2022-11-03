@@ -20,6 +20,8 @@ class BasicRangedSpell():
         self.drawContainer = self.level.worldCamera
         self.projectileSound = ""
         self.particleSystem = None
+        self.explodes = False
+        self.explosionParticleSystem = None
         self.summonerType = summonerType
         self.maxCooldown = 100
         self.cooldown = 0
@@ -35,7 +37,20 @@ class BasicRangedSpell():
             self.canBeCast = False
 
     def castSpell(self, originX: int, originY: int, targetX: int, targetY: int) -> None:
-        p = projectile.Projectile(originX, originY, targetX, targetY, self.projectileSize, self.projectileSpeed, self.particleSystem, self.drawContainer, self.spellDamage, self.projectileSound)
+        p = projectile.Projectile(
+            originX,
+            originY,
+            targetX,
+            targetY,
+            self.projectileSize,
+            self.projectileSpeed,
+            self.particleSystem,
+            self.explodes,
+            self.explosionParticleSystem,
+            self.drawContainer,
+            self.spellDamage,
+            self.projectileSound
+        )
         if self.summonerType == "friendly":
             self.level.friendlyProjectiles.add(p)
         elif self.summonerType == "hostile":
@@ -60,6 +75,7 @@ class MagicMissle(BasicRangedSpell):
         self.projectileSound = "magic"
         self.particleSystem = particle.MagicProjectileParticleSystem
         self.maxCooldown = 20
+        self.explosionParticleSystem = particle.MagicExplosionParticleSystem
 
 class Fireball(BasicRangedSpell):
     def __init__(self, summonerType: str) -> None:

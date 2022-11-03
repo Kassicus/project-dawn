@@ -5,7 +5,22 @@ import lib
 import sound
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, targetX: int, targetY: int, size: int, speed: float, particleSystem: object, drawContainer: pygame.sprite.Group, damage: int, spawnSound: str) -> None:
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        targetX: int,
+        targetY: int,
+        size: int,
+        speed: float,
+        trailParticleSystem: object,
+        explodes: bool,
+        explosionParticleSystem: object,
+        drawContainer: pygame.sprite.Group,
+        damage: int,
+        spawnSound: str
+    ) -> None:
+        
         """Create a projectile
         
         Arguments:
@@ -29,10 +44,12 @@ class Projectile(pygame.sprite.Sprite):
         self.speed = speed # How fast we get to our target position
         self.damage = damage # The amount of damage we do
         self.lifetime = 8000 # The default lifetime of the projectile (this is here in case a particle makes it outside the map at all)
+        self.explodes = explodes
 
         sound.playSound(spawnSound) # Play the spawn sound on init
 
-        self.particleSystem = particleSystem(self.pos.x, self.pos.y, drawContainer) # Create our particle system
+        self.trailParticleSystem = trailParticleSystem(self.pos.x, self.pos.y) # Create our particle system
+        self.explosionParticleSystem = explosionParticleSystem
 
         self.image = pygame.Surface([size, size]) # Create a square surface for our image
         self.image.fill(lib.color.WHITE) # Fill that surface solid white
@@ -56,14 +73,24 @@ class Projectile(pygame.sprite.Sprite):
 
         return vectors # Return those vectors
 
+    def explode(self) -> None:
+        if self.explodes:
+            e = self.explosionParticleSystem(self.pos.x, self.pos.y)
+            lib.levelref.worldCamera.add(e)
+            lib.levelref.particles.add(e)
+
+    def destroy(self) -> None:
+        self.explode()
+        self.kill()
+
     def update(self) -> None:
         """Update the projectile"""
 
         self.pos += self.velo * lib.deltaTime # Move the projectile
         self.rect.center = self.pos # Set the center of the rect to the new position
 
-        if self.particleSystem is not None: # If we have a particle system
-            self.particleSystem.update(self.pos.x, self.pos.y) # Make sure to update it
+        if self.trailParticleSystem is not None: # If we have a particle system
+            self.trailParticleSystem.update(self.pos.x, self.pos.y) # Make sure to update it
 
         self.lifetime -= 1 # Count down our lifetime (kinda range?)
         if self.lifetime <= 0: # If it runs out

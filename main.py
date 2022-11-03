@@ -25,7 +25,7 @@ class Game(): # Main game class
         # Game interface objects
         self.level = level.Level("assets/tiles/starter_dungeon.png") # The level, this holds most of our logic
         self.debugInterface = debug.DebugInterface(self.level) # Create a debug interface, it needs the level for reference
-        self.pauseMenu = menu.PlayerInventoryMenu(50, 45, (120, 113, 93, 120), (0, 150, 0)) # Create the pause menu instance
+        self.pauseMenu = menu.PauseMenu(50, 45) # Create the pause menu instance
 
     def run(self) -> None:
         """Calls all of the functions that run the game"""

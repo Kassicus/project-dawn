@@ -5,7 +5,7 @@ import lib
 
 # Generic status bar class, updates in real time, requires feed from updated value
 class StatusBar():
-    def __init__(self, x, y, width, height, bgColor, fgColor, value, maxValue, displaySurface):
+    def __init__(self, x, y, width, height, bgColor, fgColor, value, maxValue):
         """Draw a dynamic status bar
 
         Keyword arguments:
@@ -27,7 +27,7 @@ class StatusBar():
         # Graphics variables
         self.bgColor = bgColor # The background color
         self.fgColor = fgColor # The foreground color
-        self.displaySurface = displaySurface # Get the master surface
+        self.displaySurface = lib.levelref.displaySurface # Get the master surface
 
         # Value variables
         self.value = value # The inital value we start with, updated with the current value after the first update loop

@@ -3,6 +3,7 @@ import pygame
 import random
 
 # Custom imports
+import lib
 import camera
 import player
 import wall
@@ -16,6 +17,7 @@ class Level():
         Arguments:
         backgroundPath: str - The path of the background image to be used for the level
         """
+        lib.levelref = self
 
         # Display setup
         self.displaySurface = pygame.display.get_surface() # Get the drawable surface from the main game
@@ -23,7 +25,7 @@ class Level():
         
         # Early level setup
         self.worldCamera = camera.PlayerCenterCamera(self.displaySurface, self.levelBackground) # Create a camera that tracks the player
-        self.player = player.Player(self) # Create the player
+        self.player = player.Player() # Create the player
         self.collidables = pygame.sprite.Group() # Create a group to hold all collidable objects
         self.wallContainer = pygame.sprite.Group() # Held here to access all walls
         self.friendlyProjectiles = pygame.sprite.Group()
@@ -135,12 +137,12 @@ class Level():
 
     def createTurrets(self):
         for x in range(len(self.turretLocations)):
-            e = enemy.TurretEnemy(int((self.turretLocations[x][0] * 50) + 25), int((self.turretLocations[x][1] * 50) + 25), 30, self.displaySurface, self)
+            e = enemy.TurretEnemy(int((self.turretLocations[x][0] * 50) + 25), int((self.turretLocations[x][1] * 50) + 25), 30)
             self.enemyContainer.add(e)
             self.worldCamera.add(e)
 
     def createEnemies(self, count: int) -> None:
         for c in range(count):
-            c = enemy.ChaserEnemy(random.randint(0, 1000), random.randint(0, 800), 20, 100, self.displaySurface)
+            c = enemy.ChaserEnemy(random.randint(0, 1000), random.randint(0, 800), 20, 100)
             self.worldCamera.add(c)
             self.enemyContainer.add(c)

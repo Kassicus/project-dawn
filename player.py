@@ -8,12 +8,12 @@ import particle
 import spells
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, level: object) -> None:
+    def __init__(self) -> None:
         """Create the player"""
 
         # Import setup
         pygame.sprite.Sprite.__init__(self) # Initialize the sprite super class
-        self.level = level # A reference back to the parent of the player
+        self.level = lib.levelref # A reference back to the parent of the player
 
         # Pos and movement vars
         self.pos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2)) # Set the players position to the center of the screen
@@ -24,8 +24,8 @@ class Player(pygame.sprite.Sprite):
         self.particleSystem = None # By default we dont get a particle system? TODO make the players particle system work here
 
         self.spellbook = {
-            "Magic Missle": spells.MagicMissle(self.level, "friendly"),
-            "Fireball": spells.Fireball(self.level, "friendly")
+            "Magic Missle": spells.MagicMissle("friendly"),
+            "Fireball": spells.Fireball("friendly")
         }
 
         self.activeSpell = self.spellbook["Magic Missle"]

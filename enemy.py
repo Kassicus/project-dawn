@@ -9,13 +9,11 @@ import particle
 import spells
 
 class BaseStaticEnemy(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface) -> None:
+    def __init__(self, x: int, y: int, size: int) -> None:
         super().__init__()
 
         self.pos = pygame.math.Vector2(x, y)
         self.health = 100
-
-        self.displaySurface = displaySurface
 
         self.image = pygame.Surface([size, size])
         self.image.fill(lib.color.STATICENEMY)
@@ -29,10 +27,10 @@ class BaseStaticEnemy(pygame.sprite.Sprite):
             self.kill()
 
 class TurretEnemy(BaseStaticEnemy):
-    def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface, level: object) -> None:
-        super().__init__(x, y, size, displaySurface)
+    def __init__(self, x: int, y: int, size: int) -> None:
+        super().__init__(x, y, size)
         self.tag = "turret"
-        self.spell = spells.MagicMissle(level, "hostile")
+        self.spell = spells.MagicMissle("hostile")
         self.spell.maxCooldown = 120
         self.spell.cooldown = random.randint(0, self.spell.maxCooldown)
 
@@ -41,7 +39,7 @@ class TurretEnemy(BaseStaticEnemy):
             self.spell.castSpell(self.pos.x, self.pos.y, player.pos.x, player.pos.y)
 
 class BaseEnemy(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface) -> None:
+    def __init__(self, x: int, y: int, size: int) -> None:
         super().__init__()
 
         self.pos = pygame.math.Vector2(x, y)
@@ -49,7 +47,7 @@ class BaseEnemy(pygame.sprite.Sprite):
         self.speed = 100
         self.health = 20
 
-        self.healthBar = ui.StatusBar(int(self.pos.x - 20), int(self.pos.y - 30), 40, 7, lib.color.WHITE, lib.color.RED, self.health, self.health, displaySurface)
+        self.healthBar = ui.StatusBar(int(self.pos.x - 20), int(self.pos.y - 30), 40, 7, lib.color.WHITE, lib.color.RED, self.health, self.health)
         
         self.image = pygame.Surface([size, size])
         self.image.fill(lib.color.RED)
@@ -69,8 +67,8 @@ class BaseEnemy(pygame.sprite.Sprite):
             self.kill()
 
 class ChaserEnemy(BaseEnemy):
-    def __init__(self, x: int, y: int, size: int, speed: float, displaySurface: pygame.Surface) -> None:
-        super().__init__(x, y, size, displaySurface)
+    def __init__(self, x: int, y: int, size: int, speed: float) -> None:
+        super().__init__(x, y, size)
         self.tag = "chaser"
 
         self.speed = speed

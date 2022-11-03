@@ -5,7 +5,7 @@ import projectile
 import particle
 
 class BasicRangedSpell():
-    def __init__(self, level: object, summonerType: str) -> None:
+    def __init__(self, summonerType: str) -> None:
         """Base class for ranged spells
         
         Arguments:
@@ -16,7 +16,7 @@ class BasicRangedSpell():
         self.spellDamage = 0
         self.projectileSize = 1
         self.projectileSpeed = 100
-        self.level = level
+        self.level = lib.levelref
         self.drawContainer = self.level.worldCamera
         self.projectileSound = ""
         self.particleSystem = None
@@ -44,7 +44,7 @@ class BasicRangedSpell():
         self.cooldown = self.maxCooldown
 
 class MagicMissle(BasicRangedSpell):
-    def __init__(self, level: object, summonerType: str) -> None:
+    def __init__(self, summonerType: str) -> None:
         """Magic Missle spell
         
         Arguments:
@@ -52,7 +52,7 @@ class MagicMissle(BasicRangedSpell):
         summonerType: str - The indicator of which entity type is casting the spell ["friendly", "hostile"]
         """
         
-        super().__init__(level, summonerType)
+        super().__init__(summonerType)
 
         self.spellDamage = 5
         self.projectileSpeed = 200
@@ -62,7 +62,7 @@ class MagicMissle(BasicRangedSpell):
         self.maxCooldown = 20
 
 class Fireball(BasicRangedSpell):
-    def __init__(self, level: object, summonerType: str) -> None:
+    def __init__(self, summonerType: str) -> None:
         """Fireball spell
         
         Arguments:
@@ -70,7 +70,7 @@ class Fireball(BasicRangedSpell):
         summonerType: str - The indicator of which entity type is casting the spell ["friendly", "hostile"]
         """
         
-        super().__init__(level, summonerType)
+        super().__init__(summonerType)
 
         self.spellDamage = 20
         self.projectileSpeed = 100

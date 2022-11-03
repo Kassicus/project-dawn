@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
             "Fireball": spells.Fireball(self.level, "friendly")
         }
 
-        self.activeSpell = self.spellbook["Fireball"]
+        self.activeSpell = self.spellbook["Magic Missle"]
 
         # Image vars
         self.image = pygame.Surface([40, 40]) # Create the player as a 40x40 square

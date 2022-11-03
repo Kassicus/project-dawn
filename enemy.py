@@ -6,6 +6,7 @@ import lib
 import ui
 import projectile
 import particle
+import spells
 
 class BaseStaticEnemy(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface) -> None:
@@ -22,25 +23,22 @@ class BaseStaticEnemy(pygame.sprite.Sprite):
         self.rect.center = self.pos
 
     def update(self):
+        self.spell.update()
+
         if self.health <= 0:
             self.kill()
 
 class TurretEnemy(BaseStaticEnemy):
-    def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface) -> None:
+    def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface, level: object) -> None:
         super().__init__(x, y, size, displaySurface)
         self.tag = "turret"
-        self.maxCooldown = random.randint(50, 100)
-        self.cooldown = self.maxCooldown
+        self.spell = spells.MagicMissle(level, "hostile")
+        self.spell.maxCooldown = 120
+        self.spell.cooldown = random.randint(0, self.spell.maxCooldown)
 
-    def shootAtPlayer(self, player: pygame.sprite.Sprite, level: object) -> None:
-        self.cooldown -= 1
-
-        if self.cooldown <= 0:
-            p = projectile.Projectile(self.pos.x, self.pos.y, player.pos.x, player.pos.y, 5, 180, particle.MagicProjectileParticleSystem, level.worldCamera, 10, "magic")
-            p.lifetime = 3000
-            level.hostileProjectiles.add(p)
-            level.worldCamera.add(p)
-            self.cooldown = self.maxCooldown
+    def shootAtPlayer(self, player: pygame.sprite.Sprite) -> None:
+        if self.spell.canBeCast:
+            self.spell.castSpell(self.pos.x, self.pos.y, player.pos.x, player.pos.y)
 
 class BaseEnemy(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int, size: int, displaySurface: pygame.Surface) -> None:

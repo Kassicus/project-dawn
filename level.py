@@ -41,7 +41,7 @@ class Level():
         ]
 
         self.turretLocations = [
-        [7, 20], [22, 20], [7, 35], [22, 35]
+        [20, 7], [24, 7], [28, 7], [32, 7]
         ]
 
         # Late level setup
@@ -70,8 +70,7 @@ class Level():
             if e.tag == "chaser":
                 e.chasePlayer(self.player)
             if e.tag == "turret":
-                #e.shootAtPlayer(self.player, self)
-                pass
+                e.shootAtPlayer(self.player)
 
         self.friendlyProjectileCollision()
         #self.hostileProjectileCollision()
@@ -136,7 +135,7 @@ class Level():
 
     def createTurrets(self):
         for x in range(len(self.turretLocations)):
-            e = enemy.TurretEnemy(int(self.turretLocations[x][0] * 50), int(self.turretLocations[x][1] * 50), 30, self.displaySurface)
+            e = enemy.TurretEnemy(int((self.turretLocations[x][0] * 50) + 25), int((self.turretLocations[x][1] * 50) + 25), 30, self.displaySurface, self)
             self.enemyContainer.add(e)
             self.worldCamera.add(e)
 

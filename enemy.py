@@ -15,6 +15,8 @@ class BaseStaticEnemy(pygame.sprite.Sprite):
         self.pos = pygame.math.Vector2(x, y)
         self.health = 100
 
+        self.healthBar = ui.StatusBar(int(self.pos.x - 50), int(self.pos.y - 30), 100, 7, lib.color.WHITE, lib.color.RED, self.health, self.health)
+
         self.image = pygame.Surface([size, size])
         self.image.fill(lib.color.STATICENEMY)
         self.rect = self.image.get_rect()
@@ -22,6 +24,9 @@ class BaseStaticEnemy(pygame.sprite.Sprite):
 
     def update(self):
         self.spell.update()
+
+        self.healthBar.draw()
+        self.healthBar.update(self.health)
 
         if self.health <= 0:
             self.kill()

@@ -1,4 +1,4 @@
-import reference
+import lib
 
 class Animation():
     def __init__(self, frames, animationSpeed):
@@ -21,7 +21,7 @@ class Animation():
         image (pygame.Surface) : The current image of the animation
         """
 
-        self.frameIndex += self.animationSpeed * reference.dt # Increase our frame index at a rate that is independant of game framerate
+        self.frameIndex += self.animationSpeed * lib.deltaTime # Increase our frame index at a rate that is independant of game framerate
         if self.frameIndex > len(self.frames): # If the frame index is too high
             self.frameIndex = 0 # Reset it
         image = self.frames[int(self.frameIndex)] # Get the new image

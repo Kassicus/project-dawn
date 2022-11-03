@@ -28,7 +28,7 @@ class Projectile(pygame.sprite.Sprite):
         self.targetPos = pygame.math.Vector2(targetX, targetY) # Vector for the target position
         self.speed = speed # How fast we get to our target position
         self.damage = damage # The amount of damage we do
-        self.lifetime = 1000 # The default lifetime of the projectile
+        self.lifetime = 8000 # The default lifetime of the projectile (this is here in case a particle makes it outside the map at all)
 
         sound.playSound(spawnSound) # Play the spawn sound on init
 

@@ -5,6 +5,7 @@ import pygame
 import lib
 import projectile
 import particle
+import spells
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, level: object) -> None:
@@ -18,11 +19,16 @@ class Player(pygame.sprite.Sprite):
         self.pos = pygame.math.Vector2(int(lib.SCREEN_WIDTH / 2), int(lib.SCREEN_HEIGHT / 2)) # Set the players position to the center of the screen
         self.velo = pygame.math.Vector2() # Create the players velocity vector
         self.speed = 250 # Set the speed variable for the player
-        self.maxCooldown = 20
-        self.cooldown = self.maxCooldown
 
         # Fancy things
         self.particleSystem = None # By default we dont get a particle system? TODO make the players particle system work here
+
+        self.spellbook = {
+            "Magic Missle": spells.MagicMissle(self.level, "friendly"),
+            "Fireball": spells.Fireball(self.level, "friendly")
+        }
+
+        self.activeSpell = self.spellbook["Fireball"]
 
         # Image vars
         self.image = pygame.Surface([40, 40]) # Create the player as a 40x40 square
@@ -39,6 +45,7 @@ class Player(pygame.sprite.Sprite):
 
         self.move() # Call the players movmement method
         self.interact()
+        self.activeSpell.update()
 
         # Update the particle system
         if self.particleSystem is not None: # If we have a particle system
@@ -48,16 +55,9 @@ class Player(pygame.sprite.Sprite):
         rawMousePos = pygame.mouse.get_pos()
         worldMousePos = pygame.math.Vector2(rawMousePos[0] + lib.globalOffset.x, rawMousePos[1] + lib.globalOffset.y)
 
-        self.cooldown -= 1
-        if self.cooldown <= 0:
-            self.cooldown = 0
-
         if pygame.mouse.get_pressed()[0]:
-            if self.cooldown == 0:
-                p = projectile.Projectile(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y, 3, 200, particle.MagicProjectileParticleSystem, self.level.worldCamera, 5, "magic")
-                self.level.friendlyProjectiles.add(p)
-                self.level.worldCamera.add(p)
-                self.cooldown = self.maxCooldown
+            if self.activeSpell.canBeCast:
+                self.activeSpell.castSpell(self.pos.x, self.pos.y, worldMousePos.x, worldMousePos.y)
 
     def move(self) -> None:
         """Handles player movement based on [WASD] keys"""

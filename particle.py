@@ -132,3 +132,19 @@ class MagicProjectileParticleSystem(ParticleSystem):
         self.particleContainer.update()
         newCount = self.maxParticles - len(self.particleContainer)
         self.createParticles(newPos.x, newPos.y, newCount, 1, 3, 0, 25, 75, -20, 20, -20, 20, 0, 255)
+
+class FireTrailParticleSystem(ParticleSystem):
+    def __init__(self, x: int, y: int, drawContainer: pygame.sprite.Group) -> None:
+        super().__init__(drawContainer)
+
+        self.spawnPos = pygame.math.Vector2(x, y)
+        self.particleColor = lib.color.getRandomChoice([lib.color.FIRETRAIL1, lib.color.FIRETRAIL2, lib.color.FIRETRAIL3])
+        self.maxParticles = 75
+        self.createParticles(self.spawnPos.x, self.spawnPos.y, self.maxParticles, 2, 5, 3, 100, 140, -30, 30, -30, 30, 100, 255)
+
+    def update(self, x: int, y: int) -> None:
+        newPos = pygame.math.Vector2(int(x), int(y))
+        self.particleContainer.update()
+        newCount = self.maxParticles - len(self.particleContainer)
+        self.particleColor = lib.color.getRandomChoice([lib.color.FIRETRAIL1, lib.color.FIRETRAIL2, lib.color.FIRETRAIL3])
+        self.createParticles(newPos.x, newPos.y, newCount, 2, 5, 3, 100, 140, -30, 30, -30, 30, 100, 255)

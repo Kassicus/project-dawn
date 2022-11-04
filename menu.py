@@ -4,7 +4,7 @@ import pygame.color
 import pygame.freetype as freetype
 
 import lib
-import menuBtn as btn
+import menuBtn
 
 class BaseMenuScreen(): # Base menu screen for other types of menus to inherit (EX: Store Menu, Pause Menu, etc.)
     def __init__(self, x: int, y:int) -> None:
@@ -47,7 +47,7 @@ class BaseMenuScreen(): # Base menu screen for other types of menus to inherit (
         self.subScreenList :list[MenuSubScreen] = []
 
         # Surface Variables
-        self.display_surface = pygame.display.get_surface()
+        self.displaySurface = pygame.display.get_surface()
         self.menuScreenBackground = MenuSubScreen(self.x, self.y, self.width-(self.x*2), self.height-(self.y*2),self.bg_color,True)
         self.menuScreenBackground.surface.fill(self.bg_color)
         self.subScreenList.append(self.menuScreenBackground)
@@ -80,29 +80,31 @@ class PauseMenu(BaseMenuScreen):
         s1BtnTextList = ["Character Info","Inventory","Astral Stash","Spell Book","Settings"]
 
         # Pause Menu Sub Screen Variables
-        self.menuLayout = MenuPage()
+        self.menuLayout = MenuPage("pauseMenu")
         self.menuTitleSection = MenuSubScreen(self.x,self.y,self.menuScreenBackground.width,self.menuRowHeight,None,True)
         self.menuSection1 = MenuSubScreen(self.x,(self.y+self.menuRowHeight),self.menuColumnWidth,self.menuRowHeight*2,None,True)
         self.menuSection2 = MenuSubScreen(self.x+self.menuColumnWidth,self.y+self.menuRowHeight,self.menuColumnWidth*2,self.menuRowHeight*2,None,True)
         self.menuSection3 = MenuSubScreen(self.x,self.y+self.menuRowHeight*3,self.menuScreenBackground.width,self.menuRowHeight*2,None,True)
-        self.menuLayout.screenList.append(self.menuScreenBackground)
-        self.menuLayout.screenList.append(self.menuTitleSection)
-        self.menuLayout.screenList.append(self.menuSection1)
-        self.menuLayout.screenList.append(self.menuSection2)
-        self.menuLayout.screenList.append(self.menuSection3)
+        self.menuLayout.addScreen(self.menuScreenBackground)
+        self.menuLayout.addScreen(self.menuTitleSection)
+        self.menuLayout.addScreen(self.menuSection1)
+        self.menuLayout.addScreen(self.menuSection2)
+        self.menuLayout.addScreen(self.menuSection3)
 
         # Inventory Sub Screen Variables
-        self.inventoryLayout = MenuPage()
-        itemDisplay = MenuSubScreen(self.menuSection2.x,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,self.colorPicker("black"),False)
-        itemInfo = MenuSubScreen(self.menuSection2.x+itemDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,self.colorPicker("white"),False)
-        inventorySpace = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,self.colorPicker("white"),False,3,8)
+        self.inventoryLayout = MenuPage("inventory")
+        itemDisplay = MenuSubScreen(self.menuSection2.x,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False)
+        itemDisplay.screenImgs.append(pygame.image.load('assets/.resources/sec2HalfBorder.png'))
+        itemDisplay.screenImgs.append(pygame.image.load('assets/.resources/katanaLg.png'))
+        itemInfo = MenuSubScreen(self.menuSection2.x+itemDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,self.colorPicker("black"),False)
+        inventorySpace = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,3,8)
 
 
         ## Inventory Space Buttons
         for s in range(1,inventorySpace.columns*inventorySpace.rows+1):
             if s <= 8:
                 key = self.btnKey+str(s)
-                value = btn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*s,
+                value = menuBtn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*s,
                                 inventorySpace.y,
                                 inventorySpace.colWidth,
                                 inventorySpace.rowHeight,
@@ -110,11 +112,11 @@ class PauseMenu(BaseMenuScreen):
                                 "Button",
                                 self.menuTextSize)
                 value.screenNum = s
-                #value.surface.fill(self.gray22)
+                # value.surface.fill(self.gray22)
                 inventorySpace.btnDict[key] = value
             elif 8<s<=16:
                 key = self.btnKey+str(s)
-                value = btn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*(s-8),
+                value = menuBtn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*(s-8),
                                 inventorySpace.y+inventorySpace.rowHeight,
                                 inventorySpace.colWidth,
                                 inventorySpace.rowHeight,
@@ -126,7 +128,7 @@ class PauseMenu(BaseMenuScreen):
                 inventorySpace.btnDict[key] = value
             elif 16<s<=24:
                 key = self.btnKey+str(s)
-                value = btn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*(s-16),
+                value = menuBtn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*(s-16),
                                 inventorySpace.y+inventorySpace.rowHeight*2,
                                 inventorySpace.colWidth,
                                 inventorySpace.rowHeight,
@@ -137,9 +139,9 @@ class PauseMenu(BaseMenuScreen):
                 #value.surface.fill(self.gray22)
                 inventorySpace.btnDict[key] = value
 
-        self.inventoryLayout.screenList.append(itemDisplay)
-        self.inventoryLayout.screenList.append(itemInfo)
-        self.inventoryLayout.screenList.append(inventorySpace)
+        self.inventoryLayout.addScreen(itemDisplay)
+        self.inventoryLayout.addScreen(itemInfo)
+        self.inventoryLayout.addScreen(inventorySpace)
 
         self.itemArt = self.font.get_rect("Item Art", size = self.menuTextSize)
         self.itemArt.center = self.inventoryLayout.screenList[0].surface.get_rect().center
@@ -155,7 +157,7 @@ class PauseMenu(BaseMenuScreen):
         # Menu Section 1 Button Variables
         for s in range(1,self.menuRows+1):
             key = self.btnKey+str(s)
-            value = btn.Button(self.x,
+            value = menuBtn.Button(self.x,
                                self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s,
                                self.menuSection1ColumnWidth,
                                self.menuSection1RowHeight,
@@ -220,36 +222,28 @@ class PauseMenu(BaseMenuScreen):
             self.font.pad = False
 
         ## Renders text to the center of section 2
-        self.font.render_to(
-        self.menuSection2.surface,
-        self.textCenterDict[self.textCenterS2SSC],
-        self.fillerTxt+" "+str(self.screenNum),
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE
-        )
-        self.font.pad = False
+        if self.inventoryLayout.isDrawn == False:
+            self.font.render_to(
+            self.menuSection2.surface,
+            self.textCenterDict[self.textCenterS2SSC],
+            self.fillerTxt+" "+str(self.screenNum),
+            self.textColor1,
+            size=self.menuTextSize,
+            style=freetype.STYLE_UNDERLINE
+            )
+            self.font.pad = False
 
         ## Renders text to the center of section 3
-        self.font.render_to(
-        self.menuSection3.surface,
-        self.textCenterDict[self.textCenterS3SSC],
-        self.fillerTxt+" "+str(self.screenNum),
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE
-        )
-        self.font.pad = False
-
-        self.font.render_to(
-        self.inventoryLayout.screenList[0].surface,
-        self.itemArt,
-        "Item Art",
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE
-        )
-        self.font.pad = False
+        if self.inventoryLayout.isDrawn == False:
+            self.font.render_to(
+            self.menuSection3.surface,
+            self.textCenterDict[self.textCenterS3SSC],
+            self.fillerTxt+" "+str(self.screenNum),
+            self.textColor1,
+            size=self.menuTextSize,
+            style=freetype.STYLE_UNDERLINE
+            )
+            self.font.pad = False
 
         self.font.render_to(
         self.inventoryLayout.screenList[1].surface,
@@ -261,43 +255,38 @@ class PauseMenu(BaseMenuScreen):
         )
         self.font.pad = False
 
-        self.font.render_to(
-        self.inventoryLayout.screenList[2].surface,
-        self.itemInventoryText,
-        "Player Inventory",
-        self.textColor1,
-        size=self.menuTextSize,
-        style=freetype.STYLE_UNDERLINE
-        )
-        self.font.pad = False
-
         # Blits various differant surfaces onto the Display Surface
-        self.display_surface.blit(self.menuScreenBackground.surface,(self.x,self.y)) # Pause Menu Background
-        self.display_surface.blit(self.menuSection1.surface,(self.menuSection1.x,self.menuSection1.y)) # Section 1 of Pause Menu
+        self.displaySurface.blit(self.menuScreenBackground.surface,(self.x,self.y)) # Pause Menu Background
+        self.displaySurface.blit(self.menuSection1.surface,(self.menuSection1.x,self.menuSection1.y)) # Section 1 of Pause Menu
         for s in range(1,self.menuRows+1): # Section 1 Buttons
-            self.display_surface.blit(self.menuSection1.btnDict[self.btnKey+str(s)].surface,(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
-        self.display_surface.blit(self.menuSection2.surface,(self.menuSection2.x,self.menuSection2.y)) # Section 2 of Pause Menu
-        self.display_surface.blit(self.menuSection3.surface,(self.menuSection3.x,self.menuSection3.y)) # Section 3 of Pause Menu
+            self.displaySurface.blit(self.menuSection1.btnDict[self.btnKey+str(s)].surface,(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
+        self.displaySurface.blit(self.menuSection2.surface,(self.menuSection2.x,self.menuSection2.y)) # Section 2 of Pause Menu
+        self.displaySurface.blit(self.menuSection3.surface,(self.menuSection3.x,self.menuSection3.y)) # Section 3 of Pause Menu
         for s in range(0,len(self.inventoryLayout.screenList)):
-            if self.inventoryLayout.screenList[s].isDrawn:
-                self.display_surface.blit(self.inventoryLayout.screenList[s].surface,self.inventoryLayout.screenList[s].originPoint)
-                self.inventoryLayout.screenList[2].blitButtons(self.display_surface)
+            screen = self.inventoryLayout.screenList[s]
+            if screen.isDrawn:
+                self.displaySurface.blit(screen.surface,screen.originPoint)
+                if len(screen.screenImgs) > 0:
+                    for i in range(0,len(screen.screenImgs)):
+                        img = screen.screenImgs[i]
+                        xCentered = screen.x+screen.width/2-img.get_width()/2
+                        yCentered = screen.y+screen.height/2-img.get_height()/2
+                        self.displaySurface.blit(screen.screenImgs[i],(xCentered,yCentered))
+                self.inventoryLayout.screenList[2].blitButtons(self.displaySurface)
 
-                value = self.inventoryLayout.screenList[2].btnDict["btn1"]
-                bow = pygame.image.load('assets/.resources/bowArrow.png')
-                self.display_surface.blit(bow,(value.x,value.y))
+                
         
-                for i in range(0,self.inventoryLayout.screenList[2].columns+1):
-                    section = self.inventoryLayout.screenList[2]
-                    pygame.draw.line(self.display_surface,self.colorPicker("green"),(section.x+section.colWidth*i,section.y),(section.x+section.colWidth*i,section.y+section.height))
-                for i in range(0,self.inventoryLayout.screenList[2].rows+1):
-                    section = self.inventoryLayout.screenList[2]
-                    pygame.draw.line(self.display_surface,self.colorPicker("green"),(section.x,section.y+section.rowHeight*i),(section.x+section.width,section.y+section.rowHeight*i))
+                # for i in range(0,self.inventoryLayout.screenList[2].columns+1):
+                #     section = self.inventoryLayout.screenList[2]
+                #     pygame.draw.line(self.displaySurface,self.colorPicker("green"),(section.x+section.colWidth*i,section.y),(section.x+section.colWidth*i,section.y+section.height))
+                # for i in range(0,self.inventoryLayout.screenList[2].rows+1):
+                #     section = self.inventoryLayout.screenList[2]
+                #     pygame.draw.line(self.displaySurface,self.colorPicker("green"),(section.x,section.y+section.rowHeight*i),(section.x+section.width,section.y+section.rowHeight*i))
         # Draws border rects for surface bounds to make it look more clean
-        pygame.draw.rect(self.display_surface, self.gray22, (self.menuSection1.x, self.menuSection1.y, self.menuSection1.width, self.menuSection1.height), 1) # MenuSection1Border
-        pygame.draw.rect(self.display_surface, self.gray22, (self.menuSection2.x, self.menuSection2.y, self.menuSection2.width, self.menuSection2.height), 1) # MenuSection2Border
-        pygame.draw.rect(self.display_surface, self.gray22, (self.menuSection3.x, self.menuSection3.y, self.menuSection3.width, self.menuSection3.height), 1) # MenuSection3Border
-        pygame.draw.rect(self.display_surface, self.bg_color, (self.x, self.y, (self.width - (self.x * 2)), self.height - (self.y * 2)), 1) # MenuBorder
+        pygame.draw.rect(self.displaySurface, self.gray22, (self.menuSection1.x, self.menuSection1.y, self.menuSection1.width, self.menuSection1.height), 1) # MenuSection1Border
+        pygame.draw.rect(self.displaySurface, self.gray22, (self.menuSection2.x, self.menuSection2.y, self.menuSection2.width, self.menuSection2.height), 1) # MenuSection2Border
+        pygame.draw.rect(self.displaySurface, self.gray22, (self.menuSection3.x, self.menuSection3.y, self.menuSection3.width, self.menuSection3.height), 1) # MenuSection3Border
+        pygame.draw.rect(self.displaySurface, self.bg_color, (self.x, self.y, (self.width - (self.x * 2)), self.height - (self.y * 2)), 1) # MenuBorder
 
 
     def update(self):
@@ -350,7 +339,9 @@ class MenuSubScreen():
         width: width of sub screen
         height: height of sub screen
         """
+        self.parentPageName = ""
         self.btnKey = "btn"
+        self.screenImgs:list[pygame.Surface] = []
         self.rows = rows
         self.rowHeight = height/rows
         self.columns = columns
@@ -368,17 +359,30 @@ class MenuSubScreen():
 
     def blitButtons(self,surface):
         for i in range(1,len(self.btnDict)+1):
-            button = self.btnDict[self.btnKey+str(i)]
-            surface.blit(button.surface,(button.x,button.y))
+            btn = self.btnDict[self.btnKey+str(i)]
+            surface.blit(btn.surface,(btn.x,btn.y))
+            if self.parentPageName == "inventory":
+                bkimg = pygame.image.load('assets/.resources/buttonBorder.png')
+                x_centered = btn.x+btn.width / 2 - bkimg.get_width() / 2
+                y_centered = btn.y+btn.height / 2 - bkimg.get_height() / 2 #similarly..
+                surface.blit(bkimg,(x_centered,y_centered))
+                img = pygame.image.load('assets/.resources/katana.png')
+                x_centered = btn.x+btn.width / 2 - img.get_width() / 2
+                y_centered = btn.y+btn.height / 2 - img.get_height() / 2 #similarly..
+                surface.blit(img,(x_centered,y_centered))
 
 
 class MenuPage():
-    def __init__(self) -> None:
+    def __init__(self,pageName:str) -> None:
         """
         A collection of Sub Screens to be loaded EX: Inventory Page
         """
+        self.pageName = pageName
         self.isDrawn = False
         self.screenList :list[MenuSubScreen] = []
+    def addScreen(self,screen:MenuSubScreen):
+        screen.parentPageName = self.pageName
+        self.screenList.append(screen)
     def setIsDrawn(self):
         if self.isDrawn:
             for s in range(0,len(self.screenList)):

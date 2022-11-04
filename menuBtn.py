@@ -1,5 +1,6 @@
 # Standard library imports
 import os
+import string
 import pygame
 import pygame.color
 
@@ -14,7 +15,8 @@ class Button():
         width: width of the button
         height: height of the button
         btnTxtColor: color of text that is on the button
-        btnTxt: Text that will appear on the button
+        btnTxt: text that will appear on the button
+        btnTxtSize: size of text to show on button
         """
         font = freetype.Font("data/Orbitron-Regular.ttf")
         self.x = x

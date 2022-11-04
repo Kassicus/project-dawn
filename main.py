@@ -14,7 +14,7 @@ class Game(): # Main game class
         """Initialize the main game, referencing the lib script"""
 
         # Game window setup
-        self.screen = pygame.display.set_mode([lib.SCREEN_WIDTH, lib.SCREEN_HEIGHT]) # Create the game window
+        self.screen = lib.displaySurface
         pygame.display.set_caption(lib.SCREEN_TITLE) # Set the game window caption
 
         # Vars needed to make the game run

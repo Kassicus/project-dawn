@@ -7,7 +7,7 @@ import pygame.color
 import pygame.freetype as freetype
 
 class Button():
-    def __init__(self,x,y,width,height,btnTxtColor,btnTxt,btnTxtSize):
+    def __init__(self,x,y,width,height,btnTxtColor,btnTxt,btnTxtSize,bkImg:str=None,img:str=None):
         """
         Object for interactable sub elements in UI/Menus
         x: x coordinate for the origin point of the button
@@ -29,7 +29,16 @@ class Button():
         self.isHovered = False
         self.isActive = False
         self.screenNum = 0
-        self.linkedSection2DictKey = ""
-        self.linkedSection3DictKey = ""
         self.btnTxtRect = font.get_rect(btnTxt , size = btnTxtSize)
         self.btnTxtRect.center = self.surface.get_rect().center
+
+        if bkImg is not None:
+            self.bkImg = pygame.image.load(bkImg)
+            bkImgXCent = self.x+self.width / 2 - self.bkImg.get_width() / 2
+            bkImgYCent = self.y+self.height / 2 - self.bkImg.get_height() / 2 #similarly..
+            self.bkImgCent = (bkImgXCent,bkImgYCent)
+        if img is not None:
+            self.img = pygame.image.load(img)
+            imgXCent = self.x+self.width / 2 - self.img.get_width() / 2
+            imgYCent = self.y+self.height / 2 - self.img.get_height() / 2 #similarly..
+            self.imgCent = (imgXCent,imgYCent)

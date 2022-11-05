@@ -108,53 +108,8 @@ class PauseMenu(BaseMenuScreen):
         itemDisplay = MenuSubScreen(self.menuSection2.x,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False,screenImgs=itemDisplayImgs)
         itemInfo = MenuSubScreen(self.menuSection2.x+itemDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,colorPicker("black"),False)
         inventorySpace = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,3,8)
-
-
-        ## Inventory Space Buttons
-        # for s in range(1,inventorySpace.columns*inventorySpace.rows+1):
-        #     if s <= 8:
-        #         key = self.btnKey+str(s)
-        #         value = menuBtn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*s,
-        #                         inventorySpace.y,
-        #                         inventorySpace.colWidth,
-        #                         inventorySpace.rowHeight,
-        #                         textColor2,
-        #                         "Button",
-        #                         menuTextSize,
-        #                         assetDict["btnBorder"],
-        #                         assetDict["katana"])
-        #         value.screenNum = s
-        #         # value.surface.fill(gray22)
-        #         inventorySpace.btnDict[key] = value
-        #     elif 8<s<=16:
-        #         key = self.btnKey+str(s)
-        #         value = menuBtn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*(s-8),
-        #                         inventorySpace.y+inventorySpace.rowHeight,
-        #                         inventorySpace.colWidth,
-        #                         inventorySpace.rowHeight,
-        #                         textColor2,
-        #                         "Button",
-        #                         menuTextSize,
-        #                         assetDict["btnBorder"],
-        #                         assetDict["katana"])
-        #         value.screenNum = s
-        #         #value.surface.fill(gray22)
-        #         inventorySpace.btnDict[key] = value
-        #     elif 16<s<=24:
-        #         key = self.btnKey+str(s)
-        #         value = menuBtn.Button(inventorySpace.x-inventorySpace.colWidth+inventorySpace.colWidth*(s-16),
-        #                         inventorySpace.y+inventorySpace.rowHeight*2,
-        #                         inventorySpace.colWidth,
-        #                         inventorySpace.rowHeight,
-        #                         textColor2,
-        #                         "Button",
-        #                         menuTextSize,
-        #                         assetDict["btnBorder"],
-        #                         assetDict["katana"])
-        #         value.screenNum = s
-        #         #value.surface.fill(gray22)
-        #         inventorySpace.btnDict[key] = value
         inventorySpace.generateButtons(bkImg=assetDict["btnBorder"],img=assetDict["katana"])
+
         self.inventoryLayout.addScreen(itemDisplay)
         self.inventoryLayout.addScreen(itemInfo)
         self.inventoryLayout.addScreen(inventorySpace)
@@ -170,7 +125,7 @@ class PauseMenu(BaseMenuScreen):
         self.spellBookLayout = MenuPage("spellBook")
         spellDisplay = MenuSubScreen(self.menuSection2.x,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False)
         spellInfo = MenuSubScreen(self.menuSection2.x+spellDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,colorPicker("black"),False)
-        spellBook = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,8,3)
+        spellBook = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,8,3,[pygame.image.load(assetDict["parchment"])])
         spellBook.generateButtons(btnTxt="Spell")
         
         self.spellBookLayout.addScreen(spellDisplay)
@@ -415,7 +370,7 @@ class MenuSubScreen():
                 value.screenNum = s
                 c=0
                 r+=1
-            value.surface.fill(gray22)
+            # value.surface.fill(gray22)
             self.btnDict[key] = value
 
     def blitButtons(self):

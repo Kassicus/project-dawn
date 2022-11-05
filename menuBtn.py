@@ -7,7 +7,7 @@ import pygame.color
 import pygame.freetype as freetype
 
 class Button():
-    def __init__(self,x,y,width,height,btnTxtColor,btnTxt,btnTxtSize,bkImg:str=None,img:str=None):
+    def __init__(self,x,y,width,height,btnTxtColor,btnTxt:str=None,btnTxtSize:int=8,bkImg:str=None,img:str=None):
         """
         Object for interactable sub elements in UI/Menus
         x: x coordinate for the origin point of the button
@@ -18,7 +18,7 @@ class Button():
         btnTxt: text that will appear on the button
         btnTxtSize: size of text to show on button
         """
-        font = freetype.Font("data/Orbitron-Regular.ttf")
+        self.font = freetype.Font("data/Orbitron-Regular.ttf")
         self.x = x
         self.y = y
         self.width = width
@@ -26,10 +26,11 @@ class Button():
         self.surface = pygame.Surface((width,height),pygame.SRCALPHA)
         self.btnTxt = btnTxt
         self.btnTxtColor = btnTxtColor
+        self.btnTxtSize = btnTxtSize
         self.isHovered = False
         self.isActive = False
         self.screenNum = 0
-        self.btnTxtRect = font.get_rect(btnTxt , size = btnTxtSize)
+        self.btnTxtRect = self.font.get_rect(btnTxt , size = btnTxtSize)
         self.btnTxtRect.center = self.surface.get_rect().center
 
         if bkImg is not None:
@@ -37,8 +38,22 @@ class Button():
             bkImgXCent = self.x+self.width / 2 - self.bkImg.get_width() / 2
             bkImgYCent = self.y+self.height / 2 - self.bkImg.get_height() / 2 #similarly..
             self.bkImgCent = (bkImgXCent,bkImgYCent)
+        else:
+            self.bkImg = None
         if img is not None:
             self.img = pygame.image.load(img)
             imgXCent = self.x+self.width / 2 - self.img.get_width() / 2
             imgYCent = self.y+self.height / 2 - self.img.get_height() / 2 #similarly..
             self.imgCent = (imgXCent,imgYCent)
+        else:
+            self.img = None
+    def renderBtnTxt(self):
+        self.font.render_to(
+            self.surface,
+            self.btnTxtRect,
+            self.btnTxt,
+            self.btnTxtColor,
+            size=self.btnTxtSize,
+            style=freetype.STYLE_UNDERLINE
+            )
+        self.font.pad = False

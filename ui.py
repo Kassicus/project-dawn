@@ -3,6 +3,30 @@ import pygame
 
 import lib
 
+class GenericUIComponent(pygame.sprite.Sprite):
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        bgColor: pygame.Color,
+        centered: bool,
+    ) -> None:
+
+        super().__init__()
+
+        self.pos = pygame.math.Vector2(x, y)
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(bgColor)
+        self.rect = self.image.get_rect()
+
+        if centered:
+            self.rect.center = self.pos
+        else:
+            self.rect.topleft = self.pos
+
 # Generic status bar class, updates in real time, requires feed from updated value
 class StatusBar():
     def __init__(
@@ -59,3 +83,14 @@ class StatusBar():
         
         self.value = value # Update the value with the new current value
         self.currentValue = int(self.width / self.maxValue) * self.value # Map the current value to the width of the bar based on the new value
+
+class Slider():
+    def __init__(
+        self,
+        x: int,
+        y: int,
+    ) -> None:
+
+        self.pos = pygame.math.Vector2(x, y)
+        self.slider = GenericUIComponent(x, y, 150, 10, lib.color.BLACK, False)
+        self.piper = GenericUIComponent(x + 100, y + 5, 20, 20, lib.color.WHITE, True)

@@ -60,3 +60,4 @@ displaySurface = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 deltaTime = 0 # Delta time is a magical fucking thing
 globalOffset = pygame.math.Vector2() # A global offset to be able to use the correct camera features
 levelref = None
+fpsCap = 120

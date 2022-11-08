@@ -57,6 +57,13 @@ class Game(): # Main game class
                 if event.key == pygame.K_e:
                     self.level.createEnemies(5)
 
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+
+                if event.key == pygame.K_o:
+                    for door in self.level.doorContainer:
+                        door.changeState()
+
     def draw(self) -> None:
         """Handles drawing all graphical elements"""
 

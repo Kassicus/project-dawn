@@ -7,6 +7,7 @@ import lib
 import camera
 import player
 import wall
+import door
 import particle
 import enemy
 
@@ -28,6 +29,7 @@ class Level():
         self.player = player.Player() # Create the player
         self.collidables = pygame.sprite.Group() # Create a group to hold all collidable objects
         self.wallContainer = pygame.sprite.Group() # Held here to access all walls
+        self.doorContainer = pygame.sprite.Group()
         self.particles = pygame.sprite.Group()
         self.friendlyProjectiles = pygame.sprite.Group()
         self.hostileProjectiles = pygame.sprite.Group()
@@ -43,12 +45,18 @@ class Level():
         [18, 45, 1, 3], [19, 47, 7, 1]
         ]
 
+        self.doors = [
+        [11, 10, 1, 2], [18, 10, 1, 2], [19, 9, 3, 1], [23, 9, 3, 1], [27, 9, 3, 1], [31, 9, 3, 1], [19, 12, 3, 1], [23, 12, 3, 1],
+        [27, 12, 3, 1], [31, 12, 3, 1]
+        ]
+
         self.turretLocations = [
         [20, 7], [24, 7], [28, 7], [32, 7]
         ]
 
         # Late level setup
         self.createWalls(self.walls) # Create the walls, the get added to collidables
+        self.createDoors(self.doors)
         self.createTurrets()
         self.worldCamera.add(self.player) # Add the player to the world camera
 
@@ -92,6 +100,13 @@ class Level():
             self.worldCamera.add(w) # Add the wall to the camera to be drawn TODO make invisible
             self.collidables.add(w) # Add the wall to the collidables to make the player hit it
             self.wallContainer.add(w)
+
+    def createDoors(self, doorArray: list) -> None:
+        for pointArray in range(len(doorArray)):
+            d = door.Door(doorArray[pointArray][0], doorArray[pointArray][1], doorArray[pointArray][2], doorArray[pointArray][3])
+            self.worldCamera.add(d)
+            self.collidables.add(d)
+            self.doorContainer.add(d)
 
     def checkCollisions(self) -> None:
         """Check the collisions between the player and everthing in the collidables group"""

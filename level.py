@@ -10,6 +10,7 @@ import wall
 import door
 import particle
 import enemy
+import ui
 
 class Level():
     def __init__(self, backgroundPath: str) -> None:

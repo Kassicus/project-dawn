@@ -89,8 +89,42 @@ class Slider():
         self,
         x: int,
         y: int,
+        slide: pygame.sprite.Sprite,
+        grip: pygame.sprite.Sprite,
+        minValue: int,
+        maxValue: int,
+        step: int
     ) -> None:
 
         self.pos = pygame.math.Vector2(x, y)
-        self.slider = GenericUIComponent(x, y, 150, 10, lib.color.BLACK, False)
-        self.piper = GenericUIComponent(x + 100, y + 5, 20, 20, lib.color.WHITE, True)
+
+        self.slide = slide
+        self.grip = grip
+
+        self.min = minValue
+        self.max = maxValue
+        self.step = step
+
+        self.gripped = False
+
+        self.components = pygame.sprite.Group()
+        self.components.add(self.slide, self.grip)
+
+    def draw(self, displaySurface: pygame.display) -> None:
+        self.components.draw(displaySurface)
+
+    def update(self) -> None:
+        self.components.update()
+
+        mousePos = pygame.mouse.get_pos()
+
+        if self.grip.pos.x < mousePos[0] < self.grip.pos.x + self.grip.rect.width:
+            if self.grip.pos.y < mousePos[1] < self.grip.pos.y + self.grip.rect.height:
+                if pygame.mouse.get_pressed()[0]:
+                    self.gripped = True
+                else:
+                    self.gripped = False
+
+        if self.gripped:
+            if self.min < mousePos[0] < self.max:
+                self.grip.pos.x = mousePos[0]

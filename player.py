@@ -4,6 +4,7 @@ import pygame
 # Custom imports
 import lib
 import spells
+import inventory
 
 class Player(pygame.sprite.Sprite):
     def __init__(self) -> None:
@@ -19,6 +20,8 @@ class Player(pygame.sprite.Sprite):
         self.speed = 250 # Set the speed variable for the player
 
         # Fancy things
+        self.inventory = inventory.PlayerInventory()
+
         self.particleSystem = None # By default we dont get a particle system? TODO make the players particle system work here
 
         self.spellbook = {

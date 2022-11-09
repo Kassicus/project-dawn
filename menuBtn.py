@@ -7,7 +7,7 @@ import pygame.color
 import pygame.freetype as freetype
 
 class Button():
-    def __init__(self,x,y,width,height,btnTxtColor,btnTxt:str=None,btnTxtSize:int=8,bkImg:str=None,img:str=None):
+    def __init__(self,x,y,width,height,btnTxtColor,btnTxt:str=None,btnTxtSize:int=8,bkImg:str=None,img:pygame.Surface=None):
         """
         Object for interactable sub elements in UI/Menus
         x: x coordinate for the origin point of the button
@@ -34,19 +34,23 @@ class Button():
         self.btnTxtRect.center = self.surface.get_rect().center
 
         if bkImg is not None:
-            self.bkImg = pygame.image.load(bkImg)
-            bkImgXCent = self.x+self.width / 2 - self.bkImg.get_width() / 2
-            bkImgYCent = self.y+self.height / 2 - self.bkImg.get_height() / 2 #similarly..
-            self.bkImgCent = (bkImgXCent,bkImgYCent)
+            self.bkImg = bkImg
+            self.bkImgCent = self.setImgCent(bkImg)
         else:
             self.bkImg = None
+            self.bkImgCent = None
         if img is not None:
-            self.img = pygame.image.load(img)
-            imgXCent = self.x+self.width / 2 - self.img.get_width() / 2
-            imgYCent = self.y+self.height / 2 - self.img.get_height() / 2 #similarly..
-            self.imgCent = (imgXCent,imgYCent)
+            self.img = img
+            self.imgCent = self.setImgCent(img)
         else:
             self.img = None
+            self.imgCent = None
+
+    def setImgCent(self,img:pygame.Surface):
+        imgXCent = self.x+self.width / 2 - img.get_width() / 2
+        imgYCent = self.y+self.height / 2 - img.get_height() / 2 #similarly..
+        imgCent = (imgXCent,imgYCent)
+        return imgCent
     def renderBtnTxt(self):
         self.font.render_to(
             self.surface,

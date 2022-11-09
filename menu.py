@@ -6,16 +6,15 @@ import pygame.freetype as freetype
 # Custom library imports
 import lib
 import menuBtn
+import inventory
 
 # Resource path variables
 displaySurface = lib.displaySurface
 assetPath = "assets/.resources/"
 assetDict = {}
-assetDict["katana"] = assetPath+"katana.png"
-assetDict["katanaLg"] = assetPath+"katanaLg.png"
-assetDict["parchment"] = assetPath+"parchment.png"
-assetDict["btnBorder"] = assetPath+"buttonBorder.png"
-assetDict["sec2Half"] = assetPath+"sec2HalfBorder.png"
+assetDict["parchment"] = pygame.image.load(assetPath+"parchment.png")
+assetDict["btnBorder"] = pygame.image.load(assetPath+"buttonBorder.png")
+assetDict["sec2Half"] = pygame.image.load(assetPath+"sec2HalfBorder.png")
 
 # Color Variables
 colorPicker = pygame.color.Color
@@ -51,6 +50,7 @@ class BaseMenuScreen(): # Base menu screen for other types of menus to inherit (
 
         # Logic Variables
         self.isDrawn = False
+        self.inventory = inventory.PlayerInventory()
 
         # Menu Format Variables
         self.menuRows = 5
@@ -74,10 +74,7 @@ class PauseMenu(BaseMenuScreen):
         y: Y value of menu origin coordinate
 
         """
-        # Dictionary Variables
-        self.textCenterDict = {}   # Dictionary of Text Centered objects
-        self.menuOptionDict = {}   # Dictionary of menuOptions
-
+        
         # Text Variables
         self.menuTitle = "Character Management"
         self.fillerTxt = "Filler Text"
@@ -102,13 +99,13 @@ class PauseMenu(BaseMenuScreen):
 
         # Inventory Sub Screen Variables
         self.inventoryLayout = MenuPage("inventory")
-        itemDisplayImgs:list[pygame.Surface] = []
-        itemDisplayImgs.append(pygame.image.load(assetDict["sec2Half"]))
-        itemDisplayImgs.append(pygame.image.load(assetDict["katanaLg"]))
+        itemDisplayImgs:list[pygame.Surface] = [assetDict["sec2Half"]]
         itemDisplay = MenuSubScreen(self.menuSection2.x,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False,screenImgs=itemDisplayImgs)
         itemInfo = MenuSubScreen(self.menuSection2.x+itemDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,colorPicker("black"),False)
         inventorySpace = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,3,8)
-        inventorySpace.generateButtons(bkImg=assetDict["btnBorder"],img=assetDict["katana"])
+        inventorySpace.generateButtons(bkImg=assetDict["btnBorder"])
+        inventorySpace.btnDict[inventorySpace.btnKey+str(1)].img = self.inventory.inventory["slot1"].img
+        inventorySpace.btnDict[inventorySpace.btnKey+str(1)].imgCent = inventorySpace.btnDict[inventorySpace.btnKey+str(1)].setImgCent(self.inventory.inventory["slot1"].img)
 
         self.inventoryLayout.addScreen(itemDisplay)
         self.inventoryLayout.addScreen(itemInfo)
@@ -118,7 +115,7 @@ class PauseMenu(BaseMenuScreen):
         self.spellBookLayout = MenuPage("spellBook")
         spellDisplay = MenuSubScreen(self.menuSection2.x,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False)
         spellInfo = MenuSubScreen(self.menuSection2.x+spellDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False)
-        spellBook = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,8,3,[pygame.image.load(assetDict["parchment"])])
+        spellBook = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,8,3,[assetDict["parchment"]])
         spellBook.generateButtons(btnTxt="Spell")
         
         self.spellBookLayout.addScreen(spellDisplay)
@@ -165,10 +162,10 @@ class PauseMenu(BaseMenuScreen):
         pygame.draw.rect(displaySurface, gray22, (self.menuSection3.x, self.menuSection3.y, self.menuSection3.width, self.menuSection3.height), 1) # MenuSection3Border
         pygame.draw.rect(displaySurface, bg_color, (self.x, self.y, (self.width - (self.x * 2)), self.height - (self.y * 2)), 1) # MenuBorder
 
-
     def update(self):
         """Update the menu
         """
+        self.inventory.inventory["slot1"]
         mouse = pygame.mouse.get_pos()
         for i in range(1,len(self.menuSection1.btnDict)+1):
             btn = self.menuSection1.btnDict[self.menuSection1.btnKey+str(i)]
@@ -216,6 +213,11 @@ class PauseMenu(BaseMenuScreen):
                         self.spellBookLayout.setIsDrawn()
                 elif btn.isHovered == False and self.menuSection1.activeBtn != self.menuSection1.btnKey+str(i):
                     btn.isActive = False
+    # def getInventory(self,inventory):
+    #     """
+    #     Gets an inventory object class to render
+    #     """
+    #     return inventory
 
 class MenuSubScreen():
     def __init__(self, x: int, y: int, width: float, height: float, bgColor: pygame.color.Color = None,isDrawn:bool = False, rows:int = 1, columns:int = 1,screenImgs:list[pygame.Surface] = []) -> None:

@@ -3,10 +3,11 @@ import pygame
 import pygame.color
 import pygame.freetype as freetype
 
+# Custom library imports
 import lib
 import menuBtn
 
-
+# Resource path variables
 displaySurface = lib.displaySurface
 assetPath = "assets/.resources/"
 assetDict = {}
@@ -15,6 +16,7 @@ assetDict["katanaLg"] = assetPath+"katanaLg.png"
 assetDict["parchment"] = assetPath+"parchment.png"
 assetDict["btnBorder"] = assetPath+"buttonBorder.png"
 assetDict["sec2Half"] = assetPath+"sec2HalfBorder.png"
+
 # Color Variables
 colorPicker = pygame.color.Color
 fg_color = (0, 150, 0)
@@ -25,6 +27,7 @@ textColor2 = "red3"
 textColor3 = "red4"
 gray22 = colorPicker("gray22")
 gray22.a = 225
+
 # Text Format Variables
 menuTitleTextSize = 64
 menuTextSize = 28
@@ -43,13 +46,11 @@ class BaseMenuScreen(): # Base menu screen for other types of menus to inherit (
         self.width = lib.SCREEN_WIDTH
         self.height = lib.SCREEN_HEIGHT
 
-
         # Font Path Variables
         self.font = freetype.Font("data/Orbitron-Regular.ttf")  # type: ignore
 
         # Logic Variables
         self.isDrawn = False
-
 
         # Menu Format Variables
         self.menuRows = 5
@@ -77,12 +78,6 @@ class PauseMenu(BaseMenuScreen):
         self.textCenterDict = {}   # Dictionary of Text Centered objects
         self.menuOptionDict = {}   # Dictionary of menuOptions
 
-        # Dictionary Dynamic Key Name Base Definitions
-        self.btnKey = "btn" # Base key name for a dynamic dictionary key. Dictionary:'MenuSubScreen().btnDict'. USE: Specifically to reference buttons that are sub sections of menuSection1. EX: self.s1BtnKey+str(1) = section1Btn1.
-        self.textCenterS2SSC = "menuSection2SubSectionTextCenter" # Base key name for a dynamic dictionary key. Dictionary:'textCenterDict'. USE: Secifically to reference the objects that get a surface's dimensions and centers text within them. More Specifically for Section2's SubSections in this case. EX: self.textCenterS1SSC+str(1) = menuSection1SubSectionTextCenter1.
-        self.textCenterS3SSC = "menuSection3SubSectionTextCenter" # Base key name for a dynamic dictionary key. Dictionary:'textCenterDict'. USE: Secifically to reference the objects that get a surface's dimensions and centers text within them. More Specifically for Section3's SubSections in this case. EX: self.textCenterS1SSC+str(1) = menuSection1SubSectionTextCenter1.
-
-
         # Text Variables
         self.menuTitle = "Character Management"
         self.fillerTxt = "Filler Text"
@@ -91,7 +86,12 @@ class PauseMenu(BaseMenuScreen):
         # Pause Menu Sub Screen Variables
         self.menuLayout = MenuPage("pauseMenu")
         self.menuTitleSection = MenuSubScreen(self.x,self.y,self.menuScreenBackground.width,self.menuRowHeight,None,True)
-        self.menuSection1 = MenuSubScreen(self.x,(self.y+self.menuRowHeight),self.menuColumnWidth,self.menuRowHeight*2,None,True)
+
+        self.menuSection1 = MenuSubScreen(self.x,(self.y+self.menuRowHeight),self.menuColumnWidth,self.menuRowHeight*2,None,True,5)
+        self.menuSection1.generateButtons(s1BtnTextList)
+        self.menuSection1.btnDict[self.menuSection1.btnKey+str(1)].isActive = True
+        self.menuSection1.activeBtn = self.menuSection1.btnKey+str(1)
+
         self.menuSection2 = MenuSubScreen(self.x+self.menuColumnWidth,self.y+self.menuRowHeight,self.menuColumnWidth*2,self.menuRowHeight*2,None,True)
         self.menuSection3 = MenuSubScreen(self.x,self.y+self.menuRowHeight*3,self.menuScreenBackground.width,self.menuRowHeight*2,None,True)
         self.menuLayout.addScreen(self.menuScreenBackground)
@@ -114,71 +114,26 @@ class PauseMenu(BaseMenuScreen):
         self.inventoryLayout.addScreen(itemInfo)
         self.inventoryLayout.addScreen(inventorySpace)
 
-        self.itemArt = self.font.get_rect("Item Art", size = menuTextSize)
-        self.itemArt.center = self.inventoryLayout.screenList[0].surface.get_rect().center
-        self.itemInfoText = self.font.get_rect("Item Info", size = menuTextSize)
-        self.itemInfoText.center = self.inventoryLayout.screenList[1].surface.get_rect().center
-        self.itemInventoryText = self.font.get_rect("Player Inventory", size = menuTextSize)
-        self.itemInventoryText.center = self.inventoryLayout.screenList[2].surface.get_rect().center
-
         # Spell Book Sub Screen Variables
         self.spellBookLayout = MenuPage("spellBook")
         spellDisplay = MenuSubScreen(self.menuSection2.x,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False)
-        spellInfo = MenuSubScreen(self.menuSection2.x+spellDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,colorPicker("black"),False)
+        spellInfo = MenuSubScreen(self.menuSection2.x+spellDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,None,False)
         spellBook = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,8,3,[pygame.image.load(assetDict["parchment"])])
         spellBook.generateButtons(btnTxt="Spell")
         
         self.spellBookLayout.addScreen(spellDisplay)
         self.spellBookLayout.addScreen(spellInfo)
         self.spellBookLayout.addScreen(spellBook)
-        # Menu Section 1 Surface Dimension Variables
-        self.menuSection1RowHeight = self.menuSection1.surface.get_height()/self.menuRows
-        self.menuSection1ColumnWidth = self.menuSection1.surface.get_width()
-
-        # Menu Section 1 Button Variables
-        for s in range(1,self.menuRows+1):
-            key = self.btnKey+str(s)
-            value = menuBtn.Button(self.x,
-                               self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s,
-                               self.menuSection1ColumnWidth,
-                               self.menuSection1RowHeight,
-                               textColor2,
-                               s1BtnTextList[s-1],
-                               menuTextSize)
-            if s == 1:
-                value.isActive = True
-                self.menuSection1.activeBtn = self.btnKey+str(s)
-                screenNum = s
-                # self.inventoryLayout.isDrawn = True
-                # self.inventoryLayout.setIsDrawn()
-            value.screenNum = s
-            self.menuSection1.btnDict[key] = value
 
         # Text Centering Variables
-        ## Menu Title Section
         self.menuTitleTextRect = self.font.get_rect(self.menuTitle, size = menuTitleTextSize)
         self.menuTitleTextRect.center = self.menuTitleSection.surface.get_rect().center
 
-        ## Menu Section 2
-        key = self.textCenterS2SSC
-        value = self.font.get_rect(self.fillerTxt, size = menuTextSize)
-        value.center = self.menuSection2.surface.get_rect().center
-        self.textCenterDict[key] = value
-
-        ## Menu Section 3
-        key = self.textCenterS3SSC
-        value = self.font.get_rect(self.fillerTxt, size = menuTextSize)
-        value.center = self.menuSection3.surface.get_rect().center
-        self.textCenterDict[key] = value
-
-
-
+        self.itemInfoText = self.font.get_rect("Item Info", size = menuTextSize)
+        self.itemInfoText.center = self.inventoryLayout.screenList[1].surface.get_rect().center
 
     def draw(self):
-
-
         # Rendering the separate menu elements 'together'. Background/Containers/Text
-
         ## Renders menu title text to the title section of the menu
         self.font.render_to(
         self.menuScreenBackground.surface,
@@ -190,42 +145,6 @@ class PauseMenu(BaseMenuScreen):
         )
         self.font.pad = False
 
-        ## Renders the button text to the buttons of section 1
-        for i in range(1,self.menuRows+1):
-            self.font.render_to(
-            self.menuSection1.btnDict[self.btnKey+str(i)].surface,
-            self.menuSection1.btnDict[self.btnKey+str(i)].btnTxtRect,
-            self.menuSection1.btnDict[self.btnKey+str(i)].btnTxt,
-            self.menuSection1.btnDict[self.btnKey+str(i)].btnTxtColor,
-            size=menuTextSize,
-            style=freetype.STYLE_UNDERLINE
-            )
-            self.font.pad = False
-
-        ## Renders text to the center of section 2
-        if self.inventoryLayout.isDrawn == False:
-            self.font.render_to(
-            self.menuSection2.surface,
-            self.textCenterDict[self.textCenterS2SSC],
-            self.fillerTxt+" "+str(screenNum),
-            textColor1,
-            size=menuTextSize,
-            style=freetype.STYLE_UNDERLINE
-            )
-            self.font.pad = False
-
-        ## Renders text to the center of section 3
-        if self.inventoryLayout.isDrawn == False :
-            self.font.render_to(
-            self.menuSection3.surface,
-            self.textCenterDict[self.textCenterS3SSC],
-            self.fillerTxt+" "+str(screenNum),
-            textColor1,
-            size=menuTextSize,
-            style=freetype.STYLE_UNDERLINE
-            )
-            self.font.pad = False
-
         self.font.render_to(
         self.inventoryLayout.screenList[1].surface,
         self.itemInfoText,
@@ -236,22 +155,10 @@ class PauseMenu(BaseMenuScreen):
         )
         self.font.pad = False
 
-        # Blits various differant surfaces onto the Display Surface
-        displaySurface.blit(self.menuScreenBackground.surface,(self.x,self.y)) # Pause Menu Background
-        displaySurface.blit(self.menuSection1.surface,(self.menuSection1.x,self.menuSection1.y)) # Section 1 of Pause Menu
-        for s in range(1,self.menuRows+1): # Section 1 Buttons
-            displaySurface.blit(self.menuSection1.btnDict[self.btnKey+str(s)].surface,(self.x,(self.y+self.menuRowHeight-self.menuSection1RowHeight+self.menuSection1RowHeight*s)))
-        displaySurface.blit(self.menuSection2.surface,(self.menuSection2.x,self.menuSection2.y)) # Section 2 of Pause Menu
-        displaySurface.blit(self.menuSection3.surface,(self.menuSection3.x,self.menuSection3.y)) # Section 3 of Pause Menu
+        self.menuLayout.drawScreens()
         self.inventoryLayout.drawScreens()
         self.spellBookLayout.drawScreens()
         
-                # for i in range(0,self.inventoryLayout.screenList[2].columns+1):
-                #     section = self.inventoryLayout.screenList[2]
-                #     pygame.draw.line(displaySurface,colorPicker("green"),(section.x+section.colWidth*i,section.y),(section.x+section.colWidth*i,section.y+section.height))
-                # for i in range(0,self.inventoryLayout.screenList[2].rows+1):
-                #     section = self.inventoryLayout.screenList[2]
-                #     pygame.draw.line(displaySurface,colorPicker("green"),(section.x,section.y+section.rowHeight*i),(section.x+section.width,section.y+section.rowHeight*i))
         # Draws border rects for surface bounds to make it look more clean
         pygame.draw.rect(displaySurface, gray22, (self.menuSection1.x, self.menuSection1.y, self.menuSection1.width, self.menuSection1.height), 1) # MenuSection1Border
         pygame.draw.rect(displaySurface, gray22, (self.menuSection2.x, self.menuSection2.y, self.menuSection2.width, self.menuSection2.height), 1) # MenuSection2Border
@@ -262,42 +169,42 @@ class PauseMenu(BaseMenuScreen):
     def update(self):
         """Update the menu
         """
-        displaySurface = pygame.display.get_surface()
         mouse = pygame.mouse.get_pos()
-        for i in range(1,len(self.menuSection1.btnDict.keys())+1):
-            if self.menuSection1.btnDict[self.btnKey+str(i)].x <= mouse[0] <= self.menuSection1.btnDict[self.btnKey+str(i)].x+self.menuSection1.btnDict[self.btnKey+str(i)].width and self.menuSection1.btnDict[self.btnKey+str(i)].y <= mouse[1] <= self.menuSection1.btnDict[self.btnKey+str(i)].y+self.menuSection1.btnDict[self.btnKey+str(i)].height:
-                    self.menuSection1.btnDict[self.btnKey+str(i)].isHovered = True
+        for i in range(1,len(self.menuSection1.btnDict)+1):
+            btn = self.menuSection1.btnDict[self.menuSection1.btnKey+str(i)]
+            if btn.x <= mouse[0] <= btn.x+btn.width and btn.y <= mouse[1] <= btn.y+btn.height:
+                    btn.isHovered = True
             else:
-                self.menuSection1.btnDict[self.btnKey+str(i)].isHovered = False
-            if self.menuSection1.btnDict[self.btnKey+str(i)].isHovered or self.menuSection1.btnDict[self.btnKey+str(i)].isActive:
-                self.menuSection1.btnDict[self.btnKey+str(i)].btnTxtColor = textColor3
+                btn.isHovered = False
+            if btn.isHovered or btn.isActive:
+                btn.btnTxtColor = textColor3
             else:
-                self.menuSection1.btnDict[self.btnKey+str(i)].btnTxtColor = textColor1
-            self.menuSection1.btnDict[self.btnKey+str(i)].surface = pygame.Surface((self.menuSection1.btnDict[self.btnKey+str(i)].width,self.menuSection1.btnDict[self.btnKey+str(i)].height),pygame.SRCALPHA)
-        self.menuClick()
+                btn.btnTxtColor = textColor1
+            btn.surface = pygame.Surface((btn.width,btn.height),pygame.SRCALPHA)
+
+        self.checkMenuClick()
 
         # Refresh all screens on menu to reduce build up
         refreshMenuScreens(self.menuLayout.screenList)
         refreshMenuScreens(self.inventoryLayout.screenList)
         refreshMenuScreens(self.spellBookLayout.screenList)
 
-    def menuClick(self):
+    def checkMenuClick(self):
         """Handles anything to do with clicking in the pause menu
         """
-
         if pygame.mouse.get_pressed()[0]: # Check for the mouse left click
-            # mouseX, mouseY = pygame.mouse.get_pos() # Get the current mouse position
-            for i in range(1,self.menuRows+1):
-                if self.menuSection1.btnDict[self.btnKey+str(i)].isHovered and self.menuSection1.btnDict[self.btnKey+str(i)].isActive == False and self.menuSection1.activeBtn != self.btnKey+str(i):
+            for i in range(1,self.menuSection1.rows+1):
+                btn = self.menuSection1.btnDict[self.menuSection1.btnKey+str(i)]
+                if btn.isHovered and btn.isActive == False and self.menuSection1.activeBtn != self.menuSection1.btnKey+str(i):
                     self.menuSection1.btnDict[self.menuSection1.activeBtn].isActive = False
-                    self.menuSection1.activeBtn = self.btnKey+str(i)
-                    self.menuSection1.btnDict[self.btnKey+str(i)].isActive = True
-                    if self.menuSection1.btnDict[self.btnKey+str(i)].btnTxt == "Inventory":
+                    self.menuSection1.activeBtn = self.menuSection1.btnKey+str(i)
+                    btn.isActive = True
+                    if btn.btnTxt == "Inventory":
                         self.inventoryLayout.isDrawn = True
                         self.inventoryLayout.setIsDrawn()
                         self.spellBookLayout.isDrawn = False
                         self.spellBookLayout.setIsDrawn()
-                    elif self.menuSection1.btnDict[self.btnKey+str(i)].btnTxt == "Spell Book":
+                    elif btn.btnTxt == "Spell Book":
                         self.spellBookLayout.isDrawn = True
                         self.spellBookLayout.setIsDrawn()
                         self.inventoryLayout.isDrawn = False
@@ -307,9 +214,8 @@ class PauseMenu(BaseMenuScreen):
                         self.inventoryLayout.setIsDrawn()
                         self.spellBookLayout.isDrawn = False
                         self.spellBookLayout.setIsDrawn()
-                    screenNum = self.menuSection1.btnDict[self.btnKey+str(i)].screenNum
-                elif self.menuSection1.btnDict[self.btnKey+str(i)].isHovered == False and self.menuSection1.activeBtn != self.btnKey+str(i):
-                    self.menuSection1.btnDict[self.btnKey+str(i)].isActive = False
+                elif btn.isHovered == False and self.menuSection1.activeBtn != self.menuSection1.btnKey+str(i):
+                    btn.isActive = False
 
 class MenuSubScreen():
     def __init__(self, x: int, y: int, width: float, height: float, bgColor: pygame.color.Color = None,isDrawn:bool = False, rows:int = 1, columns:int = 1,screenImgs:list[pygame.Surface] = []) -> None:
@@ -338,11 +244,13 @@ class MenuSubScreen():
         self.activeBtn = "" # Holds Dictionary key of current active button in the sub screen
         self.btnDict = {} # A dictionary of buttons on the sub screen
 
-    def generateButtons(self,btnTxt:str=None,bkImg:str=None,img:str=None):
+    def generateButtons(self,btnTxtList:list[str] = None, btnTxt:str=None,bkImg:str=None,img:str=None):
         ## Inventory Space Buttons
         c = 0
         r = 0
         for s in range(1,self.columns*self.rows+1):
+            if btnTxtList is not None:
+                btnTxt = btnTxtList[s-1]
             if c < self.columns-1:
                 key = self.btnKey+str(s)
                 value = menuBtn.Button(self.x+self.colWidth*c,

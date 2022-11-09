@@ -3,9 +3,43 @@ import pygame
 
 import lib
 
+class GenericUIComponent(pygame.sprite.Sprite):
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        bgColor: pygame.Color,
+        centered: bool,
+    ) -> None:
+
+        super().__init__()
+
+        self.pos = pygame.math.Vector2(x, y)
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(bgColor)
+        self.rect = self.image.get_rect()
+
+        if centered:
+            self.rect.center = self.pos
+        else:
+            self.rect.topleft = self.pos
+
 # Generic status bar class, updates in real time, requires feed from updated value
 class StatusBar():
-    def __init__(self, x, y, width, height, bgColor, fgColor, value, maxValue):
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        bgColor: tuple,
+        fgColor: tuple,
+        value: int,
+        maxValue: int
+        ):
         """Draw a dynamic status bar
 
         Keyword arguments:
@@ -40,7 +74,7 @@ class StatusBar():
         pygame.draw.rect(self.displaySurface, self.bgColor, (self.pos.x - lib.globalOffset.x, self.pos.y - lib.globalOffset.y, self.width, self.height), 0) # Draw the background
         pygame.draw.rect(self.displaySurface, self.fgColor, (self.pos.x + 2 - lib.globalOffset.x, self.pos.y + 2 - lib.globalOffset.y, self.currentValue - 4, self.height - 4)) # Draw the dynamic foreground
 
-    def update(self, value):
+    def update(self, value: int):
         """Updates the bar
         
         Keyword arguments:
@@ -49,3 +83,48 @@ class StatusBar():
         
         self.value = value # Update the value with the new current value
         self.currentValue = int(self.width / self.maxValue) * self.value # Map the current value to the width of the bar based on the new value
+
+class Slider():
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        slide: pygame.sprite.Sprite,
+        grip: pygame.sprite.Sprite,
+        minValue: int,
+        maxValue: int,
+        step: int
+    ) -> None:
+
+        self.pos = pygame.math.Vector2(x, y)
+
+        self.slide = slide
+        self.grip = grip
+
+        self.min = minValue
+        self.max = maxValue
+        self.step = step
+
+        self.gripped = False
+
+        self.components = pygame.sprite.Group()
+        self.components.add(self.slide, self.grip)
+
+    def draw(self, displaySurface: pygame.display) -> None:
+        self.components.draw(displaySurface)
+
+    def update(self) -> None:
+        self.components.update()
+
+        mousePos = pygame.mouse.get_pos()
+
+        if self.grip.pos.x < mousePos[0] < self.grip.pos.x + self.grip.rect.width:
+            if self.grip.pos.y < mousePos[1] < self.grip.pos.y + self.grip.rect.height:
+                if pygame.mouse.get_pressed()[0]:
+                    self.gripped = True
+                else:
+                    self.gripped = False
+
+        if self.gripped:
+            if self.min < mousePos[0] < self.max:
+                self.grip.pos.x = mousePos[0]

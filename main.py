@@ -57,6 +57,13 @@ class Game(): # Main game class
                 if event.key == pygame.K_e:
                     self.level.createEnemies(5)
 
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+
+                if event.key == pygame.K_o:
+                    for door in self.level.doorContainer:
+                        door.changeState()
+
     def draw(self) -> None:
         """Handles drawing all graphical elements"""
 
@@ -86,7 +93,7 @@ class Game(): # Main game class
         # Do these last
         self.debugInterface.update(self.clock) # Update the debug interface
         pygame.display.update() # Update the display (push the new elements from the draw method)
-        lib.deltaTime = self.clock.tick(120) / 1000 # Update the delta time and tick the clock (locked to 120fps)
+        lib.deltaTime = self.clock.tick(lib.fpsCap) / 1000 # Update the delta time and tick the clock (locked to 120fps)
 
 # Run the game
 if __name__ == '__main__': # Fun python stuff

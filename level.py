@@ -47,12 +47,12 @@ class Level():
         ]
 
         self.doors = [
-        [11, 10, 1, 2], [18, 10, 1, 2], [19, 9, 3, 1], [23, 9, 3, 1], [27, 9, 3, 1], [31, 9, 3, 1], [19, 12, 3, 1], [23, 12, 3, 1],
-        [27, 12, 3, 1], [31, 12, 3, 1]
+        [11, 10, 1, 2, 0], [18, 10, 1, 2, 0], [19, 9, 3, 1, 0], [23, 9, 3, 1, 0], [27, 9, 3, 1, 0], [31, 9, 3, 1, 0], [19, 12, 3, 1, 0],
+        [23, 12, 3, 1, 0], [27, 12, 3, 1, 0], [31, 12, 3, 1, 0]
         ]
 
         self.turretLocations = [
-        [20, 7], [24, 7], [28, 7], [32, 7]
+        #[20, 7], [24, 7], [28, 7], [32, 7]
         ]
 
         # Late level setup
@@ -104,7 +104,7 @@ class Level():
 
     def createDoors(self, doorArray: list) -> None:
         for pointArray in range(len(doorArray)):
-            d = door.Door(doorArray[pointArray][0], doorArray[pointArray][1], doorArray[pointArray][2], doorArray[pointArray][3])
+            d = door.Door(doorArray[pointArray][0], doorArray[pointArray][1], doorArray[pointArray][2], doorArray[pointArray][3], doorArray[pointArray][4])
             self.worldCamera.add(d)
             self.collidables.add(d)
             self.doorContainer.add(d)
@@ -154,10 +154,11 @@ class Level():
                 p.destroy()
 
     def createTurrets(self):
-        for x in range(len(self.turretLocations)):
-            e = enemy.TurretEnemy(int((self.turretLocations[x][0] * 50) + 25), int((self.turretLocations[x][1] * 50) + 25), 30)
-            self.enemyContainer.add(e)
-            self.worldCamera.add(e)
+        if len(self.turretLocations) > 0:
+            for x in range(len(self.turretLocations)):
+                e = enemy.TurretEnemy(int((self.turretLocations[x][0] * 50) + 25), int((self.turretLocations[x][1] * 50) + 25), 30)
+                self.enemyContainer.add(e)
+                self.worldCamera.add(e)
 
     def createEnemies(self, count: int) -> None:
         for c in range(count):

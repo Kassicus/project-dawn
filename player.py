@@ -20,7 +20,6 @@ class Player(pygame.sprite.Sprite):
         self.speed = 250 # Set the speed variable for the player
 
         # Fancy things
-        self.inventory = inventory.PlayerInventory()
 
         self.particleSystem = None # By default we dont get a particle system? TODO make the players particle system work here
 

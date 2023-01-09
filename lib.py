@@ -1,6 +1,7 @@
 # Standard imports
 import pygame
 import random
+import inventory
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -55,7 +56,7 @@ class ColorLibrary():
         return color # Return the color
 
 color = ColorLibrary() # Creat the color library
-
+playerInventory = inventory.PlayerInventory()
 displaySurface = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 deltaTime = 0 # Delta time is a magical fucking thing
 globalOffset = pygame.math.Vector2() # A global offset to be able to use the correct camera features

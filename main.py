@@ -6,6 +6,7 @@ import lib
 import level
 import debug
 import menu
+import inventory
 
 pygame.init() # Initialize the pygame module (called once)
 

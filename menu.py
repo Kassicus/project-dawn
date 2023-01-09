@@ -50,7 +50,6 @@ class BaseMenuScreen(): # Base menu screen for other types of menus to inherit (
 
         # Logic Variables
         self.isDrawn = False
-        self.inventory = inventory.PlayerInventory()
 
         # Menu Format Variables
         self.menuRows = 5
@@ -104,8 +103,12 @@ class PauseMenu(BaseMenuScreen):
         itemInfo = MenuSubScreen(self.menuSection2.x+itemDisplay.width,self.menuSection2.y,self.menuSection2.width/2,self.menuSection2.height,colorPicker("black"),False)
         inventorySpace = MenuSubScreen(self.menuSection3.x,self.menuSection3.y,self.menuSection3.width,self.menuSection3.height,None,False,3,8)
         inventorySpace.generateButtons(bkImg=assetDict["btnBorder"])
-        inventorySpace.btnDict[inventorySpace.btnKey+str(1)].img = self.inventory.inventory["slot1"].img
-        inventorySpace.btnDict[inventorySpace.btnKey+str(1)].imgCent = inventorySpace.btnDict[inventorySpace.btnKey+str(1)].setImgCent(self.inventory.inventory["slot1"].img)
+        for i in range(1,len(lib.playerInventory.inventory)+1):
+            invSlot = lib.playerInventory.inventory["slot"+str(i)]
+            invBtn = inventorySpace.btnDict[inventorySpace.btnKey+str(i)]
+            if invSlot is not None:
+                invBtn.img = invSlot.img
+                invBtn.imgCent = invBtn.setImgCent(invSlot.img)
 
         self.inventoryLayout.addScreen(itemDisplay)
         self.inventoryLayout.addScreen(itemInfo)
@@ -165,7 +168,6 @@ class PauseMenu(BaseMenuScreen):
     def update(self):
         """Update the menu
         """
-        self.inventory.inventory["slot1"]
         mouse = pygame.mouse.get_pos()
         for i in range(1,len(self.menuSection1.btnDict)+1):
             btn = self.menuSection1.btnDict[self.menuSection1.btnKey+str(i)]

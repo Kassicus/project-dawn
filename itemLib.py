@@ -15,7 +15,7 @@ pistol1 = item.Weapon("Pistol","A pistol that you start the game with. Good luck
 ####################
 
 # ## Starter Secondary ##
-# knife1 = item.Weapon(1,2,False,False)
+katana1 = item.Weapon("Katana","A semi-dull katana that you start the game with. Good luck.",assetDict["katana"],assetDict["katanaLg"],1,1.1,False,False)
 # knife1.itemName = "Butter Knife"
 # knife1.itemDescription = "Your only line of defense when things get too close. Hope it isn't plastic."
 # #######################

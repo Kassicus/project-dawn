@@ -94,3 +94,42 @@ class ChaserEnemy(BaseEnemy):
         vectors = [direction[0] * self.speed, direction[1] * self.speed]
 
         return vectors
+
+class RangeChaserEnemy(BaseEnemy):
+    def __init__(self, x: int, y: int, size: int, speed: float) -> None:
+        super().__init__(x, y, size)
+        self.tag = "rangechaser"
+
+        self.speed = speed
+        self.health = 40
+        self.range = 150
+
+        self.targetPos = pygame.math.Vector2()
+
+    def chasePlayer(self, player: pygame.sprite.Sprite) -> None:
+        if self.targetPos.x < self.pos.x + self.range:
+            self.velo.x = self.getVectors(player.pos)[0]
+            self.velo.y = self.getVectors(player.pos)[1]
+        elif self.targetPos.x > self.pos.x - self.range:
+            self.velo.x = self.getVectors(player.pos)[0]
+            self.velo.y = self.getVectors(player.pos)[1]
+        elif self.targetPos.y < self.pos.y + self.range:
+            self.velo.x = self.getVectors(player.pos)[0]
+            self.velo.y = self.getVectors(player.pos)[1]
+        elif self.targetPos.y > self.pos.y - self.range:
+            self.velo.x = self.getVectors(player.pos)[0]
+            self.velo.y = self.getVectors(player.pos)[1]
+        else:
+            self.velo.x = 0
+            self.velo.y = 0
+
+
+    def getVectors(self, target: pygame.math.Vector2) -> list:
+        self.targetPos = target
+
+        distance = [target.x - self.pos.x, target.y - self.pos.y]
+        normal = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+        direction = [distance[0] / normal, distance[1] / normal]
+        vectors = [direction[0] * self.speed, direction[1] * self.speed]
+
+        return vectors
